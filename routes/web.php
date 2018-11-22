@@ -16,4 +16,3 @@
 // });
 
 Route::get('', 'HomeController@readAndSaveCSV');
-Route::get('calculation/{importId}', 'CalculationController@getIndex')->name('calculation');

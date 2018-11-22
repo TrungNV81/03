@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendEmail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use PDF;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use ZipArchive;
-use PDF;    
-use Dompdf\Dompdf;
+
 class HomeController extends Controller
 {
     public function readAndSaveCSV()
@@ -18,7 +20,7 @@ class HomeController extends Controller
             $dateNew = strtotime(date('Y-m-d H:i:s'));
             $start_date = $dateNew - $dateOld;
             // if ($start_date < 60) {
-                if (true) {
+            if (true) {
                 $importMaxId = DB::table('csv_data_import')->max('id');
                 if ($importMaxId == "") {
                     $importMaxId = 0;
@@ -57,15 +59,17 @@ class HomeController extends Controller
                 }
                 fclose($fileReader);
 
-                 DB::table('csv_file_import')->insert(
-                     ['id' => $importId, 'file_name' => basename($file)]
+                DB::table('csv_file_import')->insert(
+                    ['id' => $importId, 'file_name' => basename($file)]
                 );
-                
+
                 // Create folder
                 $path = public_path() . '/' . $importId;
                 mkdir($path, 0777, true);
-                $this->exportPDF1($importId,$path);
-                $this->exportFile($importId,$path);
+                $this->exportPDF1($importId, $path);
+                $this->exportFile($importId, $path);
+                $this->sendMail($importId);
+                $this->deleteFileZip($importId);
             } else {
                 echo "<h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That bai: " . basename($file) . " (Khoang thoi gian: " . $start_date . ")</h2>";
             }
@@ -73,35 +77,35 @@ class HomeController extends Controller
         }
     }
 
-    public function exportPDF1($importId,$path)
+    public function exportPDF1($importId, $path)
     {
         $dataPDF1 = DB::table('csv_data_import')
-        ->select('B','C','M','N','J','K')
-        ->where([
-            ['O', '=', '−'],
-            ['P', '=', '○'],
-            ['K', '=', 'ベベル'],
-            ['B', '=', '1階'],
-           ])
-        ->orderByRaw('N desc')
-        ->get();
+            ->select('B', 'C', 'M', 'N', 'J', 'K')
+            ->where([
+                ['O', '=', '−'],
+                ['P', '=', '○'],
+                ['K', '=', 'ベベル'],
+                ['B', '=', '1階'],
+            ])
+            ->orderByRaw('N desc')
+            ->get();
         //  ['id', '=', '1'],
         // return view('filepdf1', ['dataPDF1' => $dataPDF1]);
         // $data = ['dataPDF1' => $dataPDF1];
         // $path = public_path().'/STSekisanCenter/';
-        // $data = ['name' => 'tienduong'];	//data of welcome.blade.php
+        // $data = ['name' => 'tienduong'];    //data of welcome.blade.php
         // $pdf = PDF::loadView('filepdf1',  $data);
         // $saveFile =  $path.'/filepdf1.pdf';
         // $pdf->save($saveFile);
-        // $data = ['name' => 'tienduong'];	
-        $pdf = PDF::loadView('filepdf1',  compact('dataPDF1')) ;
+        // $data = ['name' => 'tienduong'];
+        $pdf = PDF::loadView('filepdf1', compact('dataPDF1'));
         // $pdf->setPaper('a4', 'landscape');
         // $pdf->page_text(555, 745, "Page {PAGE_NUM}/{PAGE_COUNT}");
-        $saveFile =  $path.'/filepdf1.pdf';
+        $saveFile = $path . '/filepdf1.pdf';
         $pdf->save($saveFile);
     }
 
-    public function exportFile($importId,$path)
+    public function exportFile($importId, $path)
     {
         $cellPos = array(
             "B", "C", "D", "E", "G", "H", "K",
@@ -346,6 +350,32 @@ class HomeController extends Controller
             }
             reset($objects);
             rmdir($dirPath);
+        }
+    }
+
+    public function sendMail($importId)
+    {
+        $objDemo = new \stdClass();
+        $objDemo->demo_one = 'Demo One Value';
+        $objDemo->demo_two = 'Demo Two Value';
+        $objDemo->sender = 'Trung Admin';
+        $objDemo->receiver = 'Trung User';
+        $objDemo->import_id = $importId;
+
+        Mail::to("nguyentrung17891@gmail.com")->send(new SendEmail($objDemo));
+    }
+
+    public function deleteFileZip($importId)
+    {
+        $file_folder = public_path() . '/'; // folder to load files
+        $files = glob($file_folder . '*');
+        foreach ($files as $file) {
+            $position = strrpos($file, '/');
+            $basename = substr($file, $position + 1);
+            if ($basename == $importId . '.zip') {
+                unlink($basename);
+            }
+            continue;
         }
     }
 }
