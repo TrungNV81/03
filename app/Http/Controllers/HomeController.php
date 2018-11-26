@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use ZipArchive;
-
+set_time_limit(300);
 class HomeController extends Controller
 {
     public function readAndSaveCSV()
@@ -80,28 +80,19 @@ class HomeController extends Controller
     public function exportPDF1($importId, $path)
     {
         $dataPDF1 = DB::table('csv_data_import')
-            ->select('B', 'C', 'M', 'N', 'J', 'K')
-            ->where([
-                ['O', '=', '−'],
-                ['P', '=', '○'],
-                ['K', '=', 'ベベル'],
-                ['B', '=', '1階'],
-            ])
-            ->orderByRaw('N desc')
-            ->get();
-        //  ['id', '=', '1'],
-        // return view('filepdf1', ['dataPDF1' => $dataPDF1]);
-        // $data = ['dataPDF1' => $dataPDF1];
-        // $path = public_path().'/STSekisanCenter/';
-        // $data = ['name' => 'tienduong'];    //data of welcome.blade.php
-        // $pdf = PDF::loadView('filepdf1',  $data);
-        // $saveFile =  $path.'/filepdf1.pdf';
-        // $pdf->save($saveFile);
-        // $data = ['name' => 'tienduong'];
-        $pdf = PDF::loadView('filepdf1', compact('dataPDF1'));
-        // $pdf->setPaper('a4', 'landscape');
-        // $pdf->page_text(555, 745, "Page {PAGE_NUM}/{PAGE_COUNT}");
-        $saveFile = $path . '/filepdf1.pdf';
+        ->select('B','C','M','N','J','K', 'Q')
+        ->where([
+            ['O', '=', '−'],
+            ['P', '=', '○'],
+            ['K', '=', 'ベベル'],
+            ['B', '=', '1階'],
+            ['id', '=', $importId],])
+        ->orderByRaw('N desc')
+        ->get(); 
+        $filename = $dataPDF1[0]->Q.'_１階先行壁.pdf';
+        $pdf = PDF::loadView('filepdf1',  compact('dataPDF1')) ;
+        $pdf->setPaper('a4', 'landscape');
+        $saveFile =  $path.'/'.$filename;
         $pdf->save($saveFile);
     }
 
