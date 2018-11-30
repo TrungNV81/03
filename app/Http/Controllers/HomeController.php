@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use ZipArchive;
+
 set_time_limit(300);
 class HomeController extends Controller
 {
@@ -66,10 +67,10 @@ class HomeController extends Controller
                 // Create folder
                 $path = public_path() . '/' . $importId;
                 mkdir($path, 0777, true);
-                $this->exportPDF1($importId, $path);
+                // $this->exportPDF1($importId, $path);
                 $this->exportFile($importId, $path);
-                $this->sendMail($importId);
-                $this->deleteFileZip($importId);
+                // $this->sendMail($importId);
+                // $this->deleteFileZip($importId);
             } else {
                 echo "<h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That bai: " . basename($file) . " (Khoang thoi gian: " . $start_date . ")</h2>";
             }
@@ -80,29 +81,26 @@ class HomeController extends Controller
     public function exportPDF1($importId, $path)
     {
         $dataPDF1 = DB::table('csv_data_import')
-        ->select('B','C','M','N','J','K', 'Q')
-        ->where([
-            ['O', '=', '−'],
-            ['P', '=', '○'],
-            ['K', '=', 'ベベル'],
-            ['B', '=', '1階'],
-            ['id', '=', $importId],])
-        ->orderByRaw('N desc')
-        ->get(); 
-        $filename = $dataPDF1[0]->Q.'_１階先行壁.pdf';
-        $pdf = PDF::loadView('filepdf1',  compact('dataPDF1')) ;
+            ->select('B', 'C', 'M', 'N', 'J', 'K', 'Q')
+            ->where([
+                ['O', '=', '−'],
+                ['P', '=', '○'],
+                ['K', '=', 'ベベル'],
+                ['B', '=', '1階'],
+                ['id', '=', $importId]])
+            ->orderByRaw('N desc')
+            ->get();
+        $filename = $dataPDF1[0]->Q . '_１階先行壁.pdf';
+        $pdf = PDF::loadView('filepdf1', compact('dataPDF1'));
         $pdf->setPaper('a4', 'landscape');
-        $saveFile =  $path.'/'.$filename;
+        $saveFile = $path . '/' . $filename;
         $pdf->save($saveFile);
     }
 
     public function exportFile($importId, $path)
     {
-        $cellPos = array(
-            "B", "C", "D", "E", "G", "H", "K",
-        );
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template01.xlsx");
-        // add data sheet 1-1
+
         $dataImport1_1 = DB::table('csv_data_import')
             ->where([
                 ['id', '=', $importId],
@@ -113,26 +111,7 @@ class HomeController extends Controller
             ])
             ->orderByRaw('N DESC')
             ->get();
-
-        $spreadsheet->setActiveSheetIndexByName("先行1階2階");
-        $sheet = $spreadsheet->getActiveSheet();
-        $index = 3;
-        foreach ($dataImport1_1 as $data) {
-            $cellValue = array();
-            array_push($cellValue, $data->C);
-            array_push($cellValue, $data->K);
-            array_push($cellValue, $data->L);
-            array_push($cellValue, $data->M);
-            array_push($cellValue, $data->N);
-            array_push($cellValue, $data->G);
-            array_push($cellValue, $data->J);
-            for ($i = 0; $i < count($cellPos); $i++) {
-                $num = (string) $index;
-                $cellpos = $cellPos[$i] . $num;
-                $sheet->setCellValue($cellpos, $cellValue[$i]);
-            }
-            $index++;
-        }
+        $this->addDataToSheet($dataImport1_1, '先行1階2階', 3, $spreadsheet);
 
         //add data sheet 1-2
         $dataImport1_2 = DB::table('csv_data_import')
@@ -145,24 +124,7 @@ class HomeController extends Controller
             ])
             ->orderByRaw('N DESC')
             ->get();
-
-        $index = 506;
-        foreach ($dataImport1_2 as $data) {
-            $cellValue = array();
-            array_push($cellValue, $data->C);
-            array_push($cellValue, $data->K);
-            array_push($cellValue, $data->L);
-            array_push($cellValue, $data->M);
-            array_push($cellValue, $data->N);
-            array_push($cellValue, $data->G);
-            array_push($cellValue, $data->J);
-            for ($i = 0; $i < count($cellPos); $i++) {
-                $num = (string) $index;
-                $cellpos = $cellPos[$i] . $num;
-                $sheet->setCellValue($cellpos, $cellValue[$i]);
-            }
-            $index++;
-        }
+        $this->addDataToSheet($dataImport1_2, '先行1階2階', 506, $spreadsheet);
 
         // add data sheet 2
         $dataImport2 = DB::table('csv_data_import')
@@ -175,26 +137,7 @@ class HomeController extends Controller
             ])
             ->orderByRaw('K ASC, N DESC')
             ->get();
-
-        $spreadsheet->setActiveSheetIndexByName("天井1階");
-        $sheet = $spreadsheet->getActiveSheet();
-        $index = 3;
-        foreach ($dataImport2 as $data) {
-            $cellValue = array();
-            array_push($cellValue, $data->C);
-            array_push($cellValue, $data->K);
-            array_push($cellValue, $data->L);
-            array_push($cellValue, $data->M);
-            array_push($cellValue, $data->N);
-            array_push($cellValue, $data->G);
-            array_push($cellValue, $data->J);
-            for ($i = 0; $i < count($cellPos); $i++) {
-                $num = (string) $index;
-                $cellpos = $cellPos[$i] . $num;
-                $sheet->setCellValue($cellpos, $cellValue[$i]);
-            }
-            $index++;
-        }
+        $this->addDataToSheet($dataImport2, '天井1階', 3, $spreadsheet);
 
         // add data sheet 3
         $dataImport3 = DB::table('csv_data_import')
@@ -208,25 +151,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
 
-        $spreadsheet->setActiveSheetIndexByName("天井2階");
-        $sheet = $spreadsheet->getActiveSheet();
-        $index = 3;
-        foreach ($dataImport3 as $data) {
-            $cellValue = array();
-            array_push($cellValue, $data->C);
-            array_push($cellValue, $data->K);
-            array_push($cellValue, $data->L);
-            array_push($cellValue, $data->M);
-            array_push($cellValue, $data->N);
-            array_push($cellValue, $data->G);
-            array_push($cellValue, $data->J);
-            for ($i = 0; $i < count($cellPos); $i++) {
-                $num = (string) $index;
-                $cellpos = $cellPos[$i] . $num;
-                $sheet->setCellValue($cellpos, $cellValue[$i]);
-            }
-            $index++;
-        }
+        $this->addDataToSheet($dataImport3, '天井2階', 3, $spreadsheet);
 
         // add data sheet 4-1
         $dataImport4_1 = DB::table('csv_data_import')
@@ -240,25 +165,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
 
-        $spreadsheet->setActiveSheetIndexByName("壁1階2階");
-        $sheet = $spreadsheet->getActiveSheet();
-        $index = 3;
-        foreach ($dataImport4_1 as $data) {
-            $cellValue = array();
-            array_push($cellValue, $data->C);
-            array_push($cellValue, $data->K);
-            array_push($cellValue, $data->L);
-            array_push($cellValue, $data->M);
-            array_push($cellValue, $data->N);
-            array_push($cellValue, $data->G);
-            array_push($cellValue, $data->J);
-            for ($i = 0; $i < count($cellPos); $i++) {
-                $num = (string) $index;
-                $cellpos = $cellPos[$i] . $num;
-                $sheet->setCellValue($cellpos, $cellValue[$i]);
-            }
-            $index++;
-        }
+        $this->addDataToSheet($dataImport4_1, '壁1階2階', 3, $spreadsheet);
 
         // add data sheet 4-2
         $dataImport4_2 = DB::table('csv_data_import')
@@ -272,23 +179,8 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
 
-        $index = 506;
-        foreach ($dataImport4_2 as $data) {
-            $cellValue = array();
-            array_push($cellValue, $data->C);
-            array_push($cellValue, $data->K);
-            array_push($cellValue, $data->L);
-            array_push($cellValue, $data->M);
-            array_push($cellValue, $data->N);
-            array_push($cellValue, $data->G);
-            array_push($cellValue, $data->J);
-            for ($i = 0; $i < count($cellPos); $i++) {
-                $num = (string) $index;
-                $cellpos = $cellPos[$i] . $num;
-                $sheet->setCellValue($cellpos, $cellValue[$i]);
-            }
-            $index++;
-        }
+        $this->addDataToSheet($dataImport4_2, '壁1階2階', 506, $spreadsheet);
+
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
@@ -317,12 +209,43 @@ class HomeController extends Controller
             $isFinished = $zip->close();
             if ($isFinished) {
                 // remove folder tmp
-                $this->deleteDirectory($path);
-                // archive is now downloadable ...
-                // return response()->download($zip_name)->deleteFileAfterSend(true);
+                // $this->deleteDirectory($path);
             } else {
                 throw new Exception("could not close zip file: " . $zip->getStatusString());
             }
+        }
+    }
+
+    public function addDataToSheet($dataImport1_1, $sheetName, $index, $spreadsheet)
+    {
+        $cellPos = array(
+            "B", "C", "D", "E", "G", "H", "I", "J", "K",
+        );
+        $spreadsheet->setActiveSheetIndexByName($sheetName);
+        $sheet = $spreadsheet->getActiveSheet();
+        foreach ($dataImport1_1 as $data) {
+            $cellValue = array();
+            if ($data->M == 910) {
+                $I = $data->M / 1000;
+            } else {
+                $I = (910 + $data->N) / 1000;
+            }
+            $J = intval($data->G) * $I;
+            array_push($cellValue, $data->C);
+            array_push($cellValue, $data->K);
+            array_push($cellValue, $data->L);
+            array_push($cellValue, $data->M);
+            array_push($cellValue, $data->N);
+            array_push($cellValue, $data->G);
+            array_push($cellValue, $I);
+            array_push($cellValue, $J);
+            array_push($cellValue, $data->J);
+            for ($i = 0; $i < count($cellPos); $i++) {
+                $num = (string) $index;
+                $cellpos = $cellPos[$i] . $num;
+                $sheet->setCellValue($cellpos, $cellValue[$i]);
+            }
+            $index++;
         }
     }
 
