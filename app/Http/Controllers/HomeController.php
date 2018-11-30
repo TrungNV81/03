@@ -217,27 +217,89 @@ class HomeController extends Controller
     public function addDataToSheet($dataImport1_1, $sheetName, $index, $spreadsheet)
     {
         $cellPos = array(
-            "B", "C", "D", "E", "G", "H", "I", "J", "K",
+            "B", "C", "D", "E", "G", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R",
         );
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
         foreach ($dataImport1_1 as $data) {
             $cellValue = array();
-            if ($data->M == 910) {
-                $I = $data->M / 1000;
-            } else {
-                $I = (910 + $data->N) / 1000;
+            $M = intval($data->M);
+            $N = intval($data->N);
+
+            if($sheetName == "先行1階2階")
+            {
+                if($N <= 910 && $M < $N)
+                {
+                    $temp = $M;
+                    $M = $N;
+                    $N = $temp;
+                }
             }
+
+            if ($M == 910) {
+                $I = $M / 1000;
+            } else {
+                $I = (910 + $N) / 1000;
+            }
+
+            if($M<=910)
+            {
+              $M_cell   = 3;
+            }
+            if($N <= 1820)
+            {
+              $N_cell  = 6;
+            }
+            else
+            {
+               $N_cell = 8;
+            }
+    
+            if($M > 0 &&  $M<= 227.5)
+            {
+              $O  = 0.25;
+            }
+            else if( $M> 227.5 && $M <= 455)
+            {
+               $O = 0.5;
+            }
+            else if($M > 455 &&  $M<= 672.5)
+            {
+              $O  = 0.75;
+            }
+            else
+            {
+                 $O   = 1;
+            }
+    
+            if($N  >= 1600)
+            {
+                $P = 1;
+            }
+            else
+            {
+                $P = $this->roundNumber($N/1600);
+            }
+            $Q = $this->roundNumber(($data->G)*$O*$P);
+            $R = $this->roundNumber(($M_cell*$N_cell*$Q)/36);
+    
             $J = intval($data->G) * $I;
             array_push($cellValue, $data->C);
             array_push($cellValue, $data->K);
             array_push($cellValue, $data->L);
-            array_push($cellValue, $data->M);
-            array_push($cellValue, $data->N);
+            array_push($cellValue, $M);
+            array_push($cellValue, $N);
             array_push($cellValue, $data->G);
             array_push($cellValue, $I);
             array_push($cellValue, $J);
             array_push($cellValue, $data->J);
+            array_push($cellValue, $M_cell);
+            array_push($cellValue, $N_cell);
+            array_push($cellValue, $O);
+            array_push($cellValue, $P);
+            array_push($cellValue, $Q);
+            array_push($cellValue, $R);
+
             for ($i = 0; $i < count($cellPos); $i++) {
                 $num = (string) $index;
                 $cellpos = $cellPos[$i] . $num;
@@ -245,6 +307,15 @@ class HomeController extends Controller
             }
             $index++;
         }
+    }
+
+    private function roundNumber($number){
+        $val2 = round($number,2);  
+        if($val2 < $number)
+        {
+            $val2 += 0.01;
+        }
+        return $val2;
     }
 
     public function deleteDirectory($dirPath)
