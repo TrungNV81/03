@@ -174,7 +174,7 @@ class HomeController extends Controller
                 ['O', '=', '−'],
                 ['P', '=', '−'],
             ])
-            ->orderByRaw('N DESC')
+            ->orderByRaw('K ASC,N DESC')
             ->get();
 
         $this->addDataToSheet($dataImport4_2, '壁1階2階', 506, $spreadsheet);
@@ -219,6 +219,10 @@ class HomeController extends Controller
         $importId = $dataImport[0]->id;
         $floor = $dataImport[0]->B;
         $thickness = $dataImport[0]->L;
+        $name = $dataImport[0]->K;
+        $indexCell = $index;
+        $total = 0;
+        $totalCellJ = 0;
         $maxSubId = DB::table('details_data_import')->max('sub_id');
         if ($maxSubId == "") {
             $maxSubId = 0;
@@ -230,7 +234,7 @@ class HomeController extends Controller
         );
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
-        $total = 0;
+
         foreach ($dataImport as $data) {
             $cellValue = array();
             $M = intval($data->M);
@@ -269,14 +273,32 @@ class HomeController extends Controller
             } else {
                 $O = 1;
             }
-
             if ($N >= 1600) {$P = 1;} else { $P = $this->roundNumber($N / 1600);}
-
             $Q = $this->roundNumber(($data->G) * $O * $P);
-            $R = $this->roundNumber(($M_cell * $N_cell * $Q) / 36);
-            $total += $R;
-
+            $R = $this->roundNumber(($M_cell * $N_cell * $Q) / 36);            
             $J = intval($data->G) * $I;
+            $indexCell ++;
+            
+            if($name != $data->K)
+            {
+                if($sheetName == '天井1階' || $sheetName == '壁1階2階')
+                {
+                    $sheet->setCellValue('S'.((string)($indexCell - 2)), $total);
+                }
+                DB::table('details_data_import')->insert(
+                    ['id' => $importId, 'sub_id' => $maxSubId, 'sheet' => $sheetName,
+                    'floor' => $floor, 'name' => $name, 'thickness' => $thickness, 'total' => $total]
+                );
+                $name = $data->K;
+                $total = $R;
+                $maxSubId ++;
+            }
+            else
+            {
+                $total += $R;
+            }
+            $totalCellJ += $J;
+
             array_push($cellValue, $data->C);
             array_push($cellValue, $data->K);
             array_push($cellValue, $data->L);
@@ -300,12 +322,20 @@ class HomeController extends Controller
             }
             $index++;
         }
-
-        $total;
+        if($sheetName == '天井1階' || $sheetName == '壁1階2階')
+        {
+            $sheet->setCellValue('S'.((string)($indexCell - 1)), $total);
+        }
         DB::table('details_data_import')->insert(
             ['id' => $importId, 'sub_id' => $maxSubId, 'sheet' => $sheetName,
-            'floor' => $floor, 'name' => 'ベベル', 'thickness' => $thickness, 'total' => $total]
+            'floor' => $floor, 'name' => $name, 'thickness' => $thickness, 'total' => $total]
         );
+        $maxSubId ++;
+        DB::table('details_data_import')->insert(
+            ['id' => $importId, 'sub_id' => $maxSubId, 'sheet' => $sheetName,
+            'floor' => $floor, 'name' => '総切断m', 'thickness' => '0', 'total' => ceil($totalCellJ)]
+        );
+
     }
 
     private function roundNumber($number)
