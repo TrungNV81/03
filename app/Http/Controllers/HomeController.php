@@ -104,8 +104,8 @@ class HomeController extends Controller
         $dataImport1_1 = DB::table('csv_data_import')
             ->where([
                 ['id', '=', $importId],
+                ['A', '=', 'カベ'],
                 ['B', '=', '1階'],
-                ['K', '=', 'ベベル'],
                 ['O', '=', '−'],
                 ['P', '=', '○'],
             ])
@@ -117,8 +117,8 @@ class HomeController extends Controller
         $dataImport1_2 = DB::table('csv_data_import')
             ->where([
                 ['id', '=', $importId],
+                ['A', '=', 'カベ'],
                 ['B', '=', '2階'],
-                ['K', '=', 'ベベル'],
                 ['O', '=', '−'],
                 ['P', '=', '○'],
             ])
@@ -130,10 +130,9 @@ class HomeController extends Controller
         $dataImport2 = DB::table('csv_data_import')
             ->where([
                 ['id', '=', $importId],
+                ['A', '=', 'テンジョウ'],
                 ['B', '=', '1階'],
-                ['L', '=', '9.5'],
                 ['O', '=', '−'],
-                ['P', '=', '−'],
             ])
             ->orderByRaw('K ASC, N DESC')
             ->get();
@@ -143,10 +142,9 @@ class HomeController extends Controller
         $dataImport3 = DB::table('csv_data_import')
             ->where([
                 ['id', '=', $importId],
+                ['A', '=', 'テンジョウ'],
                 ['B', '=', '2階'],
-                ['L', '=', '9.5'],
                 ['O', '=', '−'],
-                ['P', '=', '−'],
             ])
             ->orderByRaw('K ASC, N DESC')
             ->get();
@@ -157,8 +155,8 @@ class HomeController extends Controller
         $dataImport4_1 = DB::table('csv_data_import')
             ->where([
                 ['id', '=', $importId],
+                ['A', '=', 'カベ'],
                 ['B', '=', '1階'],
-                ['L', '=', '12.5'],
                 ['O', '=', '−'],
                 ['P', '=', '−'],
             ])
@@ -171,8 +169,8 @@ class HomeController extends Controller
         $dataImport4_2 = DB::table('csv_data_import')
             ->where([
                 ['id', '=', $importId],
+                ['A', '=', 'カベ'],
                 ['B', '=', '2階'],
-                ['L', '=', '12.5'],
                 ['O', '=', '−'],
                 ['P', '=', '−'],
             ])
