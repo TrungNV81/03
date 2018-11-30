@@ -214,22 +214,30 @@ class HomeController extends Controller
         }
     }
 
-    public function addDataToSheet($dataImport1_1, $sheetName, $index, $spreadsheet)
+    public function addDataToSheet($dataImport, $sheetName, $index, $spreadsheet)
     {
+        $importId = $dataImport[0]->id;
+        $floor = $dataImport[0]->B;
+        $thickness = $dataImport[0]->L;
+        $maxSubId = DB::table('details_data_import')->max('sub_id');
+        if ($maxSubId == "") {
+            $maxSubId = 0;
+        }
+        $maxSubId += 1;
+
         $cellPos = array(
             "B", "C", "D", "E", "G", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R",
         );
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
-        foreach ($dataImport1_1 as $data) {
+        $total = 0;
+        foreach ($dataImport as $data) {
             $cellValue = array();
             $M = intval($data->M);
             $N = intval($data->N);
 
-            if($sheetName == "先行1階2階")
-            {
-                if($N <= 910 && $M < $N)
-                {
+            if ($sheetName == "先行1階2階") {
+                if ($N <= 910 && $M < $N) {
                     $temp = $M;
                     $M = $N;
                     $N = $temp;
@@ -242,47 +250,32 @@ class HomeController extends Controller
                 $I = (910 + $N) / 1000;
             }
 
-            if($M<=910)
-            {
-              $M_cell   = 3;
+            if ($M <= 910) {
+                $M_cell = 3;
             }
-            if($N <= 1820)
-            {
-              $N_cell  = 6;
+
+            if ($N <= 1820) {
+                $N_cell = 6;
+            } else {
+                $N_cell = 8;
             }
-            else
-            {
-               $N_cell = 8;
+
+            if ($M > 0 && $M <= 227.5) {
+                $O = 0.25;
+            } else if ($M > 227.5 && $M <= 455) {
+                $O = 0.5;
+            } else if ($M > 455 && $M <= 672.5) {
+                $O = 0.75;
+            } else {
+                $O = 1;
             }
-    
-            if($M > 0 &&  $M<= 227.5)
-            {
-              $O  = 0.25;
-            }
-            else if( $M> 227.5 && $M <= 455)
-            {
-               $O = 0.5;
-            }
-            else if($M > 455 &&  $M<= 672.5)
-            {
-              $O  = 0.75;
-            }
-            else
-            {
-                 $O   = 1;
-            }
-    
-            if($N  >= 1600)
-            {
-                $P = 1;
-            }
-            else
-            {
-                $P = $this->roundNumber($N/1600);
-            }
-            $Q = $this->roundNumber(($data->G)*$O*$P);
-            $R = $this->roundNumber(($M_cell*$N_cell*$Q)/36);
-    
+
+            if ($N >= 1600) {$P = 1;} else { $P = $this->roundNumber($N / 1600);}
+
+            $Q = $this->roundNumber(($data->G) * $O * $P);
+            $R = $this->roundNumber(($M_cell * $N_cell * $Q) / 36);
+            $total += $R;
+
             $J = intval($data->G) * $I;
             array_push($cellValue, $data->C);
             array_push($cellValue, $data->K);
@@ -307,12 +300,18 @@ class HomeController extends Controller
             }
             $index++;
         }
+
+        $total;
+        DB::table('details_data_import')->insert(
+            ['id' => $importId, 'sub_id' => $maxSubId, 'sheet' => $sheetName,
+            'floor' => $floor, 'name' => 'ベベル', 'thickness' => $thickness, 'total' => $total]
+        );
     }
 
-    private function roundNumber($number){
-        $val2 = round($number,2);  
-        if($val2 < $number)
-        {
+    private function roundNumber($number)
+    {
+        $val2 = round($number, 2);
+        if ($val2 < $number) {
             $val2 += 0.01;
         }
         return $val2;
