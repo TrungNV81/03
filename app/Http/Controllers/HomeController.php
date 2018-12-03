@@ -67,7 +67,6 @@ class HomeController extends Controller
                 // Create folder
                 $path = public_path() . '/' . $importId;
                 mkdir($path, 0777, true);
-                // $this->exportPDF1($importId, $path);
                 $this->exportFile1($importId, $path);
                 $this->exportFile2($importId, $path);
                 // $this->sendMail($importId);
@@ -79,20 +78,10 @@ class HomeController extends Controller
         }
     }
 
-    public function exportPDF1($importId, $path)
+    public function exportPDF($path, $dataPDF, $file_extension)
     {
-        $dataPDF1 = DB::table('csv_data_import')
-            ->select('B', 'C', 'M', 'N', 'J', 'K', 'Q')
-            ->where([
-                ['O', '=', '−'],
-                ['P', '=', '○'],
-                ['K', '=', 'ベベル'],
-                ['B', '=', '1階'],
-                ['id', '=', $importId]])
-            ->orderByRaw('N desc')
-            ->get();
-        $filename = $dataPDF1[0]->Q . '_１階先行壁.pdf';
-        $pdf = PDF::loadView('filepdf1', compact('dataPDF1'));
+        $filename = $dataPDF[0]->Q .$file_extension;
+        $pdf = PDF::loadView('filepdf1', compact('dataPDF'));
         $pdf->setPaper('a4', 'landscape');
         $saveFile = $path . '/' . $filename;
         $pdf->save($saveFile);
@@ -113,7 +102,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_1, '先行1階2階', 3, $spreadsheet, 2395);
-
+        $this->exportPDF($path,$dataImport1_1, '1.pdf');
         //add data sheet 1-2
         $dataImport1_2 = DB::table('csv_data_import')
             ->where([
@@ -126,7 +115,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_2, '先行1階2階', 506, $spreadsheet, 2395);
-
+        $this->exportPDF($path,$dataImport1_2, '2.pdf');
         // add data sheet 2
         $dataImport2 = DB::table('csv_data_import')
             ->where([
@@ -138,7 +127,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
         $this->addDataToFile1($dataImport2, '天井1階', 3, $spreadsheet, 1820);
-
+        $this->exportPDF($path,$dataImport2, '3.pdf');
         // add data sheet 3
         $dataImport3 = DB::table('csv_data_import')
             ->where([
@@ -151,7 +140,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport3, '天井2階', 3, $spreadsheet, 1820);
-
+        $this->exportPDF($path,$dataImport3, '4.pdf');
         // add data sheet 4-1
         $dataImport4_1 = DB::table('csv_data_import')
             ->where([
@@ -165,7 +154,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_1, '壁1階2階', 3, $spreadsheet, 2395);
-
+        $this->exportPDF($path,$dataImport4_1, '5.pdf');
         // add data sheet 4-2
         $dataImport4_2 = DB::table('csv_data_import')
             ->where([
@@ -179,7 +168,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
-
+        $this->exportPDF($path,$dataImport4_2, '6.pdf');
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
