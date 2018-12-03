@@ -355,10 +355,12 @@ class HomeController extends Controller
 
     }
 
-    public function exportFile2($importId, $path)
-    {
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/2.xlsx");
+    public function exportFile2($importId, $path) // file 指示書
 
+    {
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template02.xlsx");
+
+        // sheet 情報
         $cellPos = array(
             "B12", "C12", "B13", "C13", "B14", "C14",
         );
@@ -375,16 +377,81 @@ class HomeController extends Controller
             $cellpos = $cellPos[$i];
             $sheet->setCellValue($cellpos, $dataImport1[$i]->total);
         }
+        // end sheet 情報
+
+        // sheet 工場1便
+        $dataImport2 = DB::table('details_data_import')
+            ->select('name', 'thickness', 'total as F1', DB::raw('sum(total) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['sheet', '=', '先行1階2階'],
+                ['thickness', '!=', '0'],
+            ])
+            ->groupBy('name')
+            ->get();
+
+        $this->addDataToFile2($dataImport2, $spreadsheet, '工場1便');
+
+        // end sheet 工場1便
+
+        // sheet 工場2便
+        $dataImport3 = DB::table('details_data_import')
+            ->select('name', 'thickness', 'total as F1', DB::raw('sum(total) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['sheet', '=', '天井1階'],
+                ['thickness', '!=', '0'],
+            ])
+            ->orWhere([
+                ['id', '=', $importId],
+                ['sheet', '=', '天井2階'],
+                ['thickness', '!=', '0'],
+            ])
+            ->groupBy('name')
+            ->get();
+
+        $this->addDataToFile2($dataImport3, $spreadsheet, '工場2便');
+        // end sheet 工場2便
+
+        // sheet 工場3便
+        $dataImport4 = DB::table('details_data_import')
+            ->select('name', 'thickness', 'total as F1', DB::raw('sum(total) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['sheet', '=', '壁1階2階'],
+                ['thickness', '!=', '0'],
+            ])
+            ->groupBy('name')
+            ->get();
+
+        $this->addDataToFile2($dataImport4, $spreadsheet, '工場3便');
+        // end sheet 工場3便
+
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
-        if (ob_get_contents()) ob_end_clean();
         $writer = new Xlsx($spreadsheet);
-        if (ob_get_contents()) ob_end_clean();
         $saveFile = $path . '/' . $importId . '2.xlsx';
-        if (ob_get_contents()) ob_end_clean();
         $writer->save($saveFile);
 
+    }
+
+    private function addDataToFile2($data, $spreadsheet, $sheetName)
+    {
+        $spreadsheet->setActiveSheetIndexByName($sheetName);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $num = 2;
+        for ($i = 0; $i < count($data); $i++, $num++) {
+            $H = $data[$i]->total - $data[$i]->F1;
+            if ($H == 0) {
+                $H = '';
+            }
+            $sheet->setCellValue("B1" . $num, $data[$i]->name);
+            $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
+            $sheet->setCellValue("G1" . $num, $data[$i]->F1);
+            $sheet->setCellValue("H1" . $num, $H);
+        }
     }
 
     private function roundNumber($number)
