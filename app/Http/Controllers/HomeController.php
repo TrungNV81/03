@@ -68,7 +68,8 @@ class HomeController extends Controller
                 $path = public_path() . '/' . $importId;
                 mkdir($path, 0777, true);
                 // $this->exportPDF1($importId, $path);
-                $this->exportFile($importId, $path);
+                $this->exportFile1($importId, $path);
+                $this->exportFile2($importId, $path);
                 // $this->sendMail($importId);
                 // $this->deleteFileZip($importId);
             } else {
@@ -97,7 +98,7 @@ class HomeController extends Controller
         $pdf->save($saveFile);
     }
 
-    public function exportFile($importId, $path)
+    public function exportFile1($importId, $path)
     {
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template01.xlsx");
 
@@ -111,7 +112,7 @@ class HomeController extends Controller
             ])
             ->orderByRaw('N DESC')
             ->get();
-        $this->addDataToSheet($dataImport1_1, '先行1階2階', 3, $spreadsheet);
+        $this->addDataToFile1($dataImport1_1, '先行1階2階', 3, $spreadsheet, 2395);
 
         //add data sheet 1-2
         $dataImport1_2 = DB::table('csv_data_import')
@@ -124,7 +125,7 @@ class HomeController extends Controller
             ])
             ->orderByRaw('N DESC')
             ->get();
-        $this->addDataToSheet($dataImport1_2, '先行1階2階', 506, $spreadsheet);
+        $this->addDataToFile1($dataImport1_2, '先行1階2階', 506, $spreadsheet, 2395);
 
         // add data sheet 2
         $dataImport2 = DB::table('csv_data_import')
@@ -136,7 +137,7 @@ class HomeController extends Controller
             ])
             ->orderByRaw('K ASC, N DESC')
             ->get();
-        $this->addDataToSheet($dataImport2, '天井1階', 3, $spreadsheet);
+        $this->addDataToFile1($dataImport2, '天井1階', 3, $spreadsheet, 1820);
 
         // add data sheet 3
         $dataImport3 = DB::table('csv_data_import')
@@ -149,7 +150,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
 
-        $this->addDataToSheet($dataImport3, '天井2階', 3, $spreadsheet);
+        $this->addDataToFile1($dataImport3, '天井2階', 3, $spreadsheet, 1820);
 
         // add data sheet 4-1
         $dataImport4_1 = DB::table('csv_data_import')
@@ -163,7 +164,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
 
-        $this->addDataToSheet($dataImport4_1, '壁1階2階', 3, $spreadsheet);
+        $this->addDataToFile1($dataImport4_1, '壁1階2階', 3, $spreadsheet, 2395);
 
         // add data sheet 4-2
         $dataImport4_2 = DB::table('csv_data_import')
@@ -174,47 +175,47 @@ class HomeController extends Controller
                 ['O', '=', '−'],
                 ['P', '=', '−'],
             ])
-            ->orderByRaw('K ASC,N DESC')
+            ->orderByRaw('K ASC, N DESC')
             ->get();
 
-        $this->addDataToSheet($dataImport4_2, '壁1階2階', 506, $spreadsheet);
+        $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
 
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
         $writer = new Xlsx($spreadsheet);
-        $saveFile = $path . '/' . '門沢橋3丁目2048番・B号棟_加工明細.xlsx';
+        $saveFile = $path . '/' . $importId . '加工明細.xlsx';
         $writer->save($saveFile);
 
         // zip and download file zip
-        $file_folder = $path . '/'; // folder to load files
-        $files = glob($file_folder . '*');
-        if (extension_loaded('zip')) {
-            // Checking files are selected
-            $zip = new ZipArchive(); // Load zip library
-            $zip_name = $importId . '.zip'; // Zip name
-            $zip_folder = $importId . '/';
-            if ($zip->open($zip_name, ZIPARCHIVE::CREATE) !== true) {
-                $error .= "* Sorry ZIP creation failed at this time";
-            }
-            foreach ($files as $file) {
-                $position = strrpos($file, '/');
-                $basename = substr($file, $position + 1);
-                $zip->addFile($zip_folder . $basename);
-                continue;
-            }
+        // $file_folder = $path . '/'; // folder to load files
+        // $files = glob($file_folder . '*');
+        // if (extension_loaded('zip')) {
+        //     // Checking files are selected
+        //     $zip = new ZipArchive(); // Load zip library
+        //     $zip_name = $importId . '.zip'; // Zip name
+        //     $zip_folder = $importId . '/';
+        //     if ($zip->open($zip_name, ZIPARCHIVE::CREATE) !== true) {
+        //         $error .= "* Sorry ZIP creation failed at this time";
+        //     }
+        //     foreach ($files as $file) {
+        //         $position = strrpos($file, '/');
+        //         $basename = substr($file, $position + 1);
+        //         $zip->addFile($zip_folder . $basename);
+        //         continue;
+        //     }
 
-            $isFinished = $zip->close();
-            if ($isFinished) {
-                // remove folder tmp
-                // $this->deleteDirectory($path);
-            } else {
-                throw new Exception("could not close zip file: " . $zip->getStatusString());
-            }
-        }
+        //     $isFinished = $zip->close();
+        //     if ($isFinished) {
+        //         // remove folder tmp
+        //         // $this->deleteDirectory($path);
+        //     } else {
+        //         throw new Exception("could not close zip file: " . $zip->getStatusString());
+        //     }
+        // }
     }
 
-    public function addDataToSheet($dataImport, $sheetName, $index, $spreadsheet)
+    public function addDataToFile1($dataImport, $sheetName, $index, $spreadsheet, $tmpN)
     {
         $importId = $dataImport[0]->id;
         $floor = $dataImport[0]->B;
@@ -250,6 +251,8 @@ class HomeController extends Controller
 
             if ($M == 910) {
                 $I = $M / 1000;
+            } else if ($N == $tmpN) {
+                $I = $N / 1000;
             } else {
                 $I = (910 + $N) / 1000;
             }
@@ -273,29 +276,44 @@ class HomeController extends Controller
             } else {
                 $O = 1;
             }
-            if ($N >= 1600) {$P = 1;} else { $P = $this->roundNumber($N / 1600);}
-            $Q = $this->roundNumber(($data->G) * $O * $P);
-            $R = $this->roundNumber(($M_cell * $N_cell * $Q) / 36);            
+
+            if ($N >= 1600) {
+                $P = 1;
+            } else {
+                $P = $this->roundNumber($N / 1600);
+            }
+
+            $Q = round((($data->G) * $O * $P), 2);
+            $R = round((($M_cell * $N_cell * $Q) / 36), 2);
             $J = intval($data->G) * $I;
-            $indexCell ++;
-            
-            if($name != $data->K)
-            {
-                if($sheetName == '天井1階' || $sheetName == '壁1階2階')
-                {
-                    $sheet->setCellValue('S'.((string)($indexCell - 2)), $total);
+            $indexCell++;
+
+            if ($sheetName == '先行1階2階') {
+                $totalx = floor($total);
+            } else {
+                $totalx = ceil($total);
+            }
+
+            if ($name != $data->K) {
+                if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
+                    $sheet->setCellValue('S' . ((string) ($indexCell - 2)), $total);
                 }
+
                 DB::table('details_data_import')->insert(
                     ['id' => $importId, 'sub_id' => $maxSubId, 'sheet' => $sheetName,
-                    'floor' => $floor, 'name' => $name, 'thickness' => $thickness, 'total' => $total]
+                        'floor' => $floor, 'name' => $name, 'thickness' => $thickness, 'total' => $totalx]
                 );
                 $name = $data->K;
                 $total = $R;
-                $maxSubId ++;
-            }
-            else
-            {
+                $maxSubId++;
+            } else {
                 $total += $R;
+
+                if ($sheetName == '先行1階2階') {
+                    $totalx = floor($total);
+                } else {
+                    $totalx = ceil($total);
+                }
             }
             $totalCellJ += $J;
 
@@ -322,19 +340,50 @@ class HomeController extends Controller
             }
             $index++;
         }
-        if($sheetName == '天井1階' || $sheetName == '壁1階2階')
-        {
-            $sheet->setCellValue('S'.((string)($indexCell - 1)), $total);
+        if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
+            $sheet->setCellValue('S' . ((string) ($indexCell - 1)), $total);
         }
         DB::table('details_data_import')->insert(
             ['id' => $importId, 'sub_id' => $maxSubId, 'sheet' => $sheetName,
-            'floor' => $floor, 'name' => $name, 'thickness' => $thickness, 'total' => $total]
+                'floor' => $floor, 'name' => $name, 'thickness' => $thickness, 'total' => $totalx]
         );
-        $maxSubId ++;
+        $maxSubId++;
         DB::table('details_data_import')->insert(
             ['id' => $importId, 'sub_id' => $maxSubId, 'sheet' => $sheetName,
-            'floor' => $floor, 'name' => '総切断m', 'thickness' => '0', 'total' => ceil($totalCellJ)]
+                'floor' => $floor, 'name' => '総切断m', 'thickness' => '0', 'total' => ceil($totalCellJ)]
         );
+
+    }
+
+    public function exportFile2($importId, $path)
+    {
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/2.xlsx");
+
+        $cellPos = array(
+            "B12", "C12", "B13", "C13", "B14", "C14",
+        );
+
+        $dataImport1 = DB::table('details_data_import')
+            ->where([
+                ['id', '=', $importId],
+                ['thickness', '=', '0'],
+            ])
+            ->get();
+        $spreadsheet->setActiveSheetIndexByName('情報');
+        $sheet = $spreadsheet->getActiveSheet();
+        for ($i = 0; $i < count($cellPos); $i++) {
+            $cellpos = $cellPos[$i];
+            $sheet->setCellValue($cellpos, $dataImport1[$i]->total);
+        }
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // Save file to folder
+        if (ob_get_contents()) ob_end_clean();
+        $writer = new Xlsx($spreadsheet);
+        if (ob_get_contents()) ob_end_clean();
+        $saveFile = $path . '/' . $importId . '2.xlsx';
+        if (ob_get_contents()) ob_end_clean();
+        $writer->save($saveFile);
 
     }
 
