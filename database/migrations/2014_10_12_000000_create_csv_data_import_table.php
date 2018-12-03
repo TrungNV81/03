@@ -28,7 +28,7 @@ class CreateCsvDataImportTable extends Migration
             $table->string('K', 255)->nullable();
             $table->string('L')->nullable();
             $table->string('M')->nullable();
-            $table->string('N')->nullable();
+            $table->integer('N')->nullable();
             $table->string('O', 255)->nullable();
             $table->string('P', 255)->nullable();
             $table->string('Q', 255)->nullable();

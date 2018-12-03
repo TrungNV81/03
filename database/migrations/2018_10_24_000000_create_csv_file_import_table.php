@@ -25,6 +25,6 @@ class CreateCsvFileImportTable extends Migration
      */
     public function down()
     {
-        Schema::drop('mst_category');
+        Schema::drop('csv_file_import');
     }
 }
