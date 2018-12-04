@@ -444,9 +444,90 @@ class HomeController extends Controller
             ->groupBy('K')
             ->get();
 
+        //sheet 営業1便
         $numRec = count($dataImport2);
         $this->addDataToFile2($dataImport2, $spreadsheet, '営業1便', 1, $numRec);
         $this->addDataToFile2($dataImport5, $spreadsheet, '営業1便', 2, $numRec);
+
+            $dataImport6 = DB::table('csv_data_import')
+            ->select('K as name', 'L as thickness', 'M', 'N' , 'G as F1', DB::raw('sum(G) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['A', '=', 'テンジョウ'],
+                ['B', '=', '1階'],
+                ['K', '=', 'べべル'],
+                ['M', '=', '910'],
+                ['N', '=', '1820'],
+                ['O', '=', '○'],
+            ])
+            ->orWhere([
+                ['id', '=', $importId],
+                ['A', '=', 'テンジョウ'],
+                ['B', '=', '2階'],
+                ['K', '=', 'べべル'],
+                ['M', '=', '910'],
+                ['N', '=', '1820'],
+                ['O', '=', '○'],
+            ])
+            ->groupBy('K')
+            ->get();
+
+            //sheet 営業2便
+            $numRec = count($dataImport3);
+            $this->addDataToFile2($dataImport3, $spreadsheet, '営業2便', 1, $numRec);
+            $this->addDataToFile2($dataImport6, $spreadsheet, '営業2便', 2, $numRec);
+
+            $dataImport7 = DB::table('csv_data_import')
+            ->select('K as name', 'L as thickness', 'M', 'N' , 'G as F1', DB::raw('sum(G) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['A', '=', 'カベ'],
+                ['B', '=', '1階'],
+                ['K', '=', 'マーク付きベベル'],
+                ['M', '=', '910'],
+                ['N', '=', '2395'],
+                ['O', '=', '○'],
+            ])
+            ->orWhere([
+                ['id', '=', $importId],
+                ['A', '=', 'カベ'],
+                ['B', '=', '2階'],
+                ['K', '=', 'マーク付きベベル'],
+                ['M', '=', '910'],
+                ['N', '=', '2395'],
+                ['O', '=', '○'],
+            ])
+            ->groupBy('K')
+            ->get();
+
+            $dataImport8 = DB::table('csv_data_import')
+            ->select('K as name', 'L as thickness', 'M', 'N' , 'G as F1', DB::raw('sum(G) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['A', '=', 'カベ'],
+                ['B', '=', '1階'],
+                ['D', '=', 'コーナーボード'],
+                ['M', '=', '65'],
+                ['N', '=', '2395'],
+                ['O', '=', '○'],
+            ])
+            ->orWhere([
+                ['id', '=', $importId],
+                ['A', '=', 'カベ'],
+                ['B', '=', '2階'],
+                ['D', '=', 'コーナーボード'],
+                ['M', '=', '65'],
+                ['N', '=', '2395'],
+                ['O', '=', '○'],
+            ])
+            ->groupBy('K')
+            ->get();
+        //sheet 営業3便
+        $numRec = count($dataImport4);
+        $this->addDataToFile2($dataImport4, $spreadsheet, '営業3便', 1, $numRec);
+        $this->addDataToFile2($dataImport7, $spreadsheet, '営業3便', 2, $numRec);
+        $numRec += count($dataImport7); 
+        $this->addDataToFile2($dataImport8, $spreadsheet, '営業3便', 2, $numRec);
         // end sheet 営業1便
         $spreadsheet->setActiveSheetIndex(0);
 
@@ -473,10 +554,33 @@ class HomeController extends Controller
                 if ($H == 0) {
                     $H = '';
                 }
-                $sheet->setCellValue("B1" . $num, $data[$i]->name);
-                $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
-                $sheet->setCellValue("G1" . $num, $data[$i]->F1);
-                $sheet->setCellValue("H1" . $num, $H);
+                if ($sheetName == '営業1便' || $sheetName == '営業2便' || $sheetName == '営業3便') {
+                    $sheet->setCellValue("B1" . $num, $data[$i]->name);
+                    $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
+                   
+                    if($data[$i]->F1 != '')
+                    {
+                        $sheet->setCellValue("G1" . $num, ($data[$i]->F1)*2);
+                    }
+                    else{
+                        $sheet->setCellValue("G1" . $num, $data[$i]->F1);
+                    }
+
+                    if($H != '')
+                    {
+                        $sheet->setCellValue("H1" . $num, ($H*2));
+                    }
+                    else{
+                        $sheet->setCellValue("H1" . $num, $H);
+                    }
+                }
+                else
+                {
+                    $sheet->setCellValue("B1" . $num, $data[$i]->name);
+                    $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
+                    $sheet->setCellValue("G1" . $num, $data[$i]->F1);
+                    $sheet->setCellValue("H1" . $num, $H);
+                }
             }
         } else {
             $num = $numRec++;
