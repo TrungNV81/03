@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use PDF;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use ZipArchive;
 
 set_time_limit(300);
 class HomeController extends Controller
@@ -80,14 +79,15 @@ class HomeController extends Controller
 
     public function exportPDF($path, $dataPDF, $file_extension)
     {
-        $filename = $dataPDF[0]->Q .$file_extension;
+        $filename = $dataPDF[0]->Q . $file_extension;
         $pdf = PDF::loadView('filepdf1', compact('dataPDF'));
         $pdf->setPaper('a4', 'landscape');
         $saveFile = $path . '/' . $filename;
         $pdf->save($saveFile);
     }
 
-    public function exportFile1($importId, $path)
+    public function exportFile1($importId, $path) // file 指示書
+
     {
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template01.xlsx");
 
@@ -102,7 +102,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_1, '先行1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($path,$dataImport1_1, '1.pdf');
+        $this->exportPDF($path, $dataImport1_1, '1.pdf');
         //add data sheet 1-2
         $dataImport1_2 = DB::table('csv_data_import')
             ->where([
@@ -115,7 +115,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_2, '先行1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($path,$dataImport1_2, '2.pdf');
+        $this->exportPDF($path, $dataImport1_2, '2.pdf');
         // add data sheet 2
         $dataImport2 = DB::table('csv_data_import')
             ->where([
@@ -127,7 +127,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
         $this->addDataToFile1($dataImport2, '天井1階', 3, $spreadsheet, 1820);
-        $this->exportPDF($path,$dataImport2, '3.pdf');
+        $this->exportPDF($path, $dataImport2, '3.pdf');
         // add data sheet 3
         $dataImport3 = DB::table('csv_data_import')
             ->where([
@@ -140,7 +140,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport3, '天井2階', 3, $spreadsheet, 1820);
-        $this->exportPDF($path,$dataImport3, '4.pdf');
+        $this->exportPDF($path, $dataImport3, '4.pdf');
         // add data sheet 4-1
         $dataImport4_1 = DB::table('csv_data_import')
             ->where([
@@ -154,7 +154,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_1, '壁1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($path,$dataImport4_1, '5.pdf');
+        $this->exportPDF($path, $dataImport4_1, '5.pdf');
         // add data sheet 4-2
         $dataImport4_2 = DB::table('csv_data_import')
             ->where([
@@ -168,7 +168,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($path,$dataImport4_2, '6.pdf');
+        $this->exportPDF($path, $dataImport4_2, '6.pdf');
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
@@ -204,7 +204,8 @@ class HomeController extends Controller
         // }
     }
 
-    public function addDataToFile1($dataImport, $sheetName, $index, $spreadsheet, $tmpN)
+    public function addDataToFile1($dataImport, $sheetName, $index, $spreadsheet, $tmpN) // file 指示書
+
     {
         $importId = $dataImport[0]->id;
         $floor = $dataImport[0]->B;
@@ -416,6 +417,35 @@ class HomeController extends Controller
         $this->addDataToFile2($dataImport4, $spreadsheet, '工場3便');
         // end sheet 工場3便
 
+        // sheet 営業1便
+        $dataImport5 = DB::table('csv_data_import')
+            ->select('K as name', 'L as thickness', 'G as F1', DB::raw('sum(G) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['A', '=', 'カベ'],
+                ['B', '=', '1階'],
+                ['I', '=', '先行ボード'],
+                ['K', '=', 'マーク付きベベル'],
+                ['M', '=', '910'],
+                ['N', '=', '2395'],
+                ['O', '=', '○'],
+            ])
+            ->orWhere([
+                ['id', '=', $importId],
+                ['A', '=', 'カベ'],
+                ['B', '=', '2階'],
+                ['I', '=', '先行ボード'],
+                ['K', '=', 'マーク付きベベル'],
+                ['M', '=', '910'],
+                ['N', '=', '2395'],
+                ['O', '=', '○'],
+            ])
+            ->groupBy('K')
+            ->get();
+
+        $this->addDataToFile2($dataImport2, $spreadsheet, '営業1便');
+        $this->addDataToFile2($dataImport5, $spreadsheet, '営業1便');
+        // end sheet 営業1便
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
@@ -425,10 +455,15 @@ class HomeController extends Controller
 
     }
 
-    private function addDataToFile2($data, $spreadsheet, $sheetName)
+    private function addDataToFile2($data, $spreadsheet, $sheetName) // file 指示書
+
     {
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
+
+        if ($sheetName == '営業1便') {
+
+        }
 
         $num = 2;
         for ($i = 0; $i < count($data); $i++, $num++) {
