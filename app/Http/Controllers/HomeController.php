@@ -21,53 +21,53 @@ class HomeController extends Controller
             $start_date = $dateNew - $dateOld;
             // if ($start_date < 60) {
             if (true) {
-                $importMaxId = DB::table('csv_data_import')->max('id');
-                if ($importMaxId == "") {
-                    $importMaxId = 0;
-                }
-                $importMaxId += 1;
+                // $importMaxId = DB::table('csv_data_import')->max('id');
+                // if ($importMaxId == "") {
+                //     $importMaxId = 0;
+                // }
+                // $importMaxId += 1;
 
-                $importId = $importMaxId;
-                $subId = 1;
-                $fileReader = fopen($file, 'r');
-                echo "<h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thanh cong: " . basename($file) . " (Khoang thoi gian: " . $start_date . ")</h2>";
-                while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
-                    $colA = mb_convert_encoding($data[0], 'UTF-8', 'Shift-JIS');
-                    $colB = mb_convert_encoding($data[1], 'UTF-8', 'Shift-JIS');
-                    $colC = mb_convert_encoding($data[2], 'UTF-8', 'Shift-JIS');
-                    $colD = mb_convert_encoding($data[3], 'UTF-8', 'Shift-JIS');
-                    $colE = mb_convert_encoding($data[4], 'UTF-8', 'Shift-JIS');
-                    $colF = mb_convert_encoding($data[5], 'UTF-8', 'Shift-JIS');
-                    $colG = mb_convert_encoding($data[6], 'UTF-8', 'Shift-JIS');
-                    $colH = mb_convert_encoding($data[7], 'UTF-8', 'Shift-JIS');
-                    $colI = mb_convert_encoding($data[8], 'UTF-8', 'Shift-JIS');
-                    $colJ = mb_convert_encoding($data[9], 'UTF-8', 'Shift-JIS');
-                    $colK = mb_convert_encoding($data[10], 'UTF-8', 'Shift-JIS');
-                    $colL = mb_convert_encoding($data[11], 'UTF-8', 'Shift-JIS');
-                    $colM = mb_convert_encoding($data[12], 'UTF-8', 'Shift-JIS');
-                    $colN = mb_convert_encoding($data[13], 'UTF-8', 'Shift-JIS');
-                    $colO = mb_convert_encoding($data[14], 'UTF-8', 'Shift-JIS');
-                    $colP = mb_convert_encoding($data[15], 'UTF-8', 'Shift-JIS');
-                    $colQ = mb_convert_encoding($data[16], 'UTF-8', 'Shift-JIS');
-                    DB::table('csv_data_import')->insert(
-                        ['id' => $importId, 'sub_id' => $subId, 'A' => $colA, 'B' => $colB,
-                            'C' => $colC, 'D' => $colD, 'E' => $colE, 'F' => $colF, 'G' => $colG,
-                            'H' => $colH, 'I' => $colI, 'J' => $colJ, 'K' => $colK, 'L' => $colL,
-                            'M' => $colM, 'N' => $colN, 'O' => $colO, 'P' => $colP, 'Q' => $colQ]
-                    );
-                    $subId++;
-                }
-                fclose($fileReader);
+                // $importId = $importMaxId;
+                // $subId = 1;
+                // $fileReader = fopen($file, 'r');
+                // echo "<h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thanh cong: " . basename($file) . " (Khoang thoi gian: " . $start_date . ")</h2>";
+                // while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
+                //     $colA = mb_convert_encoding($data[0], 'UTF-8', 'Shift-JIS');
+                //     $colB = mb_convert_encoding($data[1], 'UTF-8', 'Shift-JIS');
+                //     $colC = mb_convert_encoding($data[2], 'UTF-8', 'Shift-JIS');
+                //     $colD = mb_convert_encoding($data[3], 'UTF-8', 'Shift-JIS');
+                //     $colE = mb_convert_encoding($data[4], 'UTF-8', 'Shift-JIS');
+                //     $colF = mb_convert_encoding($data[5], 'UTF-8', 'Shift-JIS');
+                //     $colG = mb_convert_encoding($data[6], 'UTF-8', 'Shift-JIS');
+                //     $colH = mb_convert_encoding($data[7], 'UTF-8', 'Shift-JIS');
+                //     $colI = mb_convert_encoding($data[8], 'UTF-8', 'Shift-JIS');
+                //     $colJ = mb_convert_encoding($data[9], 'UTF-8', 'Shift-JIS');
+                //     $colK = mb_convert_encoding($data[10], 'UTF-8', 'Shift-JIS');
+                //     $colL = mb_convert_encoding($data[11], 'UTF-8', 'Shift-JIS');
+                //     $colM = mb_convert_encoding($data[12], 'UTF-8', 'Shift-JIS');
+                //     $colN = mb_convert_encoding($data[13], 'UTF-8', 'Shift-JIS');
+                //     $colO = mb_convert_encoding($data[14], 'UTF-8', 'Shift-JIS');
+                //     $colP = mb_convert_encoding($data[15], 'UTF-8', 'Shift-JIS');
+                //     $colQ = mb_convert_encoding($data[16], 'UTF-8', 'Shift-JIS');
+                //     DB::table('csv_data_import')->insert(
+                //         ['id' => $importId, 'sub_id' => $subId, 'A' => $colA, 'B' => $colB,
+                //             'C' => $colC, 'D' => $colD, 'E' => $colE, 'F' => $colF, 'G' => $colG,
+                //             'H' => $colH, 'I' => $colI, 'J' => $colJ, 'K' => $colK, 'L' => $colL,
+                //             'M' => $colM, 'N' => $colN, 'O' => $colO, 'P' => $colP, 'Q' => $colQ]
+                //     );
+                //     $subId++;
+                // }
+                // fclose($fileReader);
 
-                DB::table('csv_file_import')->insert(
-                    ['id' => $importId, 'file_name' => basename($file)]
-                );
+                // DB::table('csv_file_import')->insert(
+                //     ['id' => $importId, 'file_name' => basename($file)]
+                // );
 
                 // Create folder
-                $path = public_path() . '/' . $importId;
+                $path = public_path() . '/1';
                 mkdir($path, 0777, true);
-                $this->exportFile1($importId, $path);
-                $this->exportFile2($importId, $path);
+                // $this->exportFile1($importId, $path);
+                $this->exportFile2(1, $path);
                 // $this->sendMail($importId);
                 // $this->deleteFileZip($importId);
             } else {
@@ -379,8 +379,9 @@ class HomeController extends Controller
             ])
             ->groupBy('name')
             ->get();
-
-        $this->addDataToFile2($dataImport2, $spreadsheet, '工場1便');
+        
+        $numRec = 0;
+        $this->addDataToFile2($dataImport2, $spreadsheet, '工場1便', 1, $numRec);
 
         // end sheet 工場1便
 
@@ -399,8 +400,8 @@ class HomeController extends Controller
             ])
             ->groupBy('name')
             ->get();
-
-        $this->addDataToFile2($dataImport3, $spreadsheet, '工場2便');
+        $numRec = 0;
+        $this->addDataToFile2($dataImport3, $spreadsheet, '工場2便', 1, $numRec);
         // end sheet 工場2便
 
         // sheet 工場3便
@@ -413,13 +414,13 @@ class HomeController extends Controller
             ])
             ->groupBy('name')
             ->get();
-
-        $this->addDataToFile2($dataImport4, $spreadsheet, '工場3便');
+        $numRec = 0;
+        $this->addDataToFile2($dataImport4, $spreadsheet, '工場3便', 1, $numRec);
         // end sheet 工場3便
 
         // sheet 営業1便
         $dataImport5 = DB::table('csv_data_import')
-            ->select('K as name', 'L as thickness', 'G as F1', DB::raw('sum(G) as total'))
+            ->select('K as name', 'L as thickness', 'M', 'N' , 'G as F1', DB::raw('sum(G) as total'))
             ->where([
                 ['id', '=', $importId],
                 ['A', '=', 'カベ'],
@@ -443,8 +444,9 @@ class HomeController extends Controller
             ->groupBy('K')
             ->get();
 
-        $this->addDataToFile2($dataImport2, $spreadsheet, '営業1便');
-        $this->addDataToFile2($dataImport5, $spreadsheet, '営業1便');
+        $numRec = count($dataImport2);
+        $this->addDataToFile2($dataImport2, $spreadsheet, '営業1便', 1, $numRec);
+        $this->addDataToFile2($dataImport5, $spreadsheet, '営業1便', 2, $numRec);
         // end sheet 営業1便
         $spreadsheet->setActiveSheetIndex(0);
 
@@ -455,26 +457,41 @@ class HomeController extends Controller
 
     }
 
-    private function addDataToFile2($data, $spreadsheet, $sheetName) // file 指示書
+    private function addDataToFile2($data, $spreadsheet, $sheetName, $numRow, $numRec) // file 指示書
 
     {
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
-
-        if ($sheetName == '営業1便') {
-
-        }
-
-        $num = 2;
-        for ($i = 0; $i < count($data); $i++, $num++) {
-            $H = $data[$i]->total - $data[$i]->F1;
-            if ($H == 0) {
-                $H = '';
+        if ($numRow == 1) {
+            if ($sheetName == '営業1便' || $sheetName == '営業2便' || $sheetName == '営業3便') {
+                $num = 0;
+            } else {
+                $num = 2;
             }
-            $sheet->setCellValue("B1" . $num, $data[$i]->name);
-            $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
-            $sheet->setCellValue("G1" . $num, $data[$i]->F1);
-            $sheet->setCellValue("H1" . $num, $H);
+            for ($i = 0; $i < count($data); $i++, $num++) {
+                $H = $data[$i]->total - $data[$i]->F1;
+                if ($H == 0) {
+                    $H = '';
+                }
+                $sheet->setCellValue("B1" . $num, $data[$i]->name);
+                $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
+                $sheet->setCellValue("G1" . $num, $data[$i]->F1);
+                $sheet->setCellValue("H1" . $num, $H);
+            }
+        } else {
+            $num = $numRec++;
+            for ($i = 0; $i < count($data); $i++, $num++) {
+                $F = $data[$i]->M . '×' . $data[$i]->N;
+                $H = $data[$i]->total - $data[$i]->F1;
+                if ($H == 0) {
+                    $H = '';
+                }
+                $sheet->setCellValue("B1" . $num, $data[$i]->name);
+                $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
+                $sheet->setCellValue("F1" . $num, $F);
+                $sheet->setCellValue("G1" . $num, $data[$i]->F1);
+                $sheet->setCellValue("H1" . $num, $H);
+            }
         }
     }
 
