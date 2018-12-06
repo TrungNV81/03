@@ -201,6 +201,7 @@ class HomeController extends Controller
     public function addDataToFile1($dataImport, $sheetName, $index, $spreadsheet, $tmpN) // file 指示書
 
     {
+        $startCell = $index;
         $importId = $dataImport[0]->id;
         $floor = $dataImport[0]->B;
         $thickness = $dataImport[0]->L;
@@ -324,6 +325,19 @@ class HomeController extends Controller
             }
             $index++;
         }
+        $endCell = 0;
+        if($startCell == 3)
+        {
+            $endCell = 502;
+        }
+
+        if($startCell == 506)
+        {
+            $endCell = 1005;
+        }
+
+        $this->closeEmptyExcel($index, $endCell, $spreadsheet);
+
         if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
             $sheet->setCellValue('S' . ((string) ($indexCell - 1)), $total);
         }
@@ -523,7 +537,7 @@ class HomeController extends Controller
         $this->addDataToFile2($dataImport4, $spreadsheet, '営業3便', 1, $numRec);
         $this->addDataToFile2($dataImport7, $spreadsheet, '営業3便', 2, $numRec);
         $numRec += count($dataImport7);
-        $this->addDataToFile2($dataImport8, $spreadsheet, '営業3便', 2, $numRec);
+        $this->addDataToFile2($dataImport8, $spreadsheet, '営業3便', 3, $numRec);
         // end sheet 営業3便
 
         $spreadsheet->setActiveSheetIndex(0);
@@ -611,18 +625,24 @@ class HomeController extends Controller
             $sheet->setCellValue("J1" . $num, ' 枚');
             $num++;
         }
+        $num += 10;
+        $this->closeEmptyExcel($num, 21, $spreadsheet);
     }
 
     private function addDataToFile2($data, $spreadsheet, $sheetName, $numRow, $numRec) // file 指示書
 
     {
+        $flag;
+        $num = 0;
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
         if ($numRow == 1) {
             if ($sheetName == '営業1便' || $sheetName == '営業2便' || $sheetName == '営業3便') {
                 $num = 0;
+                $flag = 0;
             } else {
                 $num = 2;
+                $flag = 1;
             }
             for ($i = 0; $i < count($data); $i++, $num++) {
                 $H = $data[$i]->total - $data[$i]->F1;
@@ -660,6 +680,16 @@ class HomeController extends Controller
                     $sheet->setCellValue("H1" . $num, $H);
                 }
             }
+            if($flag == 1 && $sheetName != '営業3便')
+            {
+                $num += 10;
+                $this->closeEmptyExcel($num, 15, $spreadsheet);
+            }
+            if($numRow == 3 && $sheetName == '営業3便')
+            {
+                $num += 10;
+                $this->closeEmptyExcel($num, 15, $spreadsheet);
+            }
         } else {
             $num = $numRec++;
             for ($i = 0; $i < count($data); $i++, $num++) {
@@ -675,6 +705,15 @@ class HomeController extends Controller
                 $sheet->setCellValue("G1" . $num, $data[$i]->F1);
                 $sheet->setCellValue("H1" . $num, $H);
             }
+            $num += 11;
+            $this->closeEmptyExcel($num, 16, $spreadsheet);
+        }
+    }
+
+    private function closeEmptyExcel($startCell, $endCell, $spreadsheet)
+    {    
+        for ($i = $startCell; $i <= $endCell; $i++) {
+            $spreadsheet->getActiveSheet()->getRowDimension($i)->setVisible(false);
         }
     }
 
@@ -744,6 +783,8 @@ class HomeController extends Controller
         $sheet->setCellValue("G1" . $num, $data2[$indexData2]->F1);
         $sheet->setCellValue("H1" . $num, $H);
         $sheet->setCellValue("J1" . $num, '枚');
+        $num += 11;
+        $this->closeEmptyExcel($num++, 21, $spreadsheet);
     }
 
     private function roundNumber($number)
