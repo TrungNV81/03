@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>{{$filename}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:103,600" rel="stylesheet" type="text/css">
@@ -26,21 +26,21 @@
         .circle {
             background: rgb(0, 217, 255);
             text-align: center !important;
-            border-radius: 12px;
-            height: 24px;
-            width: 24px;
+            border-radius: 10px;
+            height: 20px;
+            width: 20px;
             position: absolute !important;
             font-size: 11px;
             display: inline-block;
             padding: 0px !important;
             margin: 0px !important;
+            line-height: 10px;
+            margin-top: 5px !important;
         }
 
-        td,
-        tr {
-            margin: 0px !important;
-            padding-top: 0px !important;
-            padding-bottom: 0px !important;
+        td {
+            line-height: 15px;        
+            height: 20px;
         }
 
         table {
@@ -48,32 +48,32 @@
         }
 
         .circle2 {
-            background: red;
+            background: rgb(255, 77, 77);;
             text-align: center !important;
-            border-radius: 12px;
-            height: 24px;
-            width: 24px;
+            border-radius: 10px;
+            height: 20px;
+            width: 20px;
             position: absolute !important;
             font-size: 11px;
             display: inline-block;
             padding: 0px !important;
             margin: 0px !important;
+            line-height: 10px;
+            margin-top: 5px !important;
         }
 
         .td1 {
             text-align: right;
             font-size: 10px;
             width: 13% !important;
-            padding: 0px !important;
-            margin: 0px !important;
         }
 
         .td2 {
             text-align: right;
-            font-size: 15px;
+            font-size: 17px;
             width: 5% !important;
-            /* padding-left:20px !important; */
             padding-right: 8px !important;
+            padding-bottom: 4px !important;
         }
 
     </style>
@@ -87,20 +87,20 @@
                     $page = (int)(count($dataPDF)/74);
                     // echo $page;
                 ?> @if($page >0) @for ($j = 0; $j
-                < $page; $j++) @if($j*74 < count($dataPDF)) <div style="text-align: center;">{{ $dataPDF[0]->Q }}_１階先行壁</div>
+                < $page; $j++) @if($j*74 < count($dataPDF)) <div style="text-align: center;">{{ $filename }}</div>
             <table style="page-break-after:always;width: 103%;">
                 @for ($i = $j*74; $i
                 < ($j + 1)*74; $i+=4) <tr style="width: 103%;">
                     @if ($i
                     < count($dataPDF)) @if($dataPDF[$i]->B == '1階')
-                        <td style="padding-top:3px;">
-                            <span class="circle">
+                        <td>
+                            <span class="circle" style="">
                                 <b>1F</b>
                             </span>
                         </td>
                         @else
-                        <td style="padding-top:3px;">
-                            <span class="circle2">
+                        <td>
+                            <span class="circle2" style="">
                                 <b>2F</b>
                             </span>
                         </td>
@@ -116,14 +116,14 @@
 
                         @endif @if ($i
                         < count($dataPDF) -1) @if($dataPDF[$i]->B == '1階')
-                            <td style="padding-top:3px;">
-                                <span class="circle">
+                            <td>
+                                <span class="circle" style="">
                                     <b>1F</b>
                                 </span>
                             </td>
                             @else
-                            <td style="padding-top:3px;">
-                                <span class="circle2">
+                            <td>
+                                <span class="circle2" style="">
                                     <b>2F</b>
                                 </span>
                             </td>
@@ -139,14 +139,14 @@
 
                             @endif @if ($i
                             < count($dataPDF) -2) @if($dataPDF[$i]->B == '1階')
-                                <td style="padding-top:3px;">
-                                    <span class="circle">
+                                <td>
+                                    <span class="circle" style="">
                                         <b>1F</b>
                                     </span>
                                 </td>
                                 @else
-                                <td style="padding-top:3px;">
-                                    <span class="circle2">
+                                <td>
+                                    <span class="circle2" style="">
                                         <b>2F</b>
                                     </span>
                                 </td>
@@ -163,14 +163,14 @@
 
                                 @endif @if ($i
                                 < count($dataPDF) - 3) @if($dataPDF[$i]->B == '1階')
-                                    <td style="padding-top:3px;">
-                                        <span class="circle">
+                                    <td>
+                                        <span class="circle" style="">
                                             <b>1F</b>
                                         </span>
                                     </td>
                                     @else
-                                    <td style="padding-top:3px;">
-                                        <span class="circle2">
+                                    <td>
+                                        <span class="circle2" style="">
                                             <b>2F</b>
                                         </span>
                                     </td>
@@ -190,20 +190,20 @@
             </table>
             <!-- @endif -->
             @endfor @endif @if(($page * 74
-            < count($dataPDF)) || $page==0 ) <div style="text-align: center;">{{ $dataPDF[0]->Q }}_１階先行壁</div>
+            < count($dataPDF)) || $page==0 ) <div style="text-align: center;">{{ $filename }}</div>
         <table style="width: 103%;">
             @for ($i = $page * 74; $i
             < count($dataPDF); $i+=4) <tr style="width: 103%;">
                 @if ($i
                 < count($dataPDF)) @if($dataPDF[$i]->B == '1階')
-                    <td style="padding-top:3px;">
-                        <span class="circle">
+                    <td>
+                        <span class="circle" style="">
                             <b>1F</b>
                         </span>
                     </td>
                     @else
-                    <td style="padding-top:3px;">
-                        <span class="circle2">
+                    <td>
+                        <span class="circle2" style="">
                             <b>2F</b>
                         </span>
                     </td>
@@ -219,14 +219,14 @@
 
                     @endif @if ($i
                     < count($dataPDF) -1) @if($dataPDF[$i]->B == '1階')
-                        <td style="padding-top:3px;">
-                            <span class="circle">
+                        <td>
+                            <span class="circle" style="">
                                 <b>1F</b>
                             </span>
                         </td>
                         @else
-                        <td style="padding-top:3px;">
-                            <span class="circle2">
+                        <td>
+                            <span class="circle2" style="">
                                 <b>2F</b>
                             </span>
                         </td>
@@ -242,14 +242,14 @@
 
                         @endif @if ($i
                         < count($dataPDF) -2) @if($dataPDF[$i]->B == '1階')
-                            <td style="padding-top:3px;">
-                                <span class="circle">
+                            <td>
+                                <span class="circle" style="">
                                     <b>1F</b>
                                 </span>
                             </td>
                             @else
-                            <td style="padding-top:3px;">
-                                <span class="circle2">
+                            <td>
+                                <span class="circle2" style="">
                                     <b>2F</b>
                                 </span>
                             </td>
@@ -266,14 +266,14 @@
 
                             @endif @if ($i
                             < count($dataPDF) - 3) @if($dataPDF[$i]->B == '1階')
-                                <td style="padding-top:3px;">
-                                    <span class="circle">
+                                <td>
+                                    <span class="circle" style="">
                                         <b>1F</b>
                                     </span>
                                 </td>
                                 @else
-                                <td style="padding-top:3px;">
-                                    <span class="circle2">
+                                <td>
+                                    <span class="circle2" style="">
                                         <b>2F</b>
                                     </span>
                                 </td>
