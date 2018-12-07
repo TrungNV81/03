@@ -29,8 +29,9 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        $importId = $this->demo->import_id;
-        return $this->from('sender@example.com')
+        $path = $this->demo->path;
+        $filename = $this->demo->filename;
+        return $this->from('module03@sonthanh.vn')
             ->view('mails.demo')
             ->subject("Email from MODULE-03")
             ->with(
@@ -38,8 +39,8 @@ class SendEmail extends Mailable
                     'testVarOne' => '1',
                     'testVarTwo' => '2',
                 ])
-            ->attach(public_path('/') . $importId . '.zip', [
-                'as' => $importId . '.zip',
+            ->attach($path . '.zip', [
+                'as' => $filename . '.zip',
                 'mime' => 'zip',
             ]);
     }

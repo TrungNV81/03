@@ -82,10 +82,9 @@ class HomeController extends Controller
                 mkdir($pathExcel, 0777, true);
                 $this->exportFile1($importId, $pathExcel,$filename);
                 $this->exportFile2($importId, $pathExcel);
-                // $this->sendMail($importId);
-                
                 $this->zip($path, $filename);
-                // $this->deleteFileZip($filename);
+                $this->sendMail($path, $filename);
+                $this->deleteFileZip($filename);
             } else {
                 echo "<h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That bai: " . basename($file) . " (Khoang thoi gian: " . $start_date . ")</h2>";
             }
@@ -823,16 +822,17 @@ class HomeController extends Controller
         }  
     }
 
-    public function sendMail($importId)
+    public function sendMail($path, $filename)
     {
         $objDemo = new \stdClass();
         $objDemo->demo_one = 'Demo One Value';
         $objDemo->demo_two = 'Demo Two Value';
         $objDemo->sender = 'Trung Admin';
         $objDemo->receiver = 'Trung User';
-        $objDemo->import_id = $importId;
+        $objDemo->path = $path;
+        $objDemo->filename = $filename;
 
-        Mail::to("nguyentrung17891@gmail.com")->send(new SendEmail($objDemo));
+        Mail::to("trungnv@eplatform.vn")->send(new SendEmail($objDemo));
     }
 
     public function deleteFileZip($importId)
