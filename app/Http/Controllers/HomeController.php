@@ -14,15 +14,17 @@ use ZipArchive;
 set_time_limit(600);
 class HomeController extends Controller
 {
+    public function index()
+    {
+        return view("index");
+    }
+
     public function readAndSaveCSV()
     {
         $dir = public_path() . '/files/';
         $files = glob($dir . '*');
         foreach ($files as $file) {
-            $dateOld = strtotime(date("Y-m-d H:i:s", filemtime($file)));
-            $dateNew = strtotime(date('Y-m-d H:i:s'));
-            $start_date = $dateNew - $dateOld;
-            // if ($start_date < 60) {
+            $dateNew = date('Y-m-d H:i:s');
             if (true) {
                 $importMaxId = DB::table('csv_data_import')->max('id');
                 if ($importMaxId == "") {
@@ -33,7 +35,7 @@ class HomeController extends Controller
                 $importId = $importMaxId;
                 $subId = 1;
                 $fileReader = fopen($file, 'r');
-                echo "<h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thanh cong: " . basename($file) . " (Khoang thoi gian: " . $start_date . ")</h2>";
+                echo " success: " . basename($file) . " (time: " . $dateNew . ")";
                 while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
                     $colA = mb_convert_encoding($data[0], 'UTF-8', 'Shift-JIS');
                     $colB = mb_convert_encoding($data[1], 'UTF-8', 'Shift-JIS');
@@ -61,51 +63,37 @@ class HomeController extends Controller
                     $subId++;
                 }
                 fclose($fileReader);
-
                 DB::table('csv_file_import')->insert(
                     ['id' => $importId, 'file_name' => basename($file)]
                 );
 
-                $filenameArr = DB::table('csv_data_import')
-                ->select('Q')
-                ->where([
-                    ['id', '=', $importId],
-                ])
-                ->get();
-
-                $filename = $filenameArr[0]->Q;
-                // Create folder
-                $path = public_path() . '/' .  $filename;
+                $strrpos = strrpos($file, '/');
+                $substr =  substr($file, $strrpos + 1);
+                $filename = explode( '.', $substr);
+                // Create folder temp
+                $path = public_path() . '/' .  $filename[0];
                 mkdir($path, 0777, true);
-
-                $pathExcel = public_path() . '/' . $filename. '/' .'EXCEL';
+                // Create folder Excel
+                $pathExcel = $path . '/EXCEL';
                 mkdir($pathExcel, 0777, true);
-                $this->exportFile1($importId, $pathExcel,$filename);
-                $this->exportFile2($importId, $pathExcel);
-                $this->zip($path, $filename);
-                $this->sendMail($path, $filename);
-                $this->deleteFileZip($filename);
+
+                $this->exportFile1($importId, $pathExcel, $filename[0]);
+                $this->exportFile2($importId, $pathExcel, $filename[0]);
+                $this->zip($path, $filename[0]);
+                $this->sendMail($path, $filename[0]);
+                $this->deleteFileZip($filename[0]);
             } else {
-                echo "<h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That bai: " . basename($file) . " (Khoang thoi gian: " . $start_date . ")</h2>";
+                echo " fail: " . basename($file) . " (time: " . $dateNew . ")</h2>";
             }
-            // end if($start_date < 60)
         }
     }
 
-    public function exportPDF($path, $dataPDF, $file_extension)
+    public function exportFile1($importId, $pathExcel, $filename) // file 指示書
     {
-        $filename = $dataPDF[0]->Q . $file_extension;
-        $pdf = PDF::loadView('filepdf1', compact('dataPDF','filename'));
-        $pdf->setPaper('a4', 'landscape');
-        $saveFile = $path . '/' . $filename .'.pdf';
-        $pdf->save($saveFile);
-    }
-
-    public function exportFile1($importId, $path, $filename) // file 指示書
-
-    {
-        $pathPDF = public_path() . '/' . $filename. '/' .'PDF';
+        // Create folder PDF
+        $pathPDF = public_path() . '/' . $filename .'/PDF';
         mkdir($pathPDF, 0777, true);
+
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template01.xlsx");
 
         $dataImport1_1 = DB::table('csv_data_import')
@@ -119,7 +107,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_1, '先行1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport1_1, '_１階先行壁');
+        $this->exportPDF($pathPDF, $dataImport1_1, '_１階先行壁', $filename);
         //add data sheet 1-2
         $dataImport1_2 = DB::table('csv_data_import')
             ->where([
@@ -132,7 +120,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_2, '先行1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport1_2, '_２階先行壁');
+        $this->exportPDF($pathPDF, $dataImport1_2, '_２階先行壁', $filename);
         // add data sheet 2
         $dataImport2 = DB::table('csv_data_import')
             ->where([
@@ -144,7 +132,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
         $this->addDataToFile1($dataImport2, '天井1階', 3, $spreadsheet, 1820);
-        $this->exportPDF($pathPDF, $dataImport2, '_１階天井');
+        $this->exportPDF($pathPDF, $dataImport2, '_１階天井', $filename);
         // add data sheet 3
         $dataImport3 = DB::table('csv_data_import')
             ->where([
@@ -157,7 +145,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport3, '天井2階', 3, $spreadsheet, 1820);
-        $this->exportPDF($pathPDF, $dataImport3, '_２階天井 ');
+        $this->exportPDF($pathPDF, $dataImport3, '_２階天井 ', $filename);
         // add data sheet 4-1
         $dataImport4_1 = DB::table('csv_data_import')
             ->where([
@@ -171,7 +159,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_1, '壁1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport4_1, '_１階壁');
+        $this->exportPDF($pathPDF, $dataImport4_1, '_１階壁', $filename);
         // add data sheet 4-2
         $dataImport4_2 = DB::table('csv_data_import')
             ->where([
@@ -185,20 +173,18 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁');
+        $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename);
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
-        $filename = $dataImport1_1[0]->Q;
+        // $filename = $dataImport1_1[0]->Q;
         $writer = new Xlsx($spreadsheet);
-        $saveFile = $path . '/' . $filename . '_加工明細.xlsx';
+        $saveFile = $pathExcel . '/' . $filename . '_加工明細.xlsx';
         $writer->save($saveFile);
-
 
     }
 
     public function addDataToFile1($dataImport, $sheetName, $index, $spreadsheet, $tmpN) // file 指示書
-
     {
         $startCell = $index;
         $importId = $dataImport[0]->id;
@@ -352,7 +338,15 @@ class HomeController extends Controller
 
     }
 
-    public function exportFile2($importId, $path) // file 指示書
+    public function exportPDF($pathPDF, $dataPDF, $file_extension, $filename)
+    {
+        $pdf = PDF::loadView('filepdf1', compact('dataPDF','filename'));
+        $pdf->setPaper('a4', 'landscape');
+        $saveFile = $pathPDF . '/' . $filename . $file_extension .'.pdf';
+        $pdf->save($saveFile);
+    }
+
+    public function exportFile2($importId, $pathExcel, $filename) // file 指示書
 
     {
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template02.xlsx");
@@ -389,7 +383,6 @@ class HomeController extends Controller
 
         $numRec = 0;
         $this->addDataToFile2($dataImport2, $spreadsheet, '工場1便', 1, $numRec);
-
         // end sheet 工場1便
 
         // sheet 工場2便
@@ -542,8 +535,7 @@ class HomeController extends Controller
         $spreadsheet->setActiveSheetIndex(0);
         // Save file to folder
         $writer = new Xlsx($spreadsheet);
-        $filename = $dataImport5[0]->Q;  
-        $saveFile = $path . '/' . $filename . '_指示書.xlsx';
+        $saveFile = $pathExcel . '/' . $filename . '_指示書.xlsx';
         // $saveFile = $path . '/' . $importId . '2.xlsx';
         $writer->save($saveFile);
 
@@ -552,16 +544,15 @@ class HomeController extends Controller
         $spreadsheet1->setActiveSheetIndex(0);
         // Save file to folder
         $writer1 = new Xlsx($spreadsheet1);
-        $saveFile = $path . '/' . $filename . '_受注1便.xlsx';
+        $saveFile = $pathExcel . '/' . $filename . '_受注1便.xlsx';
         $writer1->save($saveFile);
-
 
         $spreadsheet2 = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template03.xlsx");
         $this->addDataToFile3and4($dataImport3, $dataImport6, $spreadsheet2, '受注');
         $spreadsheet2->setActiveSheetIndex(0);
         // Save file to folder
         $writer2 = new Xlsx($spreadsheet2);
-        $saveFile = $path . '/' . $filename . '_受注2便.xlsx';
+        $saveFile = $pathExcel . '/' . $filename . '_受注2便.xlsx';
         $writer2->save($saveFile);
 
         $spreadsheet3 = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template03.xlsx");
@@ -569,10 +560,9 @@ class HomeController extends Controller
         $spreadsheet3->setActiveSheetIndex(0);
         // Save file to folder
         $writer3 = new Xlsx($spreadsheet3);
-        $saveFile = $path . '/' . $filename . '_受注3便.xlsx';
+        $saveFile = $pathExcel . '/' . $filename . '_受注3便.xlsx';
         $writer3->save($saveFile);
 
-       
     }
 
     private function addDataToFile5($data1, $data2, $data3, $spreadsheet, $sheetName){
@@ -832,7 +822,7 @@ class HomeController extends Controller
         $objDemo->path = $path;
         $objDemo->filename = $filename;
 
-        Mail::to("trungnv@eplatform.vn")->send(new SendEmail($objDemo));
+        Mail::to("nguyentrung17891@gmail.com")->send(new SendEmail($objDemo));
     }
 
     public function deleteFileZip($importId)

@@ -15,4 +15,5 @@
 //     return view('welcome');
 // });
 
-Route::get('', 'HomeController@readAndSaveCSV');
+Route::get('', 'HomeController@index');
+Route::get('export', 'HomeController@readAndSaveCSV')->name('export');
