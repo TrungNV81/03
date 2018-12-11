@@ -11,9 +11,17 @@
 |
  */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('login','LoginController@getLogin')->name('login');
+Route::post('login','LoginController@postLogin');
 
-Route::get('', 'HomeController@index');
-Route::get('export', 'HomeController@readAndSaveCSV')->name('export');
+Route::get('logout', function(){
+    Auth::logout();
+    return Redirect::to('login');
+});
+
+Route::get('batch', 'HomeController@batch');
+Route::get('export', 'HomeController@handle')->name('export');
+
+
+Route::get('','AdminController@getIndex');
+Route::get('history','AdminController@manageHistory')->name('history');

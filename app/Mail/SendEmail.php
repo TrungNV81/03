@@ -32,13 +32,8 @@ class SendEmail extends Mailable
         $path = $this->demo->path;
         $filename = $this->demo->filename;
         return $this->from('module03@sonthanh.vn')
-            ->view('mails.demo')
+            ->view('mails.templateEmail')
             ->subject("Email from MODULE-03")
-            ->with(
-                [
-                    'testVarOne' => '1',
-                    'testVarTwo' => '2',
-                ])
             ->attach($path . '.zip', [
                 'as' => $filename . '.zip',
                 'mime' => 'zip',
