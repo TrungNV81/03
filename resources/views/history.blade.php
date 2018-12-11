@@ -1,7 +1,7 @@
 @extends('template')
 @section('content')
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-    <div class="content" style="">
+    <div class="content">
         <h2>History import file</h2>
         <table class="table table-striped table-bordered table-sm">
             <tbody>

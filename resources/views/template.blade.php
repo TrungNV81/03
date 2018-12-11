@@ -33,7 +33,7 @@
                         </a>
                     </li>
                     <li class="nav-item hover">
-                        <a class="nav-link" href="{{ url('/') }}">
+                        <a class="nav-link" href="{{ url('/manageMail') }}">
                             <i class="fa fa-files-o fa-fw"></i>
                             Manage mail
                         </a>
