@@ -29,9 +29,9 @@ class AdminController extends Controller
 
     public function manageMail()
     {
-        $dataHistory = DB::table('csv_file_import')
+        $dataMail = DB::table('manage_mail')
             ->get();
-        return view("history", ['dataHistory' => $dataHistory]);
+        return view("manageMail", ['dataMail' => $dataMail]);
     }
 
 }
