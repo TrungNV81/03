@@ -14,28 +14,39 @@ use ZipArchive;
 set_time_limit(600);
 class HomeController extends Controller
 {
-    public function index()
+    public function batch()
     {
-        return view("index");
+        return view("batch");
     }
 
-    public function readAndSaveCSV()
+    public function handle()
     {
         $dir = public_path() . '/files/';
         $files = glob($dir . '*');
         foreach ($files as $file) {
             $dateNew = date('Y-m-d H:i:s');
-            if (true) {
+            $strrpos = strrpos($file, '/');
+            $filename = substr($file, $strrpos + 1);
+            $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+            $idFile = DB::table('history_file')->max('id');
+            if ($idFile == "") {
+                $idFile = 0;
+            }
+            $idFile += 1;
+            $idFile = $idFile;
+
+            if ($extension == 'csv') {
+
                 $importMaxId = DB::table('csv_data_import')->max('id');
                 if ($importMaxId == "") {
                     $importMaxId = 0;
                 }
                 $importMaxId += 1;
-
                 $importId = $importMaxId;
                 $subId = 1;
+
                 $fileReader = fopen($file, 'r');
-                echo " success: " . basename($file) . " (time: " . $dateNew . ")";
                 while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
                     $colA = mb_convert_encoding($data[0], 'UTF-8', 'Shift-JIS');
                     $colB = mb_convert_encoding($data[1], 'UTF-8', 'Shift-JIS');
@@ -66,12 +77,15 @@ class HomeController extends Controller
                 DB::table('csv_file_import')->insert(
                     ['id' => $importId, 'file_name' => basename($file)]
                 );
+                DB::table('history_file')->insert(
+                    ['id' => $idFile, 'file_name' => basename($file), 'created_at' => $dateNew, 'status' => 'success']
+                );
 
                 $strrpos = strrpos($file, '/');
-                $substr =  substr($file, $strrpos + 1);
-                $filename = explode( '.', $substr);
+                $substr = substr($file, $strrpos + 1);
+                $filename = explode('.', $substr);
                 // Create folder temp
-                $path = public_path() . '/' .  $filename[0];
+                $path = public_path() . '/' . $filename[0];
                 mkdir($path, 0777, true);
                 // Create folder Excel
                 $pathExcel = $path . '/EXCEL';
@@ -80,10 +94,13 @@ class HomeController extends Controller
                 $this->exportFile1($importId, $pathExcel, $filename[0]);
                 $this->exportFile2($importId, $pathExcel, $filename[0]);
                 $this->zip($path, $filename[0]);
-                $this->sendMail($path, $filename[0]);
+                $this->sendMail($path, $filename[0], $importId, $dateNew);
                 $this->deleteFileZip($filename[0]);
+                echo " success: " . basename($file) . " (time: " . $dateNew . ")";
             } else {
-                echo " fail: " . basename($file) . " (time: " . $dateNew . ")</h2>";
+                DB::table('history_file')->insert(
+                    ['id' => $idFile, 'file_name' => basename($file), 'created_at' => $dateNew, 'status' => 'fail']
+                );
             }
         }
     }
@@ -91,7 +108,7 @@ class HomeController extends Controller
     public function exportFile1($importId, $pathExcel, $filename) // file 指示書
     {
         // Create folder PDF
-        $pathPDF = public_path() . '/' . $filename .'/PDF';
+        $pathPDF = public_path() . '/' . $filename . '/PDF';
         mkdir($pathPDF, 0777, true);
 
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template01.xlsx");
@@ -311,13 +328,11 @@ class HomeController extends Controller
             $index++;
         }
         $endCell = 0;
-        if($startCell == 3)
-        {
+        if ($startCell == 3) {
             $endCell = 502;
         }
 
-        if($startCell == 506)
-        {
+        if ($startCell == 506) {
             $endCell = 1005;
         }
 
@@ -340,14 +355,13 @@ class HomeController extends Controller
 
     public function exportPDF($pathPDF, $dataPDF, $file_extension, $filename)
     {
-        $pdf = PDF::loadView('filepdf1', compact('dataPDF','filename'));
+        $pdf = PDF::loadView('filepdf1', compact('dataPDF', 'filename'));
         $pdf->setPaper('a4', 'landscape');
-        $saveFile = $pathPDF . '/' . $filename . $file_extension .'.pdf';
+        $saveFile = $pathPDF . '/' . $filename . $file_extension . '.pdf';
         $pdf->save($saveFile);
     }
 
     public function exportFile2($importId, $pathExcel, $filename) // file 指示書
-
     {
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template02.xlsx");
 
@@ -565,11 +579,12 @@ class HomeController extends Controller
 
     }
 
-    private function addDataToFile5($data1, $data2, $data3, $spreadsheet, $sheetName){
+    private function addDataToFile5($data1, $data2, $data3, $spreadsheet, $sheetName)
+    {
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
         $num = 4;
-        foreach($data1 as $data){
+        foreach ($data1 as $data) {
             $F = '910×910';
             $H = $data->total - $data->F1;
             if ($H == 0) {
@@ -584,7 +599,7 @@ class HomeController extends Controller
             $sheet->setCellValue("J1" . $num, '坪');
             $num++;
         }
-        foreach($data2 as $data){
+        foreach ($data2 as $data) {
             $F = $data->M . '×' . $data->N;
             $H = $data->total - $data->F1;
             if ($H == 0) {
@@ -599,7 +614,7 @@ class HomeController extends Controller
             $sheet->setCellValue("J1" . $num, ' 枚');
             $num++;
         }
-        foreach($data3 as $data){
+        foreach ($data3 as $data) {
             $F = $data->M . '×' . $data->N;
             $H = $data->total - $data->F1;
             if ($H == 0) {
@@ -619,7 +634,6 @@ class HomeController extends Controller
     }
 
     private function addDataToFile2($data, $spreadsheet, $sheetName, $numRow, $numRec) // file 指示書
-
     {
         $flag;
         $num = 0;
@@ -642,7 +656,7 @@ class HomeController extends Controller
                     $sheet->setCellValue("B1" . $num, $data[$i]->name);
                     $sheet->setCellValue("C1" . $num, '加工');
                     $sheet->setCellValue("E1" . $num, $data[$i]->thickness);
-                    
+
                     if ($data[$i]->F1 != '') {
                         if ($data[$i]->name == 'マーク付きベベル' || $data[$i]->name == '耐水ベベル') {
                             $sheet->setCellValue("G1" . $num, round(($data[$i]->F1) * 1.5));
@@ -669,13 +683,11 @@ class HomeController extends Controller
                     $sheet->setCellValue("H1" . $num, $H);
                 }
             }
-            if($flag == 1 && $sheetName != '営業3便')
-            {
+            if ($flag == 1 && $sheetName != '営業3便') {
                 $num += 10;
                 $this->closeEmptyExcel($num, 15, $spreadsheet);
             }
-            if($numRow == 3 && $sheetName == '営業3便')
-            {
+            if ($numRow == 3 && $sheetName == '営業3便') {
                 $num += 10;
                 $this->closeEmptyExcel($num, 15, $spreadsheet);
             }
@@ -700,13 +712,14 @@ class HomeController extends Controller
     }
 
     private function closeEmptyExcel($startCell, $endCell, $spreadsheet)
-    {    
+    {
         for ($i = $startCell; $i <= $endCell; $i++) {
             $spreadsheet->getActiveSheet()->getRowDimension($i)->setVisible(false);
         }
     }
 
-    public function zip($path, $filename){
+    public function zip($path, $filename)
+    {
         $path = public_path() . '/' . $filename;
         // zip and download file zip
         $file_folder = $path . '/'; // folder to load files
@@ -720,12 +733,12 @@ class HomeController extends Controller
                 $error .= "* Sorry ZIP creation failed at this time";
             }
             foreach ($folders as $folder) {
-                $files = glob($folder .'/' . '*');
+                $files = glob($folder . '/' . '*');
                 $position = strrpos($folder, '/');
                 $nameDir = substr($folder, $position + 1);
                 // $zip->addEmptyDir($nameDir);
                 foreach ($files as $file) {
-                    $zip->addFile($zip_folder.$nameDir.'/'.basename($file));
+                    $zip->addFile($zip_folder . $nameDir . '/' . basename($file));
                     continue;
                 }
             }
@@ -739,12 +752,13 @@ class HomeController extends Controller
             }
         }
     }
-    
-    private function addDataToFile3and4($data1, $data2, $spreadsheet, $sheetName){
+
+    private function addDataToFile3and4($data1, $data2, $spreadsheet, $sheetName)
+    {
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
         $num = 4;
-        foreach($data1 as $data){
+        foreach ($data1 as $data) {
             $F = '910×910';
             $H = $data->total - $data->F1;
             if ($H == 0) {
@@ -792,37 +806,47 @@ class HomeController extends Controller
             $objects = scandir($dirPath);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
-                    $dirPath = $Path.'/'.$object. '/';
+                    $dirPath = $Path . '/' . $object . '/';
                     $fileArr = scandir($dirPath);
                     foreach ($fileArr as $file) {
                         if ($file != "." && $file != "..") {
-                            if (filetype($dirPath . DIRECTORY_SEPARATOR . $file) == "dir")
-                            {                       
+                            if (filetype($dirPath . DIRECTORY_SEPARATOR . $file) == "dir") {
                                 deleteDirectory($dirPath . DIRECTORY_SEPARATOR . $file);
                             } else {
                                 unlink($dirPath . DIRECTORY_SEPARATOR . $file);
                             }
                         }
-                    }                                
+                    }
                     reset($fileArr);
                     rmdir($dirPath);
                 }
             }
             rmdir($Path);
-        }  
+        }
     }
 
-    public function sendMail($path, $filename)
+    public function sendMail($path, $filename, $importId, $dateNew)
     {
         $objDemo = new \stdClass();
-        $objDemo->demo_one = 'Demo One Value';
-        $objDemo->demo_two = 'Demo Two Value';
-        $objDemo->sender = 'Trung Admin';
-        $objDemo->receiver = 'Trung User';
+        $objDemo->demo_one = 'Nội dung 1';
+        $objDemo->demo_two = 'Nội dung 2';
+        $objDemo->sender = 'Admin';
+        $objDemo->receiver = 'User';
         $objDemo->path = $path;
         $objDemo->filename = $filename;
 
-        Mail::to("nguyentrung17891@gmail.com")->send(new SendEmail($objDemo));
+        $sendTo = 'trungnv@eplatform.vn';
+        try{
+            Mail::to($sendTo)->send(new SendEmail($objDemo));
+            DB::table('history_sendmail')->insert(
+                ['id' => $importId, 'file_zip' => $filename.'.zip','receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'success']
+            );
+        }
+        catch(\Exception $e){
+            DB::table('history_sendmail')->insert(
+                ['id' => $importId, 'file_zip' => $filename.'.zip', 'receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'fail']
+            );
+        }
     }
 
     public function deleteFileZip($importId)
