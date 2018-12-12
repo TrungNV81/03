@@ -96,7 +96,6 @@ class HomeController extends Controller
                 $this->zip($path, $filename[0]);
                 $this->sendMail($path, $filename[0], $importId, $dateNew);
                 $this->deleteFileZip($filename[0]);
-                echo " success: " . basename($file) . " (time: " . $dateNew . ")";
             } else {
                 DB::table('history_file')->insert(
                     ['id' => $idFile, 'file_name' => basename($file), 'created_at' => $dateNew, 'status' => 'fail']
@@ -320,10 +319,10 @@ class HomeController extends Controller
             array_push($cellValue, $Q);
             array_push($cellValue, $R);
 
-            for ($i = 0; $i < count($cellPos); $i++) {
+            foreach ($cellPos as $key =>$value) {
                 $num = (string) $index;
-                $cellpos = $cellPos[$i] . $num;
-                $sheet->setCellValue($cellpos, $cellValue[$i]);
+                $cellpos = $cellPos[$key] . $num;
+                $sheet->setCellValue($cellpos, $cellValue[$key]);
             }
             $index++;
         }
@@ -378,9 +377,9 @@ class HomeController extends Controller
             ->get();
         $spreadsheet->setActiveSheetIndexByName('情報');
         $sheet = $spreadsheet->getActiveSheet();
-        for ($i = 0; $i < count($cellPos); $i++) {
-            $cellpos = $cellPos[$i];
-            $sheet->setCellValue($cellpos, $dataImport1[$i]->total);
+        foreach ($cellPos as $key => $value) {
+            $cellpos = $cellPos[$key];
+            $sheet->setCellValue($cellpos, $dataImport1[$key]->total);
         }
         // end sheet 情報
 
