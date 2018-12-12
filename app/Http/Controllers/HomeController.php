@@ -826,11 +826,13 @@ class HomeController extends Controller
 
     public function sendMail($path, $filename, $importId, $dateNew)
     {
+        $templateEmail = DB::table('template_email')
+            ->get();
         $objDemo = new \stdClass();
-        $objDemo->demo_one = 'Nội dung 1';
-        $objDemo->demo_two = 'Nội dung 2';
-        $objDemo->sender = 'Admin';
-        $objDemo->receiver = 'User';
+        $objDemo->subject = $templateEmail[0]->subject;
+        $objDemo->body = $templateEmail[0]->body;
+        $objDemo->sender = $templateEmail[0]->sender;
+        $objDemo->receiver = $templateEmail[0]->receiver;
         $objDemo->path = $path;
         $objDemo->filename = $filename;
         $emailArr = DB::table('manage_mail')

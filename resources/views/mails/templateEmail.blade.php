@@ -1,14 +1,8 @@
 Hello <i>{{ $demo->receiver }}</i>,
-<p>This is a demo email for testing purposes! Also, it's the HTML version.</p>
- 
-<p><u>Demo object values:</u></p>
- 
+<br>
 <div>
-<p><b>Demo One:</b>&nbsp;{{ $demo->demo_one }}</p>
-<p><b>Demo Two:</b>&nbsp;{{ $demo->demo_two }}</p>
+    {{ $demo->body }}
 </div>
- 
-<p><u>Values passed by With method:</u></p>
  
 Thank You,
 <br/>

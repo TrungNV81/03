@@ -14,7 +14,9 @@ function Update()
         data : {
             time : $('#time').val(),
             subject: $('#subject').val(),
+            receiver : $('#receiver').val(),
             body: $('#body').val(),
+            sender: $('#sender').val()
         },
         success : function (result){
             $('#permission_id' + $('#idUser').val()).text($("#permission_id_select option:selected" ).text());

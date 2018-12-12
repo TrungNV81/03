@@ -29,4 +29,4 @@ Route::get('manageMail', 'AdminController@manageMail')->name('manageMail');
 Route::post('edit-mail', 'AdminController@editMail')->name('edit-mail');
 
 Route::get('setting','CmdController@getIndex')->name('setting');
-Route::post('update','CmdController@saveTime');
+Route::post('update','CmdController@UpdateSetting');

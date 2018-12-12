@@ -22,11 +22,13 @@ class CmdController extends Controller
         return view("setting", ['timeRunBatch' => $timeRunBatch[0], 'templateEmail' => $templateEmail[0]]);
     }
 
-    public function saveTime()
+    public function UpdateSetting()
     {
         $time = $_POST['time'];
         $subject = $_POST['subject'];
+        $receiver = $_POST['receiver'];
         $body = $_POST['body'];
+        $sender = $_POST['sender'];
 
         exec($_POST['time'] . " > /dev/null &");
 
@@ -34,7 +36,7 @@ class CmdController extends Controller
             ->update(['time' => $time]);
 
         DB::table('template_email')
-            ->update(['subject' => $subject, 'body' => $body]);
+            ->update(['subject' => $subject, 'receiver' => $receiver, 'body' => $body, 'sender' => $sender]);
 
         $smg = "update success";
         echo $smg;
