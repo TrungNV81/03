@@ -7,6 +7,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <!------ Include the above in your HEAD tag ---------->
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+    <script src="{{URL::asset('/js/setting.js')}}"></script>
     <meta name="csrf_token" content="{{ csrf_token() }}" />
 </head>
 <body>

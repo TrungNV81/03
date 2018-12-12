@@ -16,19 +16,27 @@ class CmdController extends Controller
         $timeRunBatch = DB::table('time_run_batch')
             ->get();
 
-        return view("setting", ['timeRunBatch' => $timeRunBatch[0]]);
+        $templateEmail = DB::table('template_email')
+            ->get();
+
+        return view("setting", ['timeRunBatch' => $timeRunBatch[0], 'templateEmail' => $templateEmail[0]]);
     }
 
     public function saveTime()
     {
+        $time = $_POST['time'];
+        $subject = $_POST['subject'];
+        $body = $_POST['body'];
+
         exec($_POST['time'] . " > /dev/null &");
 
         DB::table('time_run_batch')
-            ->update(['time' => $_POST['time']]);
+            ->update(['time' => $time]);
 
-        $timeRunBatch = DB::table('time_run_batch')
-            ->get();
+        DB::table('template_email')
+            ->update(['subject' => $subject, 'body' => $body]);
 
-        return view("setting", ['timeRunBatch' => $timeRunBatch[0]]);
+        $smg = "update success";
+        echo $smg;
     }
 }

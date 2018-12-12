@@ -19,6 +19,7 @@ class AdminController extends Controller
     public function historyFile()
     {
         $historyFile = DB::table('history_file')
+            ->orderByRaw('created_at DESC')
             ->get();
 
         return view("historyFile", ['historyFile' => $historyFile]);
@@ -27,6 +28,7 @@ class AdminController extends Controller
     public function historySendMail()
     {
         $historySendMail = DB::table('history_sendmail')
+            ->orderByRaw('created_at DESC')
             ->get();
 
         return view("historySendMail", ['historySendMail' => $historySendMail]);

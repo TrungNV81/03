@@ -833,18 +833,31 @@ class HomeController extends Controller
         $objDemo->receiver = 'User';
         $objDemo->path = $path;
         $objDemo->filename = $filename;
-
-        $sendTo = 'trungnv@eplatform.vn';
-        try{
-            Mail::to($sendTo)->send(new SendEmail($objDemo));
-            DB::table('history_sendmail')->insert(
-                ['id' => $importId, 'file_zip' => $filename.'.zip','receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'success']
-            );
+        $emailArr = DB::table('manage_mail')
+            ->select('email')
+            ->where([
+                ['status', '=', '1'],
+            ])
+            ->get();
+        
+        $idMail = DB::table('history_sendmail')->max('id');
+        if ($idMail == "") {
+            $idMail = 0;
         }
-        catch(\Exception $e){
-            DB::table('history_sendmail')->insert(
-                ['id' => $importId, 'file_zip' => $filename.'.zip', 'receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'fail']
-            );
+        $idMail += 1;
+        foreach ($emailArr as $sendTo) {
+            try{
+                Mail::to($sendTo->email)->send(new SendEmail($objDemo));
+                DB::table('history_sendmail')->insert(
+                    ['id' => $idMail, 'file_zip' => $filename.'.zip','receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'success']
+                );
+            }
+            catch(\Exception $e){
+                DB::table('history_sendmail')->insert(
+                    ['id' => $idMail, 'file_zip' => $filename.'.zip', 'receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'fail']
+                );
+            }
+            $idMail ++;
         }
     }
 
