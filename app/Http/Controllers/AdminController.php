@@ -16,15 +16,20 @@ class AdminController extends Controller
         return view("welcome");
     }
 
-    public function manageHistory()
+    public function historyFile()
     {
         $historyFile = DB::table('history_file')
             ->get();
 
+        return view("historyFile", ['historyFile' => $historyFile]);
+    }
+
+    public function historySendMail()
+    {
         $historySendMail = DB::table('history_sendmail')
             ->get();
 
-        return view("history", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail]);
+        return view("historySendMail", ['historySendMail' => $historySendMail]);
     }
 
     public function manageMail()
@@ -64,5 +69,4 @@ class AdminController extends Controller
         ->get();
         return view("manageMail", ['dataMail' => $dataMail]);
     }
-
 }
