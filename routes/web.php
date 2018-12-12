@@ -26,4 +26,4 @@ Route::get('export', 'HomeController@handle')->name('export');
 Route::get('','AdminController@getIndex');
 Route::get('history','AdminController@manageHistory')->name('history');
 Route::get('manageMail', 'AdminController@manageMail')->name('manageMail');
-Route::post('edit-mail', 'AdminController@editMail')->name('edit-mail');
+Route::post('edit-mail', 'AdminController@editMail');
