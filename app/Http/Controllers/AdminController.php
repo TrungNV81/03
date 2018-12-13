@@ -39,34 +39,24 @@ class AdminController extends Controller
         return view("manageMail", ['dataMail' => $dataMail]);
     }
 
-    public function editMail(Request $data)
+    public function editMail()
     {
-
+        $stringMail = $_POST['arrMail'];
+        $stringStatus = $_POST['arrStatus'];
+        $arrMail = explode(',',$stringMail);
+        $arrStatus = explode(',',$stringStatus);
         $arrId = DB::table('manage_mail')
         ->select('id')
         ->get();
 
-        for($i=0; $i<count($arrId);$i++)
+        foreach($arrId as $key => $value)
         {
-            $y = 0;
-            $status = 'status'.$arrId[$i]->id;
-            if (isset($_POST[$status])) {
-                $y = 1;
-            }
-            else{
-                $y = 0;
-            }
             DB::table('manage_mail')
-            ->where('id', $arrId[$i]->id)
+            ->where('id', $arrId[$key]->id)
             ->update([
-                'email' => $_POST['mail'.$arrId[$i]->id],  'status' => $y,
+                'email' => $arrMail[$key],  'status' => $arrStatus[$key],
             ]);
         }
-        echo '<script language="javascript">';
-           echo 'alert("Success")';
-           echo '</script>';
-        $dataMail = DB::table('manage_mail')
-        ->get();
-        return view("manageMail", ['dataMail' => $dataMail]);
+        echo 'Update Success';
     }
 }
