@@ -826,25 +826,40 @@ class HomeController extends Controller
 
     public function sendMail($path, $filename, $importId, $dateNew)
     {
+        $templateEmail = DB::table('template_email')
+            ->get();
         $objDemo = new \stdClass();
-        $objDemo->demo_one = 'Nội dung 1';
-        $objDemo->demo_two = 'Nội dung 2';
-        $objDemo->sender = 'Admin';
-        $objDemo->receiver = 'User';
+        $objDemo->subject = $templateEmail[0]->subject;
+        $objDemo->body = $templateEmail[0]->body;
+        $objDemo->sender = $templateEmail[0]->sender;
+        $objDemo->receiver = $templateEmail[0]->receiver;
         $objDemo->path = $path;
         $objDemo->filename = $filename;
-
-        $sendTo = 'trungnv@eplatform.vn';
-        try{
-            Mail::to($sendTo)->send(new SendEmail($objDemo));
-            DB::table('history_sendmail')->insert(
-                ['id' => $importId, 'file_zip' => $filename.'.zip','receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'success']
-            );
+        $emailArr = DB::table('manage_mail')
+            ->select('email')
+            ->where([
+                ['status', '=', '1'],
+            ])
+            ->get();
+        
+        $idMail = DB::table('history_sendmail')->max('id');
+        if ($idMail == "") {
+            $idMail = 0;
         }
-        catch(\Exception $e){
-            DB::table('history_sendmail')->insert(
-                ['id' => $importId, 'file_zip' => $filename.'.zip', 'receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'fail']
-            );
+        $idMail += 1;
+        foreach ($emailArr as $sendTo) {
+            try{
+                Mail::to($sendTo->email)->send(new SendEmail($objDemo));
+                DB::table('history_sendmail')->insert(
+                    ['id' => $idMail, 'file_zip' => $filename.'.zip','receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'success']
+                );
+            }
+            catch(\Exception $e){
+                DB::table('history_sendmail')->insert(
+                    ['id' => $idMail, 'file_zip' => $filename.'.zip', 'receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'fail']
+                );
+            }
+            $idMail ++;
         }
     }
 

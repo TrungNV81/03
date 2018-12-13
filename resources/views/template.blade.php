@@ -8,6 +8,7 @@
     <script src="{{URL::asset('/js/managemail.js')}}"></script>
     <!------ Include the above in your HEAD tag ---------->
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+    <script src="{{URL::asset('/js/setting.js')}}"></script>
     <meta name="csrf_token" content="{{ csrf_token() }}" />
 </head>
 <body>

@@ -28,5 +28,5 @@ Route::get('historySendMail','AdminController@historySendMail')->name('historySe
 Route::get('manageMail', 'AdminController@manageMail')->name('manageMail');
 Route::post('edit-mail', 'AdminController@editMail')->name('edit-mail');
 
-Route::get('setting','CmdController@getIndex')->name('history');
-Route::post('setting','CmdController@saveTime');
+Route::get('setting','CmdController@getIndex')->name('setting');
+Route::post('update','CmdController@UpdateSetting');
