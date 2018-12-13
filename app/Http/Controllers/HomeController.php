@@ -735,9 +735,10 @@ class HomeController extends Controller
                 $files = glob($folder . '/' . '*');
                 $position = strrpos($folder, '/');
                 $nameDir = substr($folder, $position + 1);
-                // $zip->addEmptyDir($nameDir);
                 foreach ($files as $file) {
-                    $zip->addFile($zip_folder . $nameDir . '/' . basename($file));
+                    $position = strrpos($file, '/');
+                    $nameFile = substr($file, $position + 1);
+                    $zip->addFile($zip_folder . $nameDir . '/' . $nameFile);
                     continue;
                 }
             }
