@@ -36,7 +36,7 @@
             </div>
         </form>
         <input hidden value="{{count($dataMail)}}" id="arrDataMail" />
-        <button class="btn btn-success" onclick="Update()"> Update </button>
+        <button class="btn btn-success" onclick="UpdateMail()"> Update </button>
     </div>
 </main>
 @endsection
