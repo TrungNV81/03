@@ -20,10 +20,13 @@ Route::get('logout', function(){
 });
 
 Route::get('batch', 'HomeController@batch');
-Route::get('export', 'HomeController@handle')->name('export');
-
+Route::get('v1/api/export', 'HomeController@handle')->name('export');
 
 Route::get('','AdminController@getIndex');
-Route::get('history','AdminController@manageHistory')->name('history');
+Route::get('historyFile','AdminController@historyFile')->name('historyFile');
+Route::get('historySendMail','AdminController@historySendMail')->name('historySendMail');
 Route::get('manageMail', 'AdminController@manageMail')->name('manageMail');
 Route::post('edit-mail', 'AdminController@editMail')->name('edit-mail');
+
+Route::get('setting','CmdController@getIndex')->name('history');
+Route::post('setting','CmdController@saveTime');
