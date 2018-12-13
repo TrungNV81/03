@@ -9,8 +9,15 @@
                 <tbody>
                     <tr style="line-height: 35px;">
                         <td style="font-weight: bold"> Time </td>
-                        <td> <input class="form-control" type="text" id="time" value="{{ $timeRunBatch->time }}"> </td>
+                        <td> <input class="form-control" type="text" id="time" value="{{ $timeRunBatch->time }}" maxlength="4"></td>
                         <td>minutes</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <p style="color:red;text-align:left;" hidden id="showError">Invalid!</p>
+                        </td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
