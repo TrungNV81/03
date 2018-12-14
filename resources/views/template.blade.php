@@ -60,12 +60,20 @@
     <script>
         $(document).ready(function() {
             $('#dataTables-example-1').DataTable({
-                responsive: true
+                responsive: true,
             });
             $('#dataTables-example-2').DataTable({
                 responsive: true
             });
         });
+        $(document).ready(function() {
+            $('#dataTables-example-3').DataTable( {
+                "columns": [
+                    { "orderDataType": "dom-text", type: 'string' },
+                    { "orderDataType": "dom-checkbox", type: 'checkbox' }
+                ]
+            } );
+        } );
     </script>
 
     <script src="{{URL::asset('/js/managemail.js')}}"></script>
@@ -96,7 +104,7 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-user">
+                <ul class="dropdown-menu dropdown-messenger">
                     <li><a href="{{ url('/logout') }}"><i class="fa fa-sign-out fa-fw"></i>Sign out</a>
                     </li>
                 </ul>

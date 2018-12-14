@@ -19,11 +19,11 @@
                             <div class="col-lg-12">
                                 <form>
                                     {{ csrf_field() }}
-                                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-1">
+                                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">
                                         <thead>
                                         <tr>
-                                            <td>Email</td>
-                                            <td>Status</td>
+                                            <th>Email</th>
+                                            <th>Status</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -34,11 +34,11 @@
                                                 </td>
                                                 @if($data->status == '1')
                                                     <td>
-                                                        <input class="form-control" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}" checked>
+                                                        <input style="height: auto" class="form-control" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}" checked>
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <input class="form-control" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}">
+                                                        <input style="height: auto" class="form-control" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}">
                                                     </td>
                                                 @endif
                                             </tr>

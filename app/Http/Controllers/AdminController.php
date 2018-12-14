@@ -26,6 +26,16 @@ class AdminController extends Controller
             ->orderByRaw('created_at DESC')
             ->get();
 
+        $totalSuccessFile = count(DB::table('history_file')
+            ->where('status', '=' ,'success')
+            ->orderByRaw('created_at DESC')
+            ->get());
+
+        $totalSuccessSendMail = count(DB::table('history_sendmail')
+            ->where('status', '=' ,'success')
+            ->orderByRaw('created_at DESC')
+            ->get());
+
         $dataMail = DB::table('manage_mail')
             ->get();
 
@@ -35,7 +45,9 @@ class AdminController extends Controller
 
         $totalMail = count($dataMail);
 
-        return view("test", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail, 'totalFile' => $totalFile, 'totalSendMail' => $totalSendMail,'totalMail' => $totalMail]);
+        return view("test", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail,
+            'totalFile' => $totalFile, 'totalSendMail' => $totalSendMail,'totalMail' => $totalMail,'totalSuccessFile' => $totalSuccessFile,
+            'totalSuccessSendMail' => $totalSuccessSendMail]);
     }
 
     public function historyFile()
