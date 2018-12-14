@@ -35,7 +35,7 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    History send mail
+                    <i class="fa fa-table fa-fw"></i>History send mail
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">

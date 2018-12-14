@@ -26,11 +26,16 @@ class AdminController extends Controller
             ->orderByRaw('created_at DESC')
             ->get();
 
+        $dataMail = DB::table('manage_mail')
+            ->get();
+
         $totalFile = count($historyFile);
 
         $totalSendMail = count($historySendMail);
 
-        return view("test", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail, 'totalFile' => $totalFile, 'totalSendMail' => $totalSendMail]);
+        $totalMail = count($dataMail);
+
+        return view("test", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail, 'totalFile' => $totalFile, 'totalSendMail' => $totalSendMail,'totalMail' => $totalMail]);
     }
 
     public function historyFile()

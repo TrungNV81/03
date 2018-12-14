@@ -12,12 +12,11 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Manage Mail
+                        <i class="fa fa-edit fa-fw"></i>Manage Mail
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h1>Manage Mail</h1>
                                 <form>
                                     {{ csrf_field() }}
                                     <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-1">
