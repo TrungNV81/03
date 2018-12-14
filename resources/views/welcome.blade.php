@@ -18,7 +18,7 @@
 
     <div class="row">
         <div class="col-lg-12 col-md-12">
-            <div class="panel panel-primary">
+            <div class="panel">
                 <div class="panel-heading">
                     <div class="row">
                         <img src="{{ asset('image/STSekisanCenter.jpg') }}" class="img img-responsive" alt="STSekisanCenter" >
