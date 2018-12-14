@@ -16,6 +16,23 @@ class AdminController extends Controller
         return view("welcome");
     }
 
+    public function test()
+    {
+        $historyFile = DB::table('history_file')
+            ->orderByRaw('created_at DESC')
+            ->get();
+
+        $historySendMail = DB::table('history_sendmail')
+            ->orderByRaw('created_at DESC')
+            ->get();
+
+        $totalFile = count($historyFile);
+
+        $totalSendMail = count($historySendMail);
+
+        return view("test", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail, 'totalFile' => $totalFile, 'totalSendMail' => $totalSendMail]);
+    }
+
     public function historyFile()
     {
         $historyFile = DB::table('history_file')

@@ -23,6 +23,7 @@ Route::get('batch', 'HomeController@batch');
 Route::get('v1/api/export', 'HomeController@handle')->name('export');
 
 Route::get('','AdminController@getIndex');
+Route::get('test','AdminController@test')->name('test');
 Route::get('historyFile','AdminController@historyFile')->name('historyFile');
 Route::get('historySendMail','AdminController@historySendMail')->name('historySendMail');
 Route::get('manageMail', 'AdminController@manageMail')->name('manageMail');
