@@ -15,7 +15,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <p style="color:red;text-align:left;" hidden id="showError">Invalid!</p>
+                            <p style="color:red;text-align:left;" hidden id="showError">Invalid (Time run batch: >=10 minutes, must be a number)</p>
                         </td>
                         <td></td>
                     </tr>

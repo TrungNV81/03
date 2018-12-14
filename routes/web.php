@@ -20,7 +20,7 @@ Route::get('logout', function(){
 });
 
 Route::get('batch', 'HomeController@batch');
-Route::get('v1/api/export', 'HomeController@handle')->name('export');
+Route::get('v1/api/export', 'HomeController@handle')->name('v1/api/export');
 
 Route::get('','AdminController@getIndex');
 Route::get('test','AdminController@test')->name('test');
