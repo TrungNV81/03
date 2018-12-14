@@ -45,7 +45,7 @@
                             <th>Receiver</th>
                             <th>File Zip</th>
                             <th>Date</th>
-                            <th>Engine version</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
