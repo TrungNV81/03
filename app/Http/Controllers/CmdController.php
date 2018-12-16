@@ -22,7 +22,7 @@ class CmdController extends Controller
         return view("setting", ['timeRunBatch' => $timeRunBatch[0], 'templateEmail' => $templateEmail[0]]);
     }
 
-    public function UpdateSetting()
+    public function updateSetting()
     {
         $time = $_POST['time'];
         $subject = $_POST['subject'];
