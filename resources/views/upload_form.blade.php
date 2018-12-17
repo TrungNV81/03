@@ -1,5 +1,6 @@
 @extends('template')
 @section('content')
+
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -8,15 +9,16 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
+    <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-table fa-fw"></i>Upload file
+                    <i class="fa fa-upload fa-fw"></i>Upload file
                 </div>
                 <!-- /.panel-heading -->
-                <div class="container">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
                             <!-- Standar Form -->
                             <form action="{{ url('uploadSubmit') }}" enctype="multipart/form-data" method="POST">
                                 {{ csrf_field() }}
@@ -26,17 +28,21 @@
                                 <div id="dropContainer" class="upload-drop-zone">
                                     Just drag and drop files here
                                 </div>
-                                <input type="submit" id="js-upload-submit" class="btn btn-success" value="Upload File">
+                                <input style="float: right" type="submit" id="js-upload-submit" class="btn btn-success" value="Upload File">
                             </form>
                         </div>
+                        <!-- /.col-lg-6 (nested) -->
                     </div>
-                </div> <!-- /container -->
+                    <!-- /.table-responsive -->
+                </div>
                 <!-- /.panel-body -->
             </div>
             <!-- /.panel -->
+        </div>
         <!-- /.col-lg-12 -->
     </div>
 </div>
+
 
 <script>
     $(function () {

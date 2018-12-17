@@ -87,21 +87,21 @@
                                 <table class="table table-sm">
                                     <tbody>
                                     <tr>
-                                        <td style="font-weight: bold"> Email subject </td>
+                                        <td style="font-weight: bold; vertical-align: middle"> Email subject </td>
                                         <td colspan="2"> <input class="form-control" type="text" id="subject" value="{{ $templateEmail->subject }}"> </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight: bold"> Recipient's name </td>
+                                        <td style="font-weight: bold; vertical-align: middle"> Recipient's name </td>
                                         <td colspan="2"> <input class="form-control" type="text" id="receiver" value="{{ $templateEmail->receiver }}"> </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight: bold"> Email body </td>
+                                        <td style="font-weight: bold;"> Email body </td>
                                         <td colspan="2">
                                             <textarea style="min-height: 250px" class="form-control" id="body">{{ $templateEmail->body }}</textarea>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-weight: bold"> Sender's name </td>
+                                        <td style="font-weight: bold;  vertical-align: middle"> Sender's name </td>
                                         <td colspan="2"> <input class="form-control" type="text" id="sender" value="{{ $templateEmail->sender }}"> </td>
                                     </tr>
                                     <tr style="text-align: center"><td colspan="3"></td></tr>
