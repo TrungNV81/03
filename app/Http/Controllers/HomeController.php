@@ -144,7 +144,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_1, '先行1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport1_1, '_１階先行壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport1_1, '_１階先行壁', $filename, 'filepdf1');
         //add data sheet 1-2
         $dataImport1_2 = DB::table('csv_data_import')
             ->where([
@@ -157,7 +157,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_2, '先行1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport1_2, '_２階先行壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport1_2, '_２階先行壁', $filename, 'filepdf1');
         // add data sheet 2
         $dataImport2 = DB::table('csv_data_import')
             ->where([
@@ -169,7 +169,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
         $this->addDataToFile1($dataImport2, '天井1階', 3, $spreadsheet, 1820);
-        $this->exportPDF($pathPDF, $dataImport2, '_１階天井', $filename);
+        $this->exportPDF($pathPDF, $dataImport2, '_１階天井', $filename, 'filepdf1');
         // add data sheet 3
         $dataImport3 = DB::table('csv_data_import')
             ->where([
@@ -182,7 +182,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport3, '天井2階', 3, $spreadsheet, 1820);
-        $this->exportPDF($pathPDF, $dataImport3, '_２階天井 ', $filename);
+        $this->exportPDF($pathPDF, $dataImport3, '_２階天井 ', $filename, 'filepdf1');
         // add data sheet 4-1
         $dataImport4_1 = DB::table('csv_data_import')
             ->where([
@@ -196,7 +196,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_1, '壁1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport4_1, '_１階壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport4_1, '_１階壁', $filename, 'filepdf1');
         // add data sheet 4-2
         $dataImport4_2 = DB::table('csv_data_import')
             ->where([
@@ -210,7 +210,8 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename, 'filepdf1');
+        $this->exportPDF($pathPDF, '', '_ラベル', $filename, 'filepdf2');
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
@@ -373,9 +374,9 @@ class HomeController extends Controller
 
     }
 
-    public function exportPDF($pathPDF, $dataPDF, $file_extension, $filename)
+    public function exportPDF($pathPDF, $dataPDF, $file_extension, $filename, $templatePDF)
     {
-        $pdf = PDF::loadView('filepdf1', compact('dataPDF', 'filename'));
+        $pdf = PDF::loadView($templatePDF, compact('dataPDF', 'filename'));
         $pdf->setPaper('a4', 'landscape');
         $saveFile = $pathPDF . '/' . $filename . $file_extension . '.pdf';
         $pdf->save($saveFile);
@@ -707,10 +708,6 @@ class HomeController extends Controller
                 $num += 10;
                 $this->closeEmptyExcel($num, 15, $spreadsheet);
             }
-            if ($numRow == 3 && $sheetName == '営業3便') {
-                $num += 10;
-                $this->closeEmptyExcel($num, 15, $spreadsheet);
-            }
         } else {
             $num = $numRec++;
             for ($i = 0; $i < count($data); $i++, $num++) {
@@ -726,8 +723,14 @@ class HomeController extends Controller
                 $sheet->setCellValue("G1" . $num, $data[$i]->F1);
                 $sheet->setCellValue("H1" . $num, $H);
             }
-            $num += 11;
-            $this->closeEmptyExcel($num, 16, $spreadsheet);
+            if ($numRow == 3 && $sheetName == '営業3便') {
+                $num += 10;
+                $this->closeEmptyExcel($num, 16, $spreadsheet);
+            }           
+            if ($sheetName != '営業3便') {
+                $num += 10;
+                $this->closeEmptyExcel($num, 16, $spreadsheet);
+            }
         }
     }
 
