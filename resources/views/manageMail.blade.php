@@ -42,18 +42,18 @@
                                             </td>
                                             @if($data->status == '1')
                                             <td>
-                                                <input style="height: auto" class="form-control" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}" checked>
+                                                <input class="form-control auto" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}" checked>
                                             </td>
                                             @else
                                             <td>
-                                                <input style="height: auto" class="form-control" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}">
+                                                <input class="form-control auto" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}">
                                             </td>
                                             @endif
                                             <td>
                                                 <form action="{{ url('del-mail') }}" method="POST">
                                                 {{ csrf_field() }}
                                                     <input hidden name="id-mail" value="{{ $data->id }}">
-                                                    <button class="btn btn-danger">Delete</button>
+                                                    <button class="btn btn-danger center-block">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>

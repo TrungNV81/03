@@ -61,16 +61,19 @@
         $(document).ready(function() {
             $('#dataTables-example-1').DataTable({
                 responsive: true,
+                "order": [[ 1, "desc" ]]
             });
             $('#dataTables-example-2').DataTable({
-                responsive: true
+                responsive: true,
+                "order": [[ 2, "desc" ]]
             });
         });
         $(document).ready(function() {
             $('#dataTables-example-3').DataTable( {
                 "columns": [
-                    { "orderDataType": "dom-text", type: 'string' },
-                    { "orderDataType": "dom-checkbox", type: 'checkbox' }
+                    { "orderDataType": "dom-text", type: 'email',"targets": [ 2, 3 ] },
+                    { "orderDataType": "dom-checkbox", type: 'checkbox', "targets": 5 },
+                    null
                 ]
             } );
         } );
