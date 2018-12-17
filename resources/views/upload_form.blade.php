@@ -28,6 +28,7 @@
                                 <div id="dropContainer" class="upload-drop-zone">
                                     Just drag and drop files here
                                 </div>
+                                <hr>
                                 <input style="float: right" type="submit" id="js-upload-submit" class="btn btn-success" value="Upload File">
                             </form>
                         </div>
