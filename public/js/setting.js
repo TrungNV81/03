@@ -7,12 +7,13 @@ function Update() {
     } else {
         hiddenError($("#time"));
     }
-    if (validFlg == true) {
-        var convertTime = convertTo_UTF8(time);
-        if (convertTime < 10) {
-            showError($("#time"));
-        } else {
-            hiddenError($("#time"));
+    //if (validFlg == true) {
+	if (true) {
+        // var convertTime = convertTo_UTF8(time);
+        // if (convertTime < 10) {
+        //    showError($("#time"));
+        // } else {
+        //    hiddenError($("#time"));
             $.ajax({
                 url: "./update",
                 type: "POST",
@@ -24,7 +25,7 @@ function Update() {
                     }
                 },
                 data: {
-                    time: convertTime,
+                    // time: convertTime,
                     subject: $("#subject").val(),
                     receiver: $("#receiver").val(),
                     body: $("#body").val(),
@@ -36,7 +37,7 @@ function Update() {
                     }, 250);
                 }
             });
-        }
+       // }
     }
 }
 

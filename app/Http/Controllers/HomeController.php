@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use ZipArchive;
 
 set_time_limit(600);
+ini_set('memory_limit', '4096M');
 class HomeController extends Controller
 {
     public function batch()
@@ -28,7 +29,7 @@ class HomeController extends Controller
 
         $minuteRunBatch = $checkBatch[0]->time;
 
-        chia = $minute/$minuteRunBatch;
+        $chia = $minute/$minuteRunBatch;
 
         $return = $minute % $minuteRunBatch == 0;
 
@@ -114,7 +115,7 @@ class HomeController extends Controller
 
                 $this->exportFile1($importId, $pathExcel, $filename[0]);
                 $this->exportFile2($importId, $pathExcel, $filename[0]);
-                $this->zip($path, $filename[0]);
+                $this->zip($path, $filename[0], $substr, $dir);
                 $this->sendMail($path, $filename[0], $importId, $dateNew);
                 $this->deleteFileZip($filename[0]);
             } else {
@@ -741,7 +742,7 @@ class HomeController extends Controller
         }
     }
 
-    public function zip($path, $filename)
+    public function zip($path, $filename, $fileCsv, $dir)
     {
         $path = public_path() . '/' . $filename;
         // zip and download file zip
@@ -771,6 +772,7 @@ class HomeController extends Controller
             if ($isFinished) {
                 // remove folder tmp
                 $this->deleteDirectory($path);
+                unlink($dir . $fileCsv);
             } else {
                 throw new Exception("could not close zip file: " . $zip->getStatusString());
             }

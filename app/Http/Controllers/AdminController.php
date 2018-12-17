@@ -154,7 +154,7 @@ class AdminController extends Controller
                 {
                     echo '<script language="javascript">';
                     echo 'alert("The system only accepts CSV files")';
-                    echo '</script>';        
+                    echo '</script>';
                     return redirect()->intended('uploadFile');
                 }
                 $dir = public_path() . '/files/';
