@@ -61,7 +61,7 @@
                                     </tbody>
                                 </table>
                                 <input hidden value="{{count($dataMail)}}" id="arrDataMail" />
-                                <button type="submit" class="btn btn-success" onclick="updateMail()">Update</button>
+                                <button style="float: right" type="submit" class="btn btn-success" onclick="updateMail()">Update</button>
                             </div>
                             <!-- /.col-lg-6 (nested) -->
                         </div>

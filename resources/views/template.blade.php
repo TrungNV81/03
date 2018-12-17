@@ -70,9 +70,10 @@
         });
         $(document).ready(function() {
             $('#dataTables-example-3').DataTable( {
+                "ordering": false,
                 "columns": [
-                    { "orderDataType": "dom-text", type: 'email',"targets": [ 2, 3 ] },
-                    { "orderDataType": "dom-checkbox", type: 'checkbox', "targets": 5 },
+                    { "orderDataType": "dom-text", type: 'email' },
+                    { "orderDataType": "dom-checkbox", type: 'checkbox' },
                     null
                 ]
             } );
@@ -98,7 +99,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url('') }}">STExcelExport</a>
+            <a class="navbar-brand" href="{{ url('/dashboard') }}">STExcelExport</a>
         </div>
         <!-- /.navbar-header -->
 

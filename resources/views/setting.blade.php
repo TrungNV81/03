@@ -68,39 +68,39 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <form>
-                                <table class="table table-striped table-sm" style="width: 50%">
-                                    <tbody>
-                                    <tr style="line-height: 35px;">
-                                        <td style="font-weight: bold;vertical-align: middle"> Time </td>
-                                        <td> <input class="form-control" type="text" id="time" value="{{ $timeRunBatch->time }}" maxlength="4"></td>
-                                        <td style="vertical-align: middle">minutes</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <p style="color:red;text-align:left;" hidden id="showError">Invalid (Time run batch: >=10 minutes, must be a number)</p>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                {{--<table class="table table-striped table-sm" style="width: 50%">--}}
+                                    {{--<tbody>--}}
+                                    {{--<tr style="line-height: 35px;">--}}
+                                        {{--<td style="font-weight: bold;vertical-align: middle"> Time </td>--}}
+                                        {{--<td> <input class="form-control" type="text" id="time" value="{{ $timeRunBatch->time }}" maxlength="4"></td>--}}
+                                        {{--<td style="vertical-align: middle">minutes</td>--}}
+                                    {{--</tr>--}}
+                                    {{--<tr>--}}
+                                        {{--<td></td>--}}
+                                        {{--<td>--}}
+                                            {{--<p style="color:red;text-align:left;" hidden id="showError">Invalid (Time run batch: >=10 minutes, must be a number)</p>--}}
+                                        {{--</td>--}}
+                                        {{--<td></td>--}}
+                                    {{--</tr>--}}
+                                    {{--</tbody>--}}
+                                {{--</table>--}}
                                 <table class="table table-sm">
                                     <tbody>
-                                    <tr style="line-height: 35px;">
+                                    <tr>
                                         <td style="font-weight: bold"> Email subject </td>
                                         <td colspan="2"> <input class="form-control" type="text" id="subject" value="{{ $templateEmail->subject }}"> </td>
                                     </tr>
-                                    <tr style="line-height: 35px;">
+                                    <tr>
                                         <td style="font-weight: bold"> Recipient's name </td>
                                         <td colspan="2"> <input class="form-control" type="text" id="receiver" value="{{ $templateEmail->receiver }}"> </td>
                                     </tr>
-                                    <tr style="line-height: 35px;">
+                                    <tr>
                                         <td style="font-weight: bold"> Email body </td>
                                         <td colspan="2">
                                             <textarea style="min-height: 250px" class="form-control" id="body">{{ $templateEmail->body }}</textarea>
                                         </td>
                                     </tr>
-                                    <tr style="line-height: 35px;">
+                                    <tr>
                                         <td style="font-weight: bold"> Sender's name </td>
                                         <td colspan="2"> <input class="form-control" type="text" id="sender" value="{{ $templateEmail->sender }}"> </td>
                                     </tr>
@@ -108,7 +108,7 @@
                                     </tbody>
                                 </table>
                             </form>
-                            <button class="btn btn-success" onclick="Update()">Update</button>
+                            <button style="float: right" class="btn btn-success" onclick="Update()">Update</button>
                         </div>
                         <!-- /.col-lg-6 (nested) -->
                     </div>
