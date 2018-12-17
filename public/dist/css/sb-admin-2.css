@@ -438,3 +438,12 @@ table.dataTable thead .sorting:after {
     width: auto !important;
     margin: auto !important;
 }
+.form-email{
+    border-top: none !important;
+    text-align: right;
+    font-weight: bold;
+    vertical-align: middle !important;
+}
+.border-top-none{
+    border-top: none !important;
+}

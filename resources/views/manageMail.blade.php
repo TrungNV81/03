@@ -19,13 +19,14 @@
                             <div class="col-lg-12">
                                 <form action="{{url('add-mail')}}" method="POST">
                                 {{ csrf_field() }}
-                                    <label>Add new mail</label>
-                                    <input type="email" name="new-email" value="">
+                                    <label style="padding: 5px">Add new mail</label>
+                                    <input style="display: inline-block; width: auto" class="form-control" type="email" name="new-email" value="">
                                     <button type="" class="btn btn-success">Add</button>
                                     @if($errors->has('new-email'))
                                         <p style="color:red">{{$errors->first('new-email')}}</p>
                                     @endif
                                 </form>
+                                <hr>
                                 <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">
                                     <thead>
                                     <tr>
@@ -60,6 +61,7 @@
                                         <?php $i++ ?> @endforeach
                                     </tbody>
                                 </table>
+                                <hr>
                                 <input hidden value="{{count($dataMail)}}" id="arrDataMail" />
                                 <button style="float: right" type="submit" class="btn btn-success" onclick="updateMail()">Update</button>
                             </div>
