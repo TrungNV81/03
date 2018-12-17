@@ -23,7 +23,7 @@ Route::get('batch', 'HomeController@batch');
 
 Route::get('v1/api/export', 'HomeController@handle')->name('v1/api/export');
 
-Route::get('','AdminController@getIndex');
+Route::get('','AdminController@dashboard');
 
 Route::get('dashboard','AdminController@dashboard')->name('dashboard');
 
@@ -42,3 +42,7 @@ Route::post('del-mail', 'AdminController@delMail')->name('del-mail');
 Route::get('setting','CmdController@getIndex')->name('setting');
 
 Route::post('update','CmdController@updateSetting');
+
+Route::get('uploadFile','AdminController@uploadFile')->name('uploadFile');
+
+Route::post('uploadSubmit', 'AdminController@uploadSubmit')->name('uploadSubmit');

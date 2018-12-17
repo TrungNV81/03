@@ -148,6 +148,9 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
+                    <li>
+                        <a href="{{ url('/uploadFile') }}"><i class="fa fa-upload fa-fw"></i> Upload file</a>
+                    </li>
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->
