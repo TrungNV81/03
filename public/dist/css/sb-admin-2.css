@@ -7,12 +7,13 @@ body {
   background-color: #f8f8f8;
 }
 #wrapper {
-  width: 100%;
+    background-color: #ecf0f1;
+    width: 100%;
 }
 #page-wrapper {
   padding: 0 15px;
   min-height: 568px;
-  background-color: white;
+  background-color: #f65314;
 }
 @media (min-width: 768px) {
   #page-wrapper {
@@ -75,10 +76,10 @@ body {
   padding: 15px;
 }
 .sidebar ul li {
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #ecf0f1;
 }
 .sidebar ul li a.active {
-  background-color: #eeeeee;
+    color: #fe0000;
 }
 .sidebar .arrow {
   float: right;
@@ -446,4 +447,143 @@ table.dataTable thead .sorting:after {
 }
 .border-top-none{
     border-top: none !important;
+}
+
+/* Made with love by Mutiullah Samim*/
+
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+html,#login{
+    background-image: url('../../image/sonthanh.jpg');
+    background-size: cover;
+    background-repeat: round;
+    height: 100%;
+    font-family: 'Numans', sans-serif;
+}
+
+.container{
+    height: 100%;
+    align-content: center;
+}
+
+.card{
+    height: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 400px;
+    background-color: rgba(0,0,0,0.5) !important;
+}
+
+.social_icon span{
+    font-size: 60px;
+    margin-left: 10px;
+    color: #f65314;
+}
+
+.social_icon span:hover{
+    color: white;
+    cursor: pointer;
+}
+
+.card-header h3{
+    color: white;
+}
+.card-header{
+    padding: 2.75rem 1.25rem !important;
+}
+.social_icon{
+    position: absolute;
+    right: 20px;
+    top: -45px;
+}
+
+.input-group-prepend span{
+    width: 50px;
+    background-color: #f65314;
+    color: #fff;
+    border:0 !important;
+}
+
+input:focus{
+    outline: 0 0 0 0  !important;
+    box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+    color: white;
+}
+
+.remember input
+{
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-right: 5px;
+}
+
+.login_btn{
+    color: #fff;
+    background-color: #f65314;
+    width: 100px;
+}
+
+.login_btn:hover{
+    color: black;
+    background-color: white;
+}
+
+.links{
+    color: white;
+}
+
+.links a{
+    margin-left: 4px;
+}
+
+.navbar-default{
+    background-color: #ecf0f1 !important;
+    border-color: #d6dadb !important;
+}
+a {
+    color: #333333 !important;
+    text-decoration: none;
+}
+a:focus, a:hover {
+    color: rgba(236,134,72,0.8);
+    text-decoration: underline;
+}
+.nav>li>a:focus, .nav>li>a:hover{
+    color: #fe0000 !important;
+
+}
+.nav-second-level {
+    background-color: rgba(236,134,72,0.8);
+}
+.nav-second-level>li>a:focus, .nav-second-level>li>a:hover{
+    background-color: rgba(236,134,72,0.8);
+    color: black !important;
+}
+.nav-second-level>li>a{
+    color: white !important;
+}
+.nav-second-level>li>a.active{
+    color: black !important;
+}
+.page-header{
+    color: white;
+}
+.panel-primary{
+  background-color: #00a1f1 !important;
+}
+.panel-primary>.panel-heading {
+    background-color: #00a1f1 !important;
+    border-color: #00a1f1 !important;
+}
+.panel-green {
+    border-color: #7cbb00;
+}
+.panel-green > .panel-heading {
+    border-color: #7cbb00;
+    background-color: #7cbb00;
 }
