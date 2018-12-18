@@ -457,7 +457,7 @@ table.dataTable thead .sorting:after {
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
 html,#login{
-    background-color: rgba(236,134,72,0.8);
+    background: linear-gradient(#ffd9ab, #ffbe83);
     height: 100%;
     font-family: 'Numans', sans-serif;
 }
@@ -570,11 +570,11 @@ a:focus, a:hover {
 }
 
 .panel-primary{
-  background-color: #f65314 !important;
+  background: linear-gradient(#ffc27a, #FF9A57) !important;
     border-color: #f65314 !important;
 }
 .panel-primary>.panel-heading {
-    background-color: #f65314 !important;
+    background: linear-gradient(#ffc27a, #FF9A57) !important;
     border-color: #f65314 !important;
 }
 .panel-green {
@@ -582,19 +582,19 @@ a:focus, a:hover {
 }
 .panel-green > .panel-heading {
     border-color: #f65314;
-    background-color: #f65314;
+    background: linear-gradient(#ffc27a, #FF9A57);
 }
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
-    background-color: #f65314 !important;
+    background: linear-gradient(#ffc27a, #FF9A57) !important;
     border-color: #f65314 !important;
     color: white !important;
 }
 .btn-success{
-    background-color: #f65314 !important;
+    background: linear-gradient(#ffc27a, #FF9A57) !important;
     border-color: #f65314 !important;
 }
 .navbar-header{
-    background-color: #f65314;
+    background: linear-gradient(#ffc27a, #FF9A57);
 }
 .navbar-brand .logo-text{
     color: white;
@@ -606,7 +606,7 @@ a:focus, a:hover {
     display: inline-block !important;
 }
 .navbar-brand{
-    padding: 15px 40px !important;
+    padding: 15px 60px !important;
 }
 .page-header{
     color: #f65314;
@@ -616,7 +616,7 @@ span.pull-left:hover{
 }
 .panel-default>.panel-heading {
     color: white !important;
-    background-color: #f65314 !important;
+    background: linear-gradient(#ffc27a, #FF9A57) !important;
 }
 .panel-default {
     border-color: #f65314;
