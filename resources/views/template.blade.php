@@ -99,7 +99,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url('/dashboard') }}">STExcelExport</a>
+            <a class="navbar-brand" href="{{ url('/dashboard') }}">
+                <img src="{{ asset('image/logo.jpg') }}" class="img img-responsive" alt="STSekisanCenter" >
+                <span>STExcelExport</span>
+            </a>
         </div>
         <!-- /.navbar-header -->
 

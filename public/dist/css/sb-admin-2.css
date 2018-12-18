@@ -596,4 +596,12 @@ a:focus, a:hover {
     background-image: linear-gradient(#f65314, rgba(236,134,72,0.8));
     background-color: white;
 }
-
+.card-footer a{
+    color: #f65314 !important;
+}
+.navbar-brand>img{
+    display: inline-block !important;
+}
+.navbar-brand{
+    padding: 15px 40px !important;
+}
