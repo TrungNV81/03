@@ -22,6 +22,9 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
+.btn{
+  min-width: 100px;
+}
 .navbar-top-links {
   margin-right: 0;
 }
@@ -106,6 +109,9 @@ body {
     width: 250px;
     margin-top: 51px;
   }
+  .navbar-default .navbar-brand{
+    width: 251px;
+  }
   .navbar-top-links .dropdown-messages,
   .navbar-top-links .dropdown-tasks,
   .navbar-top-links .dropdown-alerts {
@@ -167,7 +173,7 @@ body {
   overflow-y: scroll;
 }
 .login-panel {
-  margin-top: 25%;
+  /*margin-top: 25%;*/
 }
 .flot-chart {
   display: block;
@@ -446,4 +452,39 @@ table.dataTable thead .sorting:after {
 }
 .border-top-none{
     border-top: none !important;
+}
+
+
+#login{
+  background-color: rgba(255,194,122,0.22)
+}
+#login h2.logo{
+  margin-top: 25%;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #FF9D5D;
+}
+#login .panel-default>.panel-heading{
+  background: linear-gradient(#ffc27a, #FF9A57);
+  color: #ffffff;
+}
+#login .panel-default {
+  border-color: #FFBC00;
+}
+.navbar-default .navbar-brand{
+  color: #ffffff;
+  background: #FF9D5D;
+}
+.navbar-default .navbar-brand:hover{
+  color: #ffffff;
+  background: #FF9D5D;
+}
+
+.sidebar .nav>li>a{
+  color: #31708f;
+}
+.page-header{
+  color: #666666;
+  font-size: 20px;
+  border-color: #cccccc;
 }

@@ -99,7 +99,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url('/dashboard') }}">STExcelExport</a>
+            <a class="navbar-brand" href="{{ url('/dashboard') }}">STSekisanCenter</a>
         </div>
         <!-- /.navbar-header -->
 
@@ -125,31 +125,31 @@
                         <a href="{{ url('/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-table fa-fw"></i>Manage history<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-table fa-fw"></i> Manage History<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="{{ url('/historyFile') }}">History file</a>
+                                <a href="{{ url('/historyFile') }}"><i class="fa fa-history"></i> History import file</a>
                             </li>
                             <li>
-                                <a href="{{ url('/historySendMail') }}">History send mail</a>
+                                <a href="{{ url('/historySendMail') }}"><i class="fa fa-history"></i> History send mail</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-envelope-o fa-fw"></i>Manage mail<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-envelope-o fa-fw"></i> Setting Mail<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="{{ url('/manageMail') }}">Manage mail</a>
+                                <a href="{{ url('/manageMail') }}"><i class="fa fa-cogs"></i> Manage mail</a>
                             </li>
                             <li>
-                                <a href="{{ url('/setting') }}">Setting</a>
+                                <a href="{{ url('/setting') }}"><i class="fa fa-cogs"></i> Template mail</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <a href="{{ url('/uploadFile') }}"><i class="fa fa-upload fa-fw"></i> Upload file</a>
+                        <a href="{{ url('/uploadFile') }}"><i class="fa fa-upload fa-fw"></i> Upload File Server</a>
                     </li>
                 </ul>
             </div>
