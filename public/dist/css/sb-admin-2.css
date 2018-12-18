@@ -605,3 +605,10 @@ a:focus, a:hover {
 .navbar-brand{
     padding: 15px 40px !important;
 }
+.page-header{
+    color: #f65314;
+}
+span.pull-left:hover{
+    color: #f65314;
+}
+
