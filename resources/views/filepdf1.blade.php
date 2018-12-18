@@ -39,7 +39,7 @@
         }
 
         td {
-            line-height: 15px;        
+            line-height: 15px;
             height: 20px;
         }
 
@@ -48,7 +48,7 @@
         }
 
         .circle2 {
-            background: rgb(255, 77, 77);;
+            background: rgb(255, 77, 77);
             text-align: center !important;
             border-radius: 10px;
             height: 20px;
@@ -75,7 +75,6 @@
             padding-right: 8px !important;
             padding-bottom: 4px !important;
         }
-
     </style>
 </head>
 
@@ -84,13 +83,13 @@
         <div class="content">
             <div class="title m-b-md">
                 <?php 
-                    $page = (int)(count($dataPDF)/74);
+                    $page = (int)(count($dataPDF)/76);
                     // echo $page;
                 ?> @if($page >0) @for ($j = 0; $j
-                < $page; $j++) @if($j*74 < count($dataPDF)) <div style="text-align: center;">{{ $filename }}</div>
+                < $page; $j++) @if($j*76 < count($dataPDF)) <div style="text-align: center;">{{ $filename }}</div>
             <table style="page-break-after:always;width: 103%;">
-                @for ($i = $j*74; $i
-                < ($j + 1)*74; $i+=4) <tr style="width: 103%;">
+                @for ($i = $j*76; $i
+                < ($j + 1)*76; $i+=4) <tr style="width: 103%;">
                     @if ($i
                     < count($dataPDF)) @if($dataPDF[$i]->B == '1階')
                         <td>
@@ -189,10 +188,10 @@
                                     @endfor
             </table>
             <!-- @endif -->
-            @endfor @endif @if(($page * 74
+            @endfor @endif @if(($page * 76
             < count($dataPDF)) || $page==0 ) <div style="text-align: center;">{{ $filename }}</div>
         <table style="width: 103%;">
-            @for ($i = $page * 74; $i
+            @for ($i = $page * 76; $i
             < count($dataPDF); $i+=4) <tr style="width: 103%;">
                 @if ($i
                 < count($dataPDF)) @if($dataPDF[$i]->B == '1階')

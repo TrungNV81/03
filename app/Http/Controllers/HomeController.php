@@ -455,8 +455,21 @@ class HomeController extends Controller
         // end sheet 工場3便
 
         // sheet 営業1便
+        $sumG_Floor1 = "";
+        $sumG_Floor1 =  DB::table('csv_data_import')
+        ->select(DB::raw('sum(G) as total'))
+        ->where([
+            ['id', '=', $importId],
+            ['A', '=', 'カベ'],
+            ['B', '=', '1階'],
+            ['I', '=', '先行ボード'],
+            ['K', '=', 'マーク付きベベル'],
+            ['M', '=', '910'],
+            ['N', '=', '2395'],
+            ['O', '=', '○'],
+        ]);
         $dataImport5 = DB::table('csv_data_import')
-            ->select('K as name', 'L as thickness', 'Q', 'M', 'N', 'G as F1', DB::raw('sum(G) as total'))
+            ->select('K as name', 'L as thickness', 'Q', 'M', 'N', DB::raw('('.$sumG_Floor1->toSql().') as F1'), DB::raw('sum(G) as total'))
             ->where([
                 ['id', '=', $importId],
                 ['A', '=', 'カベ'],
@@ -477,6 +490,7 @@ class HomeController extends Controller
                 ['N', '=', '2395'],
                 ['O', '=', '○'],
             ])
+            ->mergeBindings($sumG_Floor1)
             ->groupBy('K')
             ->get();
 
@@ -486,8 +500,20 @@ class HomeController extends Controller
         // end sheet 営業1便
 
         // sheet 営業2便
+        $sumG_Floor1 = "";
+        $sumG_Floor1 = DB::table('csv_data_import')
+        ->select(DB::raw('sum(G) as total'))
+        ->where([
+            ['id', '=', $importId],
+            ['A', '=', 'テンジョウ'],
+            ['B', '=', '1階'],
+            ['K', '=', 'べべル'],
+            ['M', '=', '910'],
+            ['N', '=', '1820'],
+            ['O', '=', '○'],
+        ]);
         $dataImport6 = DB::table('csv_data_import')
-            ->select('K as name', 'L as thickness', 'M', 'N', 'G as F1', DB::raw('sum(G) as total'))
+            ->select('K as name', 'L as thickness', 'M', 'N', DB::raw('('.$sumG_Floor1->toSql().') as F1'), DB::raw('sum(G) as total'))
             ->where([
                 ['id', '=', $importId],
                 ['A', '=', 'テンジョウ'],
@@ -506,6 +532,7 @@ class HomeController extends Controller
                 ['N', '=', '1820'],
                 ['O', '=', '○'],
             ])
+            ->mergeBindings($sumG_Floor1)
             ->groupBy('K')
             ->get();
 
@@ -515,8 +542,21 @@ class HomeController extends Controller
         // end sheet 営業2便
 
         // sheet 営業3便
+        $sumG_Floor1 = "";
+        $sumG_Floor1 = DB::table('csv_data_import')
+        ->select(DB::raw('sum(G) as total'))
+        ->where([
+            ['id', '=', $importId],
+            ['A', '=', 'カベ'],
+            ['B', '=', '1階'],
+            ['K', '=', 'マーク付きベベル'],
+            ['M', '=', '910'],
+            ['N', '=', '2395'],
+            ['O', '=', '○'],
+        ]);
+
         $dataImport7 = DB::table('csv_data_import')
-            ->select('K as name', 'L as thickness', 'M', 'N', 'G as F1', DB::raw('sum(G) as total'))
+            ->select('K as name', 'L as thickness', 'M', 'N', DB::raw('('.$sumG_Floor1->toSql().') as F1'), DB::raw('sum(G) as total'))
             ->where([
                 ['id', '=', $importId],
                 ['A', '=', 'カベ'],
@@ -535,11 +575,25 @@ class HomeController extends Controller
                 ['N', '=', '2395'],
                 ['O', '=', '○'],
             ])
+            ->mergeBindings($sumG_Floor1)
             ->groupBy('K')
             ->get();
 
+            $sumG_Floor1_1 = "";
+            $sumG_Floor1_1 = DB::table('csv_data_import')
+            ->select(DB::raw('sum(G) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['A', '=', 'カベ'],
+                ['B', '=', '1階'],
+                ['D', '=', 'コーナーボード'],
+                ['M', '=', '65'],
+                ['N', '=', '2395'],
+                ['O', '=', '○'],
+            ]);
+            
         $dataImport8 = DB::table('csv_data_import')
-            ->select('K as name', 'L as thickness', 'M', 'N', 'G as F1', DB::raw('sum(G) as total'))
+            ->select('K as name', 'L as thickness', 'M', 'N', DB::raw('('.$sumG_Floor1_1->toSql().') as F1'), DB::raw('sum(G) as total'))
             ->where([
                 ['id', '=', $importId],
                 ['A', '=', 'カベ'],
@@ -558,6 +612,7 @@ class HomeController extends Controller
                 ['N', '=', '2395'],
                 ['O', '=', '○'],
             ])
+            ->mergeBindings($sumG_Floor1_1)
             ->groupBy('K')
             ->get();
 
