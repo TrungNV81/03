@@ -82,7 +82,7 @@ body {
   border-bottom: 1px solid #d6dadb;
 }
 .sidebar ul li a.active {
-    color: #f65314;
+    color: #f65314 !important;
 }
 .sidebar .arrow {
   float: right;
@@ -620,4 +620,8 @@ span.pull-left:hover{
 }
 .panel-default {
     border-color: #f65314;
+}
+.sidebar ul li .nav-second-level li a.active{
+    color: black !important;
+    /*background-color: rgba(236,134,72,0.8);*/
 }
