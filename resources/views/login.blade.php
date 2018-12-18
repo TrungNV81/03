@@ -211,7 +211,7 @@
                         <div class="form-group">
                             <label for="exampleInputPassword1" class="text-uppercase">Password</label>
                             <input type="password" class="form-control" id="password" placeholder="Password"
-                                   name="password" value="123456">
+                                   name="password" value="">
                             @if($errors->has('password'))
                                 <p style="color:red">{{$errors->first('password')}}</p>
                             @endif
