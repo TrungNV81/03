@@ -570,18 +570,19 @@ a:focus, a:hover {
 }
 
 .panel-primary{
-  background-color: #00a1f1 !important;
+  background-color: #f65314 !important;
+    border-color: #f65314 !important;
 }
 .panel-primary>.panel-heading {
-    background-color: #00a1f1 !important;
-    border-color: #00a1f1 !important;
+    background-color: #f65314 !important;
+    border-color: #f65314 !important;
 }
 .panel-green {
-    border-color: #7cbb00;
+    border-color: #f65314;
 }
 .panel-green > .panel-heading {
-    border-color: #7cbb00;
-    background-color: #7cbb00;
+    border-color: #f65314;
+    background-color: #f65314;
 }
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
     background-color: #f65314 !important;
@@ -593,8 +594,10 @@ a:focus, a:hover {
     border-color: #f65314 !important;
 }
 .navbar-header{
-    background-image: linear-gradient(#f65314, rgba(236,134,72,0.8));
-    background-color: white;
+    background-color: #f65314;
+}
+.navbar-brand .logo-text{
+    color: white;
 }
 .card-footer a{
     color: #f65314 !important;
@@ -611,4 +614,10 @@ a:focus, a:hover {
 span.pull-left:hover{
     color: #f65314;
 }
-
+.panel-default>.panel-heading {
+    color: white !important;
+    background-color: #f65314 !important;
+}
+.panel-default {
+    border-color: #f65314;
+}

@@ -101,7 +101,7 @@
             </button>
             <a class="navbar-brand" href="{{ url('/dashboard') }}">
                 <img src="{{ asset('image/logo.jpg') }}" class="img img-responsive" alt="STSekisanCenter" >
-                <span>STExcelExport</span>
+                <span class="logo-text">STExcelExport</span>
             </a>
         </div>
         <!-- /.navbar-header -->
