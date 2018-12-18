@@ -72,30 +72,46 @@ class AdminController extends Controller
 
     public function manageMail()
     {
-        $dataMail = DB::table('manage_mail')
+        $dataGroupMail = DB::table('group_mail')
             ->get();
-        return view("manageMail", ['dataMail' => $dataMail]);
+
+        if(isset($_GET['id_group'])) {
+            $id_group = $_GET['id_group'];
+            $dataMail = DB::table('manage_mail')
+                ->where('id_group', '=', $id_group)
+                ->get();
+        } else {
+            $dataMail = [];
+            $id_group = '';
+        }
+        return view("manageMail", ['dataMail' => $dataMail, 'dataGroupMail' => $dataGroupMail, 'id_group' => $id_group]);
     }
 
     public function editMail()
     {
         $stringMail = $_POST['arrMail'];
         $stringStatus = $_POST['arrStatus'];
+        $id_group = $_POST['id_group'];
         $arrMail = explode(',',$stringMail);
         $arrStatus = explode(',',$stringStatus);
-        $arrId = DB::table('manage_mail')
-            ->select('id')
-            ->get();
+        if(isset($id_group)) {
+            $arrId = DB::table('manage_mail')
+                ->select('id')
+                ->where('id_group', '=', $id_group)
+                ->get();
 
-        foreach($arrId as $key => $value)
-        {
-            DB::table('manage_mail')
-            ->where('id', $arrId[$key]->id)
-            ->update([
-                'email' => $arrMail[$key],  'status' => $arrStatus[$key],
-            ]);
+            foreach($arrId as $key => $value)
+            {
+                DB::table('manage_mail')
+                ->where('id', $arrId[$key]->id)
+                ->update([
+                    'email' => $arrMail[$key],  'status' => $arrStatus[$key],
+                ]);
+            }
+            echo 'Update success';
+        } else {
+            echo 'Update fail';
         }
-        echo 'Update success';
     }
 
     public function addMail(Request $request)
@@ -119,12 +135,12 @@ class AdminController extends Controller
             $maxIdMail = $maxIdMail;
 
             DB::table('manage_mail')->insert(
-                ['id' => $maxIdMail, 'email' => $_POST['new-email'], 'status' => '0']
+                ['id' => $maxIdMail, 'id_group' => $_POST['id_group'], 'email' => $_POST['new-email'], 'status' => '0']
             );
             echo '<script language="javascript">';
             echo 'alert("Add mail success!")';
             echo '</script>';
-            return redirect()->intended('manageMail');
+            return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
         }
     }
 
@@ -134,7 +150,7 @@ class AdminController extends Controller
         echo '<script language="javascript">';
         echo 'alert("Delete mail success!")';
         echo '</script>';
-        return redirect()->intended('manageMail');
+        return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
     }
 
     public function uploadFile()

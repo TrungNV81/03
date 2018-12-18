@@ -8,6 +8,7 @@ function updateMail()
     arrMail = '';
     arrStatus = '';
     var data = $('#arrDataMail').val();
+    var id_group = $('#id_group').val();
     for (var i = 0 ; i < data; i++) {
         var email = $('#email' + i).val()
         if (!validateEmail(email)) {
@@ -18,7 +19,7 @@ function updateMail()
         if ($('#status' + i).is(':checked')) {
             arrStatus = arrStatus + 1 + ',';
         }
-        else{
+        else {
             arrStatus = arrStatus + 0 + ',';
         }
     }
@@ -35,10 +36,11 @@ function updateMail()
         },
         data:{
             arrMail : arrMail,
-            arrStatus:  arrStatus
+            arrStatus:  arrStatus,
+            id_group: id_group
         },
         success : function (result){
             alert(result);
-        }    
+        }
     }) 
 }

@@ -103,7 +103,7 @@
         <div class="col-lg-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Line Chart
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Line chart send mail
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -195,28 +195,22 @@
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
             data: [
-                { y: '2014', a: 50, b: 90},
-                { y: '2015', a: 65,  b: 75},
-                { y: '2016', a: 50,  b: 50},
-                { y: '2017', a: 75,  b: 60},
-                { y: '2018', a: 80,  b: 65},
-                { y: '2019', a: 90,  b: 70},
-                { y: '2020', a: 100, b: 75},
-                { y: '2021', a: 115, b: 75},
-                { y: '2022', a: 120, b: 85},
-                { y: '2023', a: 145, b: 85},
-                { y: '2024', a: 160, b: 95}
+                { day: 'Monday', pushups: 20, beers: 2 },
+                { day: 'Tuesday', pushups: 10, beers: 2 },
+                { day: 'Wednesday', pushups: 5, beers: 3 },
+                { day: 'Thursday', pushups: 5, beers: 4 },
+                { day: 'Friday', pushups: 20, beers: 1 },
+                { day: 'Saturday', pushups: 20, beers: 1 },
+                { day: 'Sunday', pushups: 20, beers: 1 }
             ],
-            xkey: 'y',
-            ykeys: ['a', 'b'],
-            labels: ['Total Success', 'Total Fail'],
-            fillOpacity: 0.6,
-            hideHover: 'auto',
-            behaveLikeLine: true,
-            resize: true,
-            pointFillColors:['#ffffff'],
-            pointStrokeColors: ['black'],
-            lineColors:['gray','red']
+            xkey: 'day',
+            parseTime: false,
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['pushups','beers'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['Success','Fail'],
+            lineColors: ['#7FFF00','#FF4500']
         });
     });
 </script>
