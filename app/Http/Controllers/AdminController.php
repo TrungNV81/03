@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use DB;
+use Validator;
+
 class AdminController extends Controller
 {
     public function __construct()
@@ -16,9 +18,44 @@ class AdminController extends Controller
         return view("welcome");
     }
 
+    public function dashboard()
+    {
+        $historyFile = DB::table('history_file')
+            ->orderByRaw('created_at DESC')
+            ->get();
+
+        $historySendMail = DB::table('history_sendmail')
+            ->orderByRaw('created_at DESC')
+            ->get();
+
+        $totalSuccessFile = count(DB::table('history_file')
+            ->where('status', '=' ,'success')
+            ->orderByRaw('created_at DESC')
+            ->get());
+
+        $totalSuccessSendMail = count(DB::table('history_sendmail')
+            ->where('status', '=' ,'success')
+            ->orderByRaw('created_at DESC')
+            ->get());
+
+        $dataMail = DB::table('manage_mail')
+            ->get();
+
+        $totalFile = count($historyFile);
+
+        $totalSendMail = count($historySendMail);
+
+        $totalMail = count($dataMail);
+
+        return view("dashboard", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail,
+            'totalFile' => $totalFile, 'totalSendMail' => $totalSendMail, 'totalMail' => $totalMail,
+            'totalSuccessFile' => $totalSuccessFile, 'totalSuccessSendMail' => $totalSuccessSendMail]);
+    }
+
     public function historyFile()
     {
         $historyFile = DB::table('history_file')
+            ->orderByRaw('created_at DESC')
             ->get();
 
         return view("historyFile", ['historyFile' => $historyFile]);
@@ -27,6 +64,7 @@ class AdminController extends Controller
     public function historySendMail()
     {
         $historySendMail = DB::table('history_sendmail')
+            ->orderByRaw('created_at DESC')
             ->get();
 
         return view("historySendMail", ['historySendMail' => $historySendMail]);
@@ -39,34 +77,93 @@ class AdminController extends Controller
         return view("manageMail", ['dataMail' => $dataMail]);
     }
 
-    public function editMail(Request $data)
+    public function editMail()
     {
-
+        $stringMail = $_POST['arrMail'];
+        $stringStatus = $_POST['arrStatus'];
+        $arrMail = explode(',',$stringMail);
+        $arrStatus = explode(',',$stringStatus);
         $arrId = DB::table('manage_mail')
-        ->select('id')
-        ->get();
+            ->select('id')
+            ->get();
 
-        for($i=0; $i<count($arrId);$i++)
+        foreach($arrId as $key => $value)
         {
-            $y = 0;
-            $status = 'status'.$arrId[$i]->id;
-            if (isset($_POST[$status])) {
-                $y = 1;
-            }
-            else{
-                $y = 0;
-            }
             DB::table('manage_mail')
-            ->where('id', $arrId[$i]->id)
+            ->where('id', $arrId[$key]->id)
             ->update([
-                'email' => $_POST['mail'.$arrId[$i]->id],  'status' => $y,
+                'email' => $arrMail[$key],  'status' => $arrStatus[$key],
             ]);
         }
+        echo 'Update success';
+    }
+
+    public function addMail(Request $request)
+    {
+        $rules = [
+            'new-email' => 'required'
+        ];
+        $messages = [
+            'new-email.required' => 'Email is required.',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $maxIdMail = DB::table('manage_mail')->max('id');
+            if ($maxIdMail == "") {
+                $maxIdMail = 0;
+            }
+            $maxIdMail += 1;
+            $maxIdMail = $maxIdMail;
+
+            DB::table('manage_mail')->insert(
+                ['id' => $maxIdMail, 'email' => $_POST['new-email'], 'status' => '0']
+            );
+            echo '<script language="javascript">';
+            echo 'alert("Add mail success!")';
+            echo '</script>';
+            return redirect()->intended('manageMail');
+        }
+    }
+
+    public function delMail()
+    {
+        DB::table('manage_mail')->where('id', '=', $_POST['id-mail'])->delete();
         echo '<script language="javascript">';
-           echo 'alert("Success")';
-           echo '</script>';
-        $dataMail = DB::table('manage_mail')
-        ->get();
-        return view("manageMail", ['dataMail' => $dataMail]);
+        echo 'alert("Delete mail success!")';
+        echo '</script>';
+        return redirect()->intended('manageMail');
+    }
+
+    public function uploadFile()
+    {
+        return view('upload_form');
+    }
+
+    public function uploadSubmit(Request $request)
+    {
+        $this->validate($request, ['csv-file'=>'required']);
+        $files = $request->file('csv-file');
+        if($request->hasFile('csv-file'))
+        {
+            foreach($files as $file) {
+                $extension = strtolower($file->getClientOriginalExtension());
+                if($extension != "csv")
+                {
+                    echo '<script language="javascript">';
+                    echo 'alert("The system only accepts CSV files")';
+                    echo '</script>';
+                    return redirect()->intended('uploadFile');
+                }
+                $dir = public_path() . '/files/';
+                $file->move($dir, $file->getClientOriginalName());
+            }
+            echo '<script language="javascript">';
+            echo 'alert("Upload file success!")';
+            echo '</script>';
+            return redirect()->intended('uploadFile');
+        }
     }
 }

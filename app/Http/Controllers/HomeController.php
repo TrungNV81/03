@@ -12,11 +12,33 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use ZipArchive;
 
 set_time_limit(600);
+ini_set('memory_limit', '4096M');
 class HomeController extends Controller
 {
     public function batch()
     {
-        return view("batch");
+        $time = date('Y-m-d H:i:s');
+        $timeNow = strtotime($time);
+
+        $checkBatch = DB::table('time_run_batch')
+            ->get();
+
+        $timeOld = strtotime($checkBatch[0]->date);
+
+        $minute = ($timeNow - $timeOld)/60;
+
+        $minuteRunBatch = $checkBatch[0]->time;
+
+        $chia = $minute/$minuteRunBatch;
+
+        $return = $minute % $minuteRunBatch == 0;
+
+        if ($minute % $minuteRunBatch == 0) {
+            $this->handle();
+            shell_exec('echo "'. '[OK]  Time: ' . $time . '     |now: ' . $minute . '     |old: ' . $minuteRunBatch . '     |chia: ' . $chia . '     |return: ' . $return .'" >> /var/www/html/webtool03/app/test.log');
+        } else {
+            shell_exec('echo "'. '[NEXT]  Time: ' . $time . '     |now: ' . $minute . '     |old: ' . $minuteRunBatch . '     |chia: ' . $chia . '     |return: ' . $return .'" >> /var/www/html/webtool03/app/test.log');
+        }
     }
 
     public function handle()
@@ -93,7 +115,7 @@ class HomeController extends Controller
 
                 $this->exportFile1($importId, $pathExcel, $filename[0]);
                 $this->exportFile2($importId, $pathExcel, $filename[0]);
-                $this->zip($path, $filename[0]);
+                $this->zip($path, $filename[0], $substr, $dir);
                 $this->sendMail($path, $filename[0], $importId, $dateNew);
                 $this->deleteFileZip($filename[0]);
             } else {
@@ -123,7 +145,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_1, '先行1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport1_1, '_１階先行壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport1_1, '_１階先行壁', $filename, 'filepdf1');
         //add data sheet 1-2
         $dataImport1_2 = DB::table('csv_data_import')
             ->where([
@@ -136,7 +158,7 @@ class HomeController extends Controller
             ->orderByRaw('N DESC')
             ->get();
         $this->addDataToFile1($dataImport1_2, '先行1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport1_2, '_２階先行壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport1_2, '_２階先行壁', $filename, 'filepdf1');
         // add data sheet 2
         $dataImport2 = DB::table('csv_data_import')
             ->where([
@@ -148,7 +170,7 @@ class HomeController extends Controller
             ->orderByRaw('K ASC, N DESC')
             ->get();
         $this->addDataToFile1($dataImport2, '天井1階', 3, $spreadsheet, 1820);
-        $this->exportPDF($pathPDF, $dataImport2, '_１階天井', $filename);
+        $this->exportPDF($pathPDF, $dataImport2, '_１階天井', $filename, 'filepdf1');
         // add data sheet 3
         $dataImport3 = DB::table('csv_data_import')
             ->where([
@@ -161,7 +183,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport3, '天井2階', 3, $spreadsheet, 1820);
-        $this->exportPDF($pathPDF, $dataImport3, '_２階天井 ', $filename);
+        $this->exportPDF($pathPDF, $dataImport3, '_２階天井 ', $filename, 'filepdf1');
         // add data sheet 4-1
         $dataImport4_1 = DB::table('csv_data_import')
             ->where([
@@ -175,7 +197,7 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_1, '壁1階2階', 3, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport4_1, '_１階壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport4_1, '_１階壁', $filename, 'filepdf1');
         // add data sheet 4-2
         $dataImport4_2 = DB::table('csv_data_import')
             ->where([
@@ -189,7 +211,8 @@ class HomeController extends Controller
             ->get();
 
         $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
-        $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename);
+        $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename, 'filepdf1');
+        $this->exportPDF($pathPDF, '', '_ラベル', $filename, 'filepdf2');
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
@@ -352,9 +375,9 @@ class HomeController extends Controller
 
     }
 
-    public function exportPDF($pathPDF, $dataPDF, $file_extension, $filename)
+    public function exportPDF($pathPDF, $dataPDF, $file_extension, $filename, $templatePDF)
     {
-        $pdf = PDF::loadView('filepdf1', compact('dataPDF', 'filename'));
+        $pdf = PDF::loadView($templatePDF, compact('dataPDF', 'filename'));
         $pdf->setPaper('a4', 'landscape');
         $saveFile = $pathPDF . '/' . $filename . $file_extension . '.pdf';
         $pdf->save($saveFile);
@@ -686,10 +709,6 @@ class HomeController extends Controller
                 $num += 10;
                 $this->closeEmptyExcel($num, 15, $spreadsheet);
             }
-            if ($numRow == 3 && $sheetName == '営業3便') {
-                $num += 10;
-                $this->closeEmptyExcel($num, 15, $spreadsheet);
-            }
         } else {
             $num = $numRec++;
             for ($i = 0; $i < count($data); $i++, $num++) {
@@ -705,8 +724,14 @@ class HomeController extends Controller
                 $sheet->setCellValue("G1" . $num, $data[$i]->F1);
                 $sheet->setCellValue("H1" . $num, $H);
             }
-            $num += 11;
-            $this->closeEmptyExcel($num, 16, $spreadsheet);
+            if ($numRow == 3 && $sheetName == '営業3便') {
+                $num += 10;
+                $this->closeEmptyExcel($num, 16, $spreadsheet);
+            }           
+            if ($sheetName != '営業3便') {
+                $num += 10;
+                $this->closeEmptyExcel($num, 16, $spreadsheet);
+            }
         }
     }
 
@@ -717,7 +742,7 @@ class HomeController extends Controller
         }
     }
 
-    public function zip($path, $filename)
+    public function zip($path, $filename, $fileCsv, $dir)
     {
         $path = public_path() . '/' . $filename;
         // zip and download file zip
@@ -735,9 +760,10 @@ class HomeController extends Controller
                 $files = glob($folder . '/' . '*');
                 $position = strrpos($folder, '/');
                 $nameDir = substr($folder, $position + 1);
-                // $zip->addEmptyDir($nameDir);
                 foreach ($files as $file) {
-                    $zip->addFile($zip_folder . $nameDir . '/' . basename($file));
+                    $position = strrpos($file, '/');
+                    $nameFile = substr($file, $position + 1);
+                    $zip->addFile($zip_folder . $nameDir . '/' . $nameFile);
                     continue;
                 }
             }
@@ -746,6 +772,7 @@ class HomeController extends Controller
             if ($isFinished) {
                 // remove folder tmp
                 $this->deleteDirectory($path);
+                unlink($dir . $fileCsv);
             } else {
                 throw new Exception("could not close zip file: " . $zip->getStatusString());
             }
@@ -826,25 +853,40 @@ class HomeController extends Controller
 
     public function sendMail($path, $filename, $importId, $dateNew)
     {
+        $templateEmail = DB::table('template_email')
+            ->get();
         $objDemo = new \stdClass();
-        $objDemo->demo_one = 'Nội dung 1';
-        $objDemo->demo_two = 'Nội dung 2';
-        $objDemo->sender = 'Admin';
-        $objDemo->receiver = 'User';
+        $objDemo->subject = $templateEmail[0]->subject;
+        $objDemo->body = $templateEmail[0]->body;
+        $objDemo->sender = $templateEmail[0]->sender;
+        $objDemo->receiver = $templateEmail[0]->receiver;
         $objDemo->path = $path;
         $objDemo->filename = $filename;
-
-        $sendTo = 'trungnv@eplatform.vn';
-        try{
-            Mail::to($sendTo)->send(new SendEmail($objDemo));
-            DB::table('history_sendmail')->insert(
-                ['id' => $importId, 'file_zip' => $filename.'.zip','receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'success']
-            );
+        $emailArr = DB::table('manage_mail')
+            ->select('email')
+            ->where([
+                ['status', '=', '1'],
+            ])
+            ->get();
+        
+        $idMail = DB::table('history_sendmail')->max('id');
+        if ($idMail == "") {
+            $idMail = 0;
         }
-        catch(\Exception $e){
-            DB::table('history_sendmail')->insert(
-                ['id' => $importId, 'file_zip' => $filename.'.zip', 'receiver' => $sendTo, 'created_at' => $dateNew, 'status' => 'fail']
-            );
+        $idMail += 1;
+        foreach ($emailArr as $sendTo) {
+            try{
+                Mail::to($sendTo->email)->send(new SendEmail($objDemo));
+                DB::table('history_sendmail')->insert(
+                    ['id' => $idMail, 'file_zip' => $filename.'.zip','receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'success']
+                );
+            }
+            catch(\Exception $e){
+                DB::table('history_sendmail')->insert(
+                    ['id' => $idMail, 'file_zip' => $filename.'.zip', 'receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'fail']
+                );
+            }
+            $idMail ++;
         }
     }
 

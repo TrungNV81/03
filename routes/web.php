@@ -12,21 +12,37 @@
  */
 
 Route::get('login','LoginController@getLogin')->name('login');
+
 Route::post('login','LoginController@postLogin');
 
 Route::get('logout', function(){
     Auth::logout();
     return Redirect::to('login');
 });
-
 Route::get('batch', 'HomeController@batch');
-Route::get('v1/api/export', 'HomeController@handle')->name('export');
 
-Route::get('','AdminController@getIndex');
+Route::get('v1/api/export', 'HomeController@handle')->name('v1/api/export');
+
+Route::get('','AdminController@dashboard');
+
+Route::get('dashboard','AdminController@dashboard')->name('dashboard');
+
 Route::get('historyFile','AdminController@historyFile')->name('historyFile');
+
 Route::get('historySendMail','AdminController@historySendMail')->name('historySendMail');
+
 Route::get('manageMail', 'AdminController@manageMail')->name('manageMail');
+
 Route::post('edit-mail', 'AdminController@editMail')->name('edit-mail');
 
-Route::get('setting','CmdController@getIndex')->name('history');
-Route::post('setting','CmdController@saveTime');
+Route::post('add-mail', 'AdminController@addMail')->name('add-mail');
+
+Route::post('del-mail', 'AdminController@delMail')->name('del-mail');
+
+Route::get('setting','CmdController@getIndex')->name('setting');
+
+Route::post('update','CmdController@updateSetting');
+
+Route::get('uploadFile','AdminController@uploadFile')->name('uploadFile');
+
+Route::post('uploadSubmit', 'AdminController@uploadSubmit')->name('uploadSubmit');

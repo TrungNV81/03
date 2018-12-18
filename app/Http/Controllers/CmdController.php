@@ -16,19 +16,34 @@ class CmdController extends Controller
         $timeRunBatch = DB::table('time_run_batch')
             ->get();
 
-        return view("setting", ['timeRunBatch' => $timeRunBatch[0]]);
-    }
-
-    public function saveTime()
-    {
-        exec($_POST['time'] . " > /dev/null &");
-
-        DB::table('time_run_batch')
-            ->update(['time' => $_POST['time']]);
-
-        $timeRunBatch = DB::table('time_run_batch')
+        $templateEmail = DB::table('template_email')
             ->get();
 
-        return view("setting", ['timeRunBatch' => $timeRunBatch[0]]);
+        return view("setting", ['timeRunBatch' => $timeRunBatch[0], 'templateEmail' => $templateEmail[0]]);
+    }
+
+    public function updateSetting()
+    {
+        //$time = $_POST['time'];
+        $subject = $_POST['subject'];
+        $receiver = $_POST['receiver'];
+        $body = $_POST['body'];
+        $sender = $_POST['sender'];
+
+        $timeRun = DB::table('time_run_batch')
+            ->get();
+
+        // $fileCrontab = file_get_contents(public_path().'/crontab');
+        // $newFileCrontab = str_replace('*/'.$timeRun[0]->time, '*/'.$time, $fileCrontab);
+        // file_put_contents(public_path().'/crontab', $newFileCrontab);
+
+        // DB::table('time_run_batch')
+        //    ->update(['time' => $time]);
+
+        DB::table('template_email')
+            ->update(['subject' => $subject, 'receiver' => $receiver, 'body' => $body, 'sender' => $sender]);
+
+        $smg = "Update success";
+        echo $smg;
     }
 }
