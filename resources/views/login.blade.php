@@ -243,7 +243,7 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
-                <img style="margin: 0 auto; display: block" src="{{ asset('image/logo.png') }}" class="img img-responsive" alt="Sơn Thanh">
+                <h3 style="text-align: center; color: #f65314">STSekisanCenter</h3>
             </div>
             <div class="card-body">
                 <form action="{{url('login')}}" method="POST" role="form">

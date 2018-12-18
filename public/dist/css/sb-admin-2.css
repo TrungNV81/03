@@ -13,15 +13,18 @@ body {
 #page-wrapper {
   padding: 0 15px;
   min-height: 568px;
-  background-color: #f65314;
+  background-color: white;
 }
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 250px;
     padding: 0 30px;
-    border-left: 1px solid #f65314;
+    border-left: 1px solid #e7e7e7;
   }
+    .navbar-header{
+        width: 251px;
+    }
 }
 .navbar-top-links {
   margin-right: 0;
@@ -79,7 +82,7 @@ body {
   border-bottom: 1px solid #d6dadb;
 }
 .sidebar ul li a.active {
-    color: #fe0000;
+    color: #f65314;
 }
 .sidebar .arrow {
   float: right;
@@ -454,9 +457,7 @@ table.dataTable thead .sorting:after {
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
 html,#login{
-    background-image: url('../../image/sonthanh.jpg');
-    background-size: cover;
-    background-repeat: round;
+    background-color: rgba(236,134,72,0.8);
     height: 100%;
     font-family: 'Numans', sans-serif;
 }
@@ -487,9 +488,6 @@ html,#login{
 
 .card-header h3{
     color: white;
-}
-.card-header{
-    padding: 2.75rem 1.25rem !important;
 }
 .social_icon{
     position: absolute;
@@ -554,7 +552,7 @@ a:focus, a:hover {
     text-decoration: underline;
 }
 .nav>li>a:focus, .nav>li>a:hover{
-    color: #fe0000 !important;
+    color:#f65314 !important;
 
 }
 .nav-second-level {
@@ -570,9 +568,7 @@ a:focus, a:hover {
 .nav-second-level>li>a.active{
     color: black !important;
 }
-.page-header{
-    color: white;
-}
+
 .panel-primary{
   background-color: #00a1f1 !important;
 }
@@ -595,5 +591,9 @@ a:focus, a:hover {
 .btn-success{
     background-color: #f65314 !important;
     border-color: #f65314 !important;
+}
+.navbar-header{
+    background-image: linear-gradient(#f65314, rgba(236,134,72,0.8));
+    background-color: white;
 }
 
