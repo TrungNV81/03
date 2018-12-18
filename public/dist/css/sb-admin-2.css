@@ -20,7 +20,7 @@ body {
     position: inherit;
     margin: 0 0 0 250px;
     padding: 0 30px;
-    border-left: 1px solid #e7e7e7;
+    border-left: 1px solid #f65314;
   }
 }
 .navbar-top-links {
@@ -76,7 +76,7 @@ body {
   padding: 15px;
 }
 .sidebar ul li {
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid #d6dadb;
 }
 .sidebar ul li a.active {
     color: #fe0000;
