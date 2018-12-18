@@ -266,7 +266,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        <input type="password" class="form-control" placeholder="Password" name="password" value="123456">
+                        <input type="password" class="form-control" placeholder="Password" name="password" value="Abc!@#123456">
                         @if($errors->has('password'))
                             <p style="color:red">{{$errors->first('password')}}</p>
                         @endif

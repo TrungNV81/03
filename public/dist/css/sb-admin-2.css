@@ -596,8 +596,4 @@ a:focus, a:hover {
     background-color: #f65314 !important;
     border-color: #f65314 !important;
 }
-.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover{
-    background-color: rgba(236,134,72,0.8) !important;
-    border-color: rgba(236,134,72,0.8) !important;
-    color: white !important;
-}
+
