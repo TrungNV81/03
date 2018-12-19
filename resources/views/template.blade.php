@@ -67,6 +67,14 @@
                 responsive: true,
                 "order": [[ 2, "desc" ]]
             });
+            $('#dataTables-example-4').DataTable({
+                responsive: true,
+                "ordering": false,
+                "columns": [
+                    { "orderDataType": "dom-text", type: 'text' },
+                    { "orderDataType": "dom-checkbox", type: 'checkbox' },
+                ]
+            });
         });
         $(document).ready(function() {
             $('#dataTables-example-3').DataTable( {
