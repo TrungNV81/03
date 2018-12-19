@@ -143,7 +143,7 @@
                                 <a href="{{ url('/manageMail') }}"><i class="fa fa-cogs"></i> Manage mail</a>
                             </li>
                             <li>
-                                <a href="{{ url('/setting') }}"><i class="fa fa-cogs"></i> Template mail</a>
+                                <a href="{{ url('/templateMail') }}"><i class="fa fa-cogs"></i> Template mail</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->

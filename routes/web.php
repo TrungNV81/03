@@ -23,26 +23,26 @@ Route::get('batch', 'HomeController@batch');
 
 Route::get('v1/api/export', 'HomeController@handle')->name('v1/api/export');
 
-Route::get('','AdminController@dashboard');
+Route::get('','ManageHistoryController@dashboard');
 
-Route::get('dashboard','AdminController@dashboard')->name('dashboard');
+Route::get('dashboard','ManageHistoryController@dashboard')->name('dashboard');
 
-Route::get('historyFile','AdminController@historyFile')->name('historyFile');
+Route::get('historyFile','ManageHistoryController@historyFile')->name('historyFile');
 
-Route::get('historySendMail','AdminController@historySendMail')->name('historySendMail');
+Route::get('historySendMail','ManageHistoryController@historySendMail')->name('historySendMail');
 
-Route::get('manageMail', 'AdminController@manageMail')->name('manageMail');
+Route::get('manageMail', 'ManageMailController@manageMail')->name('manageMail');
 
-Route::post('edit-mail', 'AdminController@editMail')->name('edit-mail');
+Route::post('edit-mail', 'ManageMailController@editMail')->name('edit-mail');
 
-Route::post('add-mail', 'AdminController@addMail')->name('add-mail');
+Route::post('add-mail', 'ManageMailController@addMail')->name('add-mail');
 
-Route::post('del-mail', 'AdminController@delMail')->name('del-mail');
+Route::post('del-mail', 'ManageMailController@delMail')->name('del-mail');
 
-Route::get('setting','CmdController@getIndex')->name('setting');
+Route::get('templateMail','ManageMailController@templateMail')->name('templateMail');
 
-Route::post('update','CmdController@updateSetting');
+Route::post('updateTemplate','ManageMailController@updateTemplate');
 
-Route::get('uploadFile','AdminController@uploadFile')->name('uploadFile');
+Route::get('uploadFile','UploadFileController@uploadFile')->name('uploadFile');
 
-Route::post('uploadSubmit', 'AdminController@uploadSubmit')->name('uploadSubmit');
+Route::post('uploadSubmit', 'UploadFileController@uploadSubmit')->name('uploadSubmit');

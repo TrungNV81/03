@@ -15,7 +15,7 @@ function Update() {
         // } else {
         //    hiddenError($("#time"));
             $.ajax({
-                url: "./update",
+                url: "./updateTemplate",
                 type: "POST",
                 dataType: "text",
                 beforeSend: function(xhr) {
