@@ -17,51 +17,56 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <form action="{{ url('add-group') }}" method="POST">
+                                <form action="{{ url('add-group-mail') }}" method="POST">
                                 {{ csrf_field() }}
                                     <label style="padding: 5px">Add group mail</label>
                                     <input style="display: inline-block; width: auto" class="form-control" type="text" name="group-email" value="">
                                     <button type="" class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Add</button>
-                                    @if($errors->has('new-email'))
-                                        <p style="color:red">{{$errors->first('new-email')}}</p>
-                                    @endif
                                 </form>
-                                <br>
+                                <hr>
                                 <table width="100%" class="table table-striped table-bordered table-hover">
-                                    <thead>
+                                <thead>
+                                <tr>
+                                    <th>City</th>
+                                    <th>View Group</th>
+                                    <th>Delete Group</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($dataGroupMail as $dataGroup)
                                     <tr>
-                                        <th>City</th>
-                                        <th>View Group</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($dataGroupMail as $dataGroup)
+                                        <th>{{ $dataGroup->name }}</th>
                                         <form action="{{ url('manageMail') }}" method="GET">
-                                            <tr>
-                                                <th>{{ $dataGroup->name }}</th>
-                                                <td>
-                                                    <input type="hidden" value="{{ $dataGroup->id }}" name="id_group">
-                                                    <button type="submit" class="btn btn-warning"><i class="fa fa-eye fa-fw"></i>  View mail in group</button>
-                                                </td>
-                                            </tr>
+                                            <td>
+                                                <input type="hidden" value="{{ $dataGroup->id }}" name="id_group">
+                                                <button type="" class="btn btn-warning"><i class="fa fa-eye fa-fw"></i> View mail in group</button>
+                                            </td>
                                         </form>
-                                        @endforeach
-                                    </tbody>
+                                        <form action="{{ url('del-group-mail') }}" method="POST">
+                                        {{ csrf_field() }}
+                                            <td>
+                                                <input hidden name="id-group" value="{{ $dataGroup->id }}">
+                                                <button class="btn btn-danger center-block"> <i class="fa fa-trash-o fa-fw"></i> Delete</button>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
                                 </table>
                                 <hr>
                                 @if($id_group)
                                 <div>
-                                @if(count($dataMail) > 0)
-                                        <form action="{{url('add-mail')}}" method="POST">
-                                            {{ csrf_field() }}
-                                            <label style="padding: 5px">Add new mail</label>
-                                            <input style="display: inline-block; width: auto" class="form-control" type="email" name="new-email" value="">
-                                            <input hidden value="{{ $id_group }}" id="id_group" name="id_group" />
-                                            <button type="" class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Add</button>
-                                            @if($errors->has('new-email'))
-                                                <p style="color:red">{{$errors->first('new-email')}}</p>
-                                            @endif
-                                        </form>
+                                    <form action="{{url('add-mail')}}" method="POST">
+                                        {{ csrf_field() }}
+                                        <label style="padding: 5px">Add new mail</label>
+                                        <input style="display: inline-block; width: auto" class="form-control" type="email" name="new-email" value="">
+                                        <input hidden value="{{ $id_group }}" id="id_group" name="id_group" />
+                                        <button type="" class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Add</button>
+                                        @if($errors->has('new-email'))
+                                            <p style="color:red">{{$errors->first('new-email')}}</p>
+                                        @endif
+                                    </form>
+                                    @if(count($dataMail) > 0)
                                         <br>
                                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">
                                         <thead>
@@ -91,7 +96,7 @@
                                                     {{ csrf_field() }}
                                                         <input hidden name="id-mail" value="{{ $data->id }}">
                                                         <input hidden value="{{ $id_group }}" name="id_group" />
-                                                        <button class="btn btn-danger center-block"><i class="fa fa-trash-o fa-fw"></i>  Delete</button>
+                                                        <button class="btn btn-danger center-block"><i class="fa fa-trash-o fa-fw"></i> Delete</button>
                                                     </form>
                                                 </td>
                                             </tr>

@@ -31,18 +31,24 @@ Route::get('historyFile','ManageHistoryController@historyFile')->name('historyFi
 
 Route::get('historySendMail','ManageHistoryController@historySendMail')->name('historySendMail');
 
-Route::get('manageMail', 'ManageMailController@manageMail')->name('manageMail');
-
-Route::post('edit-mail', 'ManageMailController@editMail')->name('edit-mail');
-
-Route::post('add-mail', 'ManageMailController@addMail')->name('add-mail');
-
-Route::post('del-mail', 'ManageMailController@delMail')->name('del-mail');
-
 Route::get('templateMail','ManageMailController@templateMail')->name('templateMail');
 
 Route::post('updateTemplate','ManageMailController@updateTemplate');
 
+Route::get('manageMail', 'ManageMailController@manageMail')->name('manageMail');
+
+Route::post('add-mail', 'ManageMailController@addMail')->name('add-mail');
+
+Route::post('edit-mail', 'ManageMailController@editMail')->name('edit-mail');
+
+Route::post('del-mail', 'ManageMailController@delMail')->name('del-mail');
+
+Route::post('add-group-mail', 'ManageMailController@addGroup')->name('add-group-mail');
+
+Route::post('del-group-mail', 'ManageMailController@delGroup')->name('del-group-mail');
+
 Route::get('uploadFile','UploadFileController@uploadFile')->name('uploadFile');
 
 Route::post('uploadSubmit', 'UploadFileController@uploadSubmit')->name('uploadSubmit');
+
+

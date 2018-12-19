@@ -96,6 +96,34 @@ class ManageMailController extends Controller
         return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
     }
 
+    public function addGroup()
+    {
+        $maxIdGroup = DB::table('group_mail')->max('id');
+        if ($maxIdGroup == "") {
+            $maxIdGroup = 0;
+        }
+        $maxIdGroup += 1;
+        $idGroup = $maxIdGroup;
+
+        DB::table('group_mail')->insert(
+            ['id' => $idGroup, 'name' => $_POST['group-email'], 'status' => '0']
+        );
+        echo '<script language="javascript">';
+        echo 'alert("Add group success!")';
+        echo '</script>';
+        return redirect()->intended('manageMail?id_group='.$idGroup);
+    }
+
+    public function delGroup()
+    {
+        DB::table('group_mail')->where('id', '=', $_POST['id-group'])->delete();
+        DB::table('manage_mail')->where('id_group', '=', $_POST['id-group'])->delete();
+        echo '<script language="javascript">';
+        echo 'alert("Delete group success!")';
+        echo '</script>';
+        return redirect()->intended('manageMail');
+    }
+
     public function templateMail()
     {
         $timeRunBatch = DB::table('time_run_batch')
