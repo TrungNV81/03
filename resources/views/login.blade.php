@@ -7,7 +7,7 @@
 {{--<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>--}}
 
 <!-- Bootstrap Core CSS -->
-    <link href="{{ asset('/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">--}}
 
     <!-- MetisMenu CSS -->
     <link href="{{ asset('/metisMenu/metisMenu.min.css') }}" rel="stylesheet">
@@ -26,6 +26,8 @@
 
     <!-- Custom Fonts -->
     <link href="{{ asset('/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('/image/logo.png') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -79,12 +81,17 @@
             } );
         } );
     </script>
-
     <script src="{{URL::asset('/js/managemail.js')}}"></script>
     <!------ Include the above in your HEAD tag ---------->
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
     <script src="{{URL::asset('/js/setting.js')}}"></script>
     <meta name="csrf_token" content="{{ csrf_token() }}" />
+
+    <!--Bootsrap 4 CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body id="login">
 {{--<section class="login-block">--}}
@@ -182,55 +189,104 @@
     {{--</div>--}}
 {{--</section>--}}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <H2 class="logo">STSekisanCenter</H2>
-            <div class="login-panel panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title text-center">LOGIN</h3>
-                </div>
-                <div class="panel-body">
-                    <form action="{{url('login')}}" method="POST" role="form" class="login-form">
-                        @if($errors->has('errorlogin'))
-                            <div class="alert alert-danger">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{$errors->first('errorlogin')}}
-                            </div>
-                        @endif
-                        <div class="form-group">
-                            <label for="exampleInputEmail1" class="text-uppercase">Username</label>
-                        <!-- <input type="text" class="form-control" id="email" placeholder="Email" name="email"
-                               value="{{old('email')}}"> -->
-                            <input type="text" class="form-control" id="email" placeholder="Email" name="email"
-                                   value="admin">
-                            @if($errors->has('email'))
-                                <p style="color:red">{{$errors->first('email')}}</p>
-                            @endif
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1" class="text-uppercase">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Password"
-                                   name="password" value="">
-                            @if($errors->has('password'))
-                                <p style="color:red">{{$errors->first('password')}}</p>
-                            @endif
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input">
-                                <small>Remember Me</small>
-                            </label>
-                            {!! csrf_field() !!}
-                            <button style="float: right" type="submit" class="btn btn-login btn-warning">Login</button>
-                        </div>
+{{--<div class="container">--}}
+    {{--<div class="row">--}}
+        {{--<div class="col-md-4 col-md-offset-4">--}}
+            {{--<div class="login-panel panel panel-default">--}}
+                {{--<div class="panel-heading">--}}
+                    {{--<h3 class="panel-title">Sign In</h3>--}}
+                {{--</div>--}}
+                {{--<div class="panel-body">--}}
+                    {{--<form action="{{url('login')}}" method="POST" role="form" class="login-form">--}}
+                        {{--@if($errors->has('errorlogin'))--}}
+                            {{--<div class="alert alert-danger">--}}
+                                {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
+                                {{--{{$errors->first('errorlogin')}}--}}
+                            {{--</div>--}}
+                        {{--@endif--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label for="exampleInputEmail1" class="text-uppercase">Username</label>--}}
+                        {{--<!-- <input type="text" class="form-control" id="email" placeholder="Email" name="email"--}}
+                               {{--value="{{old('email')}}"> -->--}}
+                            {{--<input type="text" class="form-control" id="email" placeholder="Email" name="email"--}}
+                                   {{--value="admin">--}}
+                            {{--@if($errors->has('email'))--}}
+                                {{--<p style="color:red">{{$errors->first('email')}}</p>--}}
+                            {{--@endif--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label for="exampleInputPassword1" class="text-uppercase">Password</label>--}}
+                            {{--<input type="password" class="form-control" id="password" placeholder="Password"--}}
+                                   {{--name="password" value="123456">--}}
+                            {{--@if($errors->has('password'))--}}
+                                {{--<p style="color:red">{{$errors->first('password')}}</p>--}}
+                            {{--@endif--}}
+                        {{--</div>--}}
+                        {{--<div class="form-check">--}}
+                            {{--<label class="form-check-label">--}}
+                                {{--<input type="checkbox" class="form-check-input">--}}
+                                {{--<small>Remember Me</small>--}}
+                            {{--</label>--}}
+                            {{--{!! csrf_field() !!}--}}
+                            {{--<button style="float: right" type="submit" class="btn btn-login">Login</button>--}}
+                        {{--</div>--}}
 
-                    </form>
-                </div>
+                    {{--</form>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
+
+
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <h3 style="text-align: center; color: #f65314">STSekisanCenter</h3>
             </div>
+            <div class="card-body">
+                <form action="{{url('login')}}" method="POST" role="form">
+                    @if($errors->has('errorlogin'))
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            {{$errors->first('errorlogin')}}
+                        </div>
+                    @endif
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" name="email" id="email" class="form-control" placeholder="Email" value="admin">
+                        @if($errors->has('email'))
+                            <p style="color:red">{{$errors->first('email')}}</p>
+                        @endif
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input type="password" class="form-control" placeholder="Password" name="password" value="Abc!@#123456">
+                        @if($errors->has('password'))
+                            <p style="color:red">{{$errors->first('password')}}</p>
+                        @endif
+                    </div>
+                    <div class="row align-items-center remember">
+                        <input type="checkbox">Remember Me
+                    </div>
+                        {!! csrf_field() !!}
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="btn float-right login_btn">
+                    </div>
+                </form>
+            </div>
+            {{--<div class="card-footer">--}}
+                {{--<div class="d-flex justify-content-center">--}}
+                    {{--<a href="#">Forgot your password?</a>--}}
+                {{--</div>--}}
+            {{--</div>--}}
         </div>
     </div>
 </div>
-
 </body>
 </html>
