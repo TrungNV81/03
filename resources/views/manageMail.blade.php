@@ -39,7 +39,7 @@
                                         <form action="{{ url('manageMail') }}" method="GET">
                                             <td>
                                                 <input type="hidden" value="{{ $dataGroup->id }}" name="id_group">
-                                                <button type="" class="btn btn-warning"><i class="fa fa-eye fa-fw"></i> View mail in group</button>
+                                                <button type="" class="btn btn-warning"><i class="fa fa-eye fa-fw"></i> View mail</button>
                                             </td>
                                         </form>
                                         <form action="{{ url('del-group-mail') }}" method="POST">
@@ -68,6 +68,7 @@
                                     </form>
                                     @if(count($dataMail) > 0)
                                         <br>
+                                        <h3>Group mail: {{ $dataMail[0]->group_name }}</h3>
                                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">
                                         <thead>
                                         <tr>

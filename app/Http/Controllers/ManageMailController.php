@@ -21,6 +21,8 @@ class ManageMailController extends Controller
         if(isset($_GET['id_group'])) {
             $id_group = $_GET['id_group'];
             $dataMail = DB::table('manage_mail')
+                ->join('group_mail', 'manage_mail.id_group', '=', 'group_mail.id')
+                ->select('group_mail.name as group_name', 'manage_mail.id', 'manage_mail.email', 'manage_mail.status')
                 ->where('id_group', '=', $id_group)
                 ->get();
         } else {
