@@ -45,6 +45,8 @@ Route::post('del-mail', 'ManageMailController@delMail')->name('del-mail');
 
 Route::post('add-group-mail', 'ManageMailController@addGroup')->name('add-group-mail');
 
+Route::post('edit-group-mail', 'ManageMailController@editGroup')->name('edit-group-mail');
+
 Route::post('del-group-mail', 'ManageMailController@delGroup')->name('del-group-mail');
 
 Route::get('uploadFile','UploadFileController@uploadFile')->name('uploadFile');

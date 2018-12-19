@@ -28,6 +28,7 @@
                                 <thead>
                                 <tr>
                                     <th>City</th>
+                                    <th>Edit Group</th>
                                     <th>View Group</th>
                                     <th>Delete Group</th>
                                 </tr>
@@ -35,20 +36,30 @@
                                 <tbody>
                                     @foreach ($dataGroupMail as $dataGroup)
                                     <tr>
-                                        <th>{{ $dataGroup->name }}</th>
-                                        <form action="{{ url('manageMail') }}" method="GET">
-                                            <td>
+                                        <form action="{{ url('edit-group-mail') }}" method="POST">
+                                        {{ csrf_field() }}
+                                        <th>
+                                            <input style="display: inline-block; width: auto" class="form-control" type="text" 
+                                                    value="{{ $dataGroup->name }}" name="name_group">
+                                        </th>
+                                        <td>
+                                            <input hidden name="id_group" value="{{ $dataGroup->id }}">
+                                            <button class="btn btn-success"> <i class="glyphicon glyphicon-refresh"></i> Update</button>
+                                        </td>
+                                        </form>
+                                        <td>
+                                            <form action="{{ url('manageMail') }}" method="GET">
                                                 <input type="hidden" value="{{ $dataGroup->id }}" name="id_group">
                                                 <button type="" class="btn btn-warning"><i class="fa fa-eye fa-fw"></i> View mail</button>
-                                            </td>
-                                        </form>
-                                        <form action="{{ url('del-group-mail') }}" method="POST">
-                                        {{ csrf_field() }}
-                                            <td>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form action="{{ url('del-group-mail') }}" method="POST">
+                                            {{ csrf_field() }}
                                                 <input hidden name="id-group" value="{{ $dataGroup->id }}">
                                                 <button class="btn btn-danger center-block"> <i class="fa fa-trash-o fa-fw"></i> Delete</button>
-                                            </td>
-                                        </form>
+                                            </form>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -63,7 +74,10 @@
                                         <input hidden value="{{ $id_group }}" id="id_group" name="id_group" />
                                         <button type="" class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Add</button>
                                         @if($errors->has('new-email'))
-                                            <p style="color:red">{{$errors->first('new-email')}}</p>
+                                            <p style="color:red">{{ $errors->first('new-email') }}</p>
+                                        @endif
+                                        @if($id_group)
+                                            <p style="color:red">{{ $errors->first('new-email') }}</p>
                                         @endif
                                     </form>
                                     @if(count($dataMail) > 0)

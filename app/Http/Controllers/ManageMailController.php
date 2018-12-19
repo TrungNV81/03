@@ -34,6 +34,8 @@ class ManageMailController extends Controller
 
     public function addMail(Request $request)
     {
+        $id_group = $_POST['id_group'];
+        $new_email = $_POST['new-email'];
         $rules = [
             'new-email' => 'required'
         ];
@@ -41,24 +43,35 @@ class ManageMailController extends Controller
             'new-email.required' => 'Email is required.',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $maxIdMail = DB::table('manage_mail')->max('id');
-            if ($maxIdMail == "") {
-                $maxIdMail = 0;
-            }
-            $maxIdMail += 1;
-            $maxIdMail = $maxIdMail;
-
-            DB::table('manage_mail')->insert(
-                ['id' => $maxIdMail, 'id_group' => $_POST['id_group'], 'email' => $_POST['new-email'], 'status' => '0']
-            );
-            echo '<script language="javascript">';
-            echo 'alert("Add mail success!")';
+        $checkExists = DB::table('manage_mail')
+            ->where([
+                ['id_group', '=', $id_group],
+                ['email', '=', $new_email]])
+            ->exists();
+        if ($checkExists == 1) {
+            echo '<script type="text/javascript">';
+            echo 'alert("Email address exists!")';
             echo '</script>';
-            return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
+            return redirect()->intended('manageMail?id_group='.$id_group);
+        } else {
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            } else {
+                $maxIdMail = DB::table('manage_mail')->max('id');
+                if ($maxIdMail == "") {
+                    $maxIdMail = 0;
+                }
+                $maxIdMail += 1;
+                $maxIdMail = $maxIdMail;
+    
+                DB::table('manage_mail')->insert(
+                    ['id' => $maxIdMail, 'id_group' => $id_group, 'email' => $new_email, 'status' => '0']
+                );
+                echo '<script type="text/javascript">';
+                echo 'alert("Add mail success!")';
+                echo '</script>';
+                return redirect()->intended('manageMail?id_group='.$id_group);
+            }
         }
     }
 
@@ -92,7 +105,7 @@ class ManageMailController extends Controller
     public function delMail()
     {
         DB::table('manage_mail')->where('id', '=', $_POST['id-mail'])->delete();
-        echo '<script language="javascript">';
+        echo '<script type="text/javascript">';
         echo 'alert("Delete mail success!")';
         echo '</script>';
         return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
@@ -110,17 +123,26 @@ class ManageMailController extends Controller
         DB::table('group_mail')->insert(
             ['id' => $idGroup, 'name' => $_POST['group-email'], 'status' => '0']
         );
-        echo '<script language="javascript">';
+        echo '<script type="text/javascript">';
         echo 'alert("Add group success!")';
         echo '</script>';
         return redirect()->intended('manageMail?id_group='.$idGroup);
+    }
+
+    public function editGroup()
+    {
+        DB::table('group_mail')
+            ->where('id', '=', $_POST['id_group'])
+            ->update(['name' => $_POST['name_group']]);
+
+        return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
     }
 
     public function delGroup()
     {
         DB::table('group_mail')->where('id', '=', $_POST['id-group'])->delete();
         DB::table('manage_mail')->where('id_group', '=', $_POST['id-group'])->delete();
-        echo '<script language="javascript">';
+        echo '<script type="text/javascript">';
         echo 'alert("Delete group success!")';
         echo '</script>';
         return redirect()->intended('manageMail');
@@ -128,8 +150,9 @@ class ManageMailController extends Controller
 
     public function templateMail()
     {
-        $timeRunBatch = DB::table('time_run_batch')
-            ->get();
+        // $timeRunBatch = DB::table('time_run_batch')
+        //     ->get();
+        $timeRunBatch[0] = [];
 
         $templateEmail = DB::table('template_email')
             ->get();
