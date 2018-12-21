@@ -25,7 +25,7 @@ Route::get('v1/api/export', 'HomeController@handle')->name('v1/api/export');
 
 Route::get('','ManageHistoryController@dashboard');
 
-Route::get('dashboard','ManageHistoryController@dashboard')->name('dashboard');
+Route::get('dashboard','DashboardController@dashboard')->name('dashboard');
 
 Route::get('historyFile','ManageHistoryController@historyFile')->name('historyFile');
 

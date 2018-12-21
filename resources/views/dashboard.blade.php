@@ -111,14 +111,9 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu pull-right" role="menu">
-                                <li><a href="#">Day</a>
+                                <li><a href="#">Line chart send mail</a>
                                 </li>
-                                <li><a href="#">Week</a>
-                                </li>
-                                <li><a href="#">Month</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Year</a>
+                                <li><a href="#">Line chart file import</a>
                                 </li>
                             </ul>
                         </div>
@@ -143,32 +138,32 @@
                     <div class="list-group">
                         <a href="#" class="list-group-item">
                             <i class="fa fa-calendar fa-fw"></i> Last Import File
-                            <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                        <span class="pull-right text-muted small"><em>{{ $timeLastImportFile }}</em>
                                     </span>
                         </a>
                         <a href="#" class="list-group-item">
                             <i class="fa fa-file fa-fw"></i> File Import Today
-                            <span class="pull-right text-muted small"><em>30 files</em>
+                        <span class="pull-right text-muted small"><em>{{ $fileImportToday }} file</em>
                                     </span>
                         </a>
                         <a href="#" class="list-group-item">
-                            <i class="fa fa-envelope fa-fw"></i> Total Email Edit
-                            <span class="pull-right text-muted small"><em>40 files</em>
+                            <i class="fa fa-envelope fa-fw"></i> Send Mail Today
+                            <span class="pull-right text-muted small"><em>{{ $sendMailToday }} mail</em>
+                                    </span>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-upload fa-fw"></i> Total File Import
+                        <span class="pull-right text-muted small"><em>{{ $totalFile }} file</em>
+                                    </span>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-bolt fa-fw"></i> Total Send Mail
+                            <span class="pull-right text-muted small"><em>{{ $totalSendMail }} mail</em>
                                     </span>
                         </a>
                         <a href="#" class="list-group-item">
                             <i class="fa fa-desktop fa-fw"></i> Last Login
                             <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                            <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                            <span class="pull-right text-muted small"><em>11:13 AM</em>
                                     </span>
                         </a>
                         <a href="#" class="list-group-item">
@@ -190,27 +185,13 @@
 <script>
     $(function() {
         Morris.Line({
-            // ID of the element in which to draw the chart.
             element: 'morris-line-chart',
-            // Chart data records -- each entry in this array corresponds to a point on
-            // the chart.
-            data: [
-                { day: 'Monday', pushups: 20, beers: 2 },
-                { day: 'Tuesday', pushups: 10, beers: 2 },
-                { day: 'Wednesday', pushups: 5, beers: 3 },
-                { day: 'Thursday', pushups: 5, beers: 4 },
-                { day: 'Friday', pushups: 20, beers: 1 },
-                { day: 'Saturday', pushups: 20, beers: 1 },
-                { day: 'Sunday', pushups: 20, beers: 1 }
-            ],
-            xkey: 'day',
-            parseTime: false,
-            // A list of names of data record attributes that contain y-values.
-            ykeys: ['pushups','beers'],
-            // Labels for the ykeys -- will be displayed when you hover over the
-            // chart.
-            labels: ['Success','Fail'],
-            lineColors: ['#7FFF00','#FF4500']
+            data:[<?php echo $chart_data_file; ?>],
+            xkey:'day',
+            ykeys:['total', 'success', 'fail'],
+            labels: ['Toal','Success','Fail'],
+            lineColors: ['#1433F9','#7FFF00','#FE0808'],
+            parseTime: false
         });
     });
 </script>

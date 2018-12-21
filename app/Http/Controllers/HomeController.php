@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use ZipArchive;
 
 set_time_limit(600);
-ini_set('memory_limit', '4096M');
 class HomeController extends Controller
 {
     public function batch()
@@ -46,7 +45,10 @@ class HomeController extends Controller
         $dir = public_path() . '/files/';
         $files = glob($dir . '*');
         foreach ($files as $file) {
+            // get day of week
             $dateNew = date('Y-m-d H:i:s');
+            $dayOfWeek = date("l", strtotime($dateNew));
+
             $strrpos = strrpos($file, '/');
             $filename = substr($file, $strrpos + 1);
             $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
@@ -103,6 +105,8 @@ class HomeController extends Controller
                     ['id' => $idFile, 'file_name' => basename($file), 'created_at' => $dateNew, 'status' => 'success']
                 );
 
+                // call function add data file import success
+                $this->lineChartImportFile($dayOfWeek, 'success');
                 $strrpos = strrpos($file, '/');
                 $substr = substr($file, $strrpos + 1);
                 $filename = explode('.', $substr);
@@ -122,8 +126,43 @@ class HomeController extends Controller
                 DB::table('history_file')->insert(
                     ['id' => $idFile, 'file_name' => basename($file), 'created_at' => $dateNew, 'status' => 'fail']
                 );
+                // call function add data file import fail
+                $this->lineChartImportFile($dayOfWeek, 'fail');
             }
         }
+    }
+
+    public function lineChartImportFile($dayOfWeek, $category)
+    {
+        $line_chart_file = DB::table('line_chart_file')
+            ->where('day', '=' , $dayOfWeek)
+            ->get();
+
+        if ($dayOfWeek == 'Monday' && ($line_chart_file[0]->total > 0)) {
+            $total_file = DB::table('line_chart_file')
+                ->select('total')
+                ->where('day', '=' , 'Tuesday')
+                ->get();
+            if ($total_file[0]->total > 0) {
+                $day = array(
+                    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+                );
+                foreach ($day as $key => $value) {
+                    DB::table('line_chart_file')
+                        ->where('day', '=' , $value)
+                        ->update(['total' => 0, 'success' => 0, 'fail' => 0]);
+                }
+                $line_chart_file = DB::table('line_chart_file')
+                    ->where('day', '=' , $dayOfWeek)
+                    ->get();
+            }
+        }
+        $line_chart_file_total = $line_chart_file[0]->total + 1;
+        $line_chart_file_category = $line_chart_file[0]->$category + 1;
+
+        DB::table('line_chart_file')
+            ->where('day', '=' , $dayOfWeek)
+            ->update(['total' => $line_chart_file_total, $category => $line_chart_file_category]);
     }
 
     public function exportFile1($importId, $pathExcel, $filename) // file 指示書
