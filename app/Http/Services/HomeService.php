@@ -7,6 +7,9 @@ use App\Http\Repositories\CsvDataImportRepository;
 use App\Http\Repositories\CsvFileImportRepository;
 use App\Http\Repositories\LineChartFileRepository;
 use App\Http\Repositories\DetailsDataImportRepository;
+use App\Http\Repositories\TemplateEmailRepository;
+use App\Http\Repositories\ManageMailRepository;
+use App\Http\Repositories\HistorySendMailRepository;
 use App\Mail\SendEmail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -19,28 +22,15 @@ use App\Http\Constant;
 
 class HomeService
 {
-    /**
-     * @var HistoryFileRepository
-     */
     private $historyFileRepository;
-
-    /**
-     * @var CsvDataImportRepository
-     */
     private $csvDataImportRepository;
-
-    /**
-     * @var CsvFileImportRepository
-     */
     private $csvFileImportRepository;
-
-    /**
-     * @var LineChartFileRepository
-     */
     private $lineChartFileRepository;
-
     private $detailsDataImportRepository;
-
+    private $templateEmailRepository;
+    private $manageMailRepository;
+    private $historySendMailRepository;
+    
     /**
      * HomeService constructor.
      */
@@ -51,6 +41,9 @@ class HomeService
         $this->csvFileImportRepository = new CsvFileImportRepository();
         $this->lineChartFileRepository = new LineChartFileRepository();
         $this->detailsDataImportRepository = new DetailsDataImportRepository();
+        $this->templateEmailRepository = new TemplateEmailRepository();
+        $this->manageMailRepository = new ManageMailRepository();
+        $this->historySendMailRepository = new HistorySendMailRepository();
     }
 
     /**
@@ -225,7 +218,6 @@ class HomeService
         $writer = new Xlsx($spreadsheet);
         $saveFile = $pathExcel . '/' . $filename . '_加工明細.xlsx';
         $writer->save($saveFile);
-
     }
 
     /**
@@ -237,7 +229,6 @@ class HomeService
      * @param $tmpN
      */
     public function addDataToFile1($dataImport, $sheetName, $index, $spreadsheet, $tmpN)
-
     {
         $startCell = $index;
         $importId = $dataImport[0]->id;
@@ -392,7 +383,6 @@ class HomeService
     }
 
     public function exportFile2($importId, $pathExcel, $filename) // file 指示書
-
     {
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template02.xlsx");
 
@@ -401,12 +391,7 @@ class HomeService
             "B12", "C12", "B13", "C13", "B14", "C14",
         );
 
-        $dataImport1 = DB::table('details_data_import')
-            ->where([
-                ['id', '=', $importId],
-                ['thickness', '=', '0'],
-            ])
-            ->get();
+        $dataImport1 = $this->detailsDataImportRepository->getDataInformation($importId, '0');
         $spreadsheet->setActiveSheetIndexByName('情報');
         $sheet = $spreadsheet->getActiveSheet();
         foreach ($cellPos as $key => $value) {
@@ -416,16 +401,7 @@ class HomeService
         // end sheet 情報
 
         // sheet 工場1便
-        $dataImport2 = DB::table('details_data_import')
-            ->select('name', 'thickness', 'total as F1', DB::raw('sum(total) as total'))
-            ->where([
-                ['id', '=', $importId],
-                ['sheet', '=', '先行1階2階'],
-                ['thickness', '!=', '0'],
-            ])
-            ->groupBy('name')
-            ->get();
-
+        $dataImport2 = $this->detailsDataImportRepository->getDataFactory($importId, '先行1階2階', '0');
         $numRec = 0;
         $this->addDataToFile2($dataImport2, $spreadsheet, '工場1便', 1, $numRec);
         // end sheet 工場1便
@@ -450,15 +426,7 @@ class HomeService
         // end sheet 工場2便
 
         // sheet 工場3便
-        $dataImport4 = DB::table('details_data_import')
-            ->select('name', 'thickness', 'total as F1', DB::raw('sum(total) as total'))
-            ->where([
-                ['id', '=', $importId],
-                ['sheet', '=', '壁1階2階'],
-                ['thickness', '!=', '0'],
-            ])
-            ->groupBy('name')
-            ->get();
+        $dataImport4 = $this->detailsDataImportRepository->getDataFactory($importId, '壁1階2階', '0');
         $numRec = 0;
         $this->addDataToFile2($dataImport4, $spreadsheet, '工場3便', 1, $numRec);
         // end sheet 工場3便
@@ -720,7 +688,6 @@ class HomeService
     }
 
     private function addDataToFile2($data, $spreadsheet, $sheetName, $numRow, $numRec) // file 指示書
-
     {
         $flag;
         $num = 0;
@@ -919,8 +886,7 @@ class HomeService
 
     public function sendMail($path, $filename, $importId, $dateNew)
     {
-        $templateEmail = DB::table('template_email')
-            ->get();
+        $templateEmail = $this->templateEmailRepository->getTemplateEmail();
         $objDemo = new \stdClass();
         $objDemo->subject = $templateEmail[0]->subject;
         $objDemo->body = $templateEmail[0]->body;
@@ -928,14 +894,9 @@ class HomeService
         $objDemo->receiver = $templateEmail[0]->receiver;
         $objDemo->path = $path;
         $objDemo->filename = $filename;
-        $emailArr = DB::table('manage_mail')
-            ->select('email')
-            ->where([
-                ['status', '=', '1'],
-            ])
-            ->get();
+        $emailArr = $this->manageMailRepository->getArrMail();
 
-        $idMail = DB::table('history_sendmail')->max('id');
+        $idMail = $this->historySendMailRepository->getMaxIdMail('id');
         if ($idMail == "") {
             $idMail = 0;
         }
@@ -943,13 +904,9 @@ class HomeService
         foreach ($emailArr as $sendTo) {
             try {
                 Mail::to($sendTo->email)->send(new SendEmail($objDemo));
-                DB::table('history_sendmail')->insert(
-                    ['id' => $idMail, 'file_zip' => $filename . '.zip', 'receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'success']
-                );
+                $this->historySendMailRepository->insertHistorySendMail($idMail, $filename . '.zip', $sendTo->email, $dateNew, 'success');
             } catch (\Exception $e) {
-                DB::table('history_sendmail')->insert(
-                    ['id' => $idMail, 'file_zip' => $filename . '.zip', 'receiver' => $sendTo->email, 'created_at' => $dateNew, 'status' => 'fail']
-                );
+                $this->historySendMailRepository->insertHistorySendMail($idMail, $filename . '.zip', $sendTo->email, $dateNew, 'fail');
             }
             $idMail++;
         }

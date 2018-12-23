@@ -51,4 +51,9 @@ class LineChartFileRepository extends BaseRepository
         return $this->lineChartFileModel->where('day', '=', $dayOfWeek)
             ->update(['total' => $line_chart_file_total, $category => $line_chart_file_category]);
     }
+
+    public function getDataLineChartfile()
+    {
+        return $this->lineChartFileModel->get();
+    }
 }

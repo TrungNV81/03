@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Http\Models\DetailsDataImportModel;
+use Illuminate\Support\Facades\DB;
 
 class DetailsDataImportRepository extends BaseRepository
 {
@@ -45,4 +46,26 @@ class DetailsDataImportRepository extends BaseRepository
             'floor' => $floor, 'name' => $name, 'thickness' => $thickness, 'total' => $totalx]
         ]);
     }
+
+    public function getDataInformation($importId,  $thickness)
+    {
+        return $this->detailDataImportModel->where([
+            ['id', '=', $importId],
+            ['thickness', '=', $thickness],
+        ])
+            ->get();
+    }
+
+    public function getDataFactory($importId, $sheet, $thickness)
+    {
+        return $this->detailDataImportModel->select('name', 'thickness', 'total as F1', DB::raw('sum(total) as total'))
+            ->where([
+                ['id', '=', $importId],
+                ['sheet', '=', $sheet],
+                ['thickness', '!=', $thickness],
+            ])
+            ->groupBy('name')
+            ->get();
+    }
+
 }

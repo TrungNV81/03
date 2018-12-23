@@ -23,7 +23,7 @@ Route::get('batch', 'HomeController@batch');
 
 Route::get('v1/api/export', 'HomeController@handle')->name('v1/api/export');
 
-Route::get('','ManageHistoryController@dashboard');
+Route::get('','DashboardController@dashboard');
 
 Route::get('dashboard','DashboardController@dashboard')->name('dashboard');
 
