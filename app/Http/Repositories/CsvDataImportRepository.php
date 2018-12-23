@@ -81,5 +81,11 @@ class CsvDataImportRepository extends BaseRepository
             ->orderByRaw($orderBy)
             ->get();
     }
+
+    public function getDrawing($importId)
+    {
+        return $this->csvDataImportModel->where('id', '=', $importId)
+            ->get();
+    }
 }
 

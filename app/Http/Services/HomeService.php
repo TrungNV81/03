@@ -888,8 +888,13 @@ class HomeService
     {
         $templateEmail = $this->templateEmailRepository->getTemplateEmail();
         $objDemo = new \stdClass();
-        $objDemo->subject = $templateEmail[0]->subject;
-        $objDemo->body = $templateEmail[0]->body;
+
+        $drawing_name = $this->csvDataImportRepository->getDrawing($importId);
+        $drawing_name = $drawing_name[0]->Q;
+        $subject = str_replace('$drawing_name', $drawing_name, $templateEmail[0]->subject);
+        $body = str_replace('$drawing_name', $drawing_name, $templateEmail[0]->body);
+        $objDemo->subject = $subject;
+        $objDemo->body = $body;
         $objDemo->sender = $templateEmail[0]->sender;
         $objDemo->receiver = $templateEmail[0]->receiver;
         $objDemo->path = $path;
