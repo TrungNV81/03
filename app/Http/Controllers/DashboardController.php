@@ -18,10 +18,6 @@ class DashboardController extends Controller
     {
         $tableHistoryFile = 'history_file';
         $tableHistorySendMail = 'history_sendmail';
-
-        $dateNew = date('Y-m-d H:i:s');
-        $dayOfWeek = date("l", strtotime($dateNew));
-
         
         $result = DB::table('line_chart_file')
             ->get();
