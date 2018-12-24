@@ -7,6 +7,19 @@ function Update() {
     } else {
         hiddenError($("#time"));
     }
+    var subject = $("#subject").val();
+    var body = $("#body").val();
+
+    var checkSubject = subject.includes("$drawing_name");
+    var checkBody = body.includes("$drawing_name");
+    if(!checkSubject){
+        alert('Subject email required string "$drawing_name"')
+        return false;
+    }
+    if(!checkBody){
+        alert('Body email required string "$drawing_name"')
+        return false;
+    }
     //if (validFlg == true) {
 	if (true) {
         // var convertTime = convertTo_UTF8(time);

@@ -252,7 +252,7 @@ class HomeService
         );
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
-
+        $numCellR = 0;
         foreach ($dataImport as $data) {
             $cellValue = array();
             $M = intval($data->M);
@@ -348,10 +348,12 @@ class HomeService
             array_push($cellValue, $P);
             array_push($cellValue, $Q);
             array_push($cellValue, $R);
-
             foreach ($cellPos as $key => $value) {
                 $num = (string) $index;
                 $cellpos = $cellPos[$key] . $num;
+                if ($key == 14) {
+                    $numCellR += $cellValue[14];
+                }
                 $sheet->setCellValue($cellpos, $cellValue[$key]);
             }
             $index++;
@@ -369,7 +371,20 @@ class HomeService
         if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
             $sheet->setCellValue('S' . ((string) ($indexCell - 1)), $total);
         }
-
+        if ($sheetName == '先行1階2階' || $sheetName == '壁1階2階') {
+            if ($floor == "1階") {
+                session(['numCellR503' => $numCellR]);
+                $sheet->setCellValue('R503', $numCellR);
+            }
+            if ($floor == "2階") {
+                $numCellR1008 = session('numCellR503') + $numCellR;
+                $sheet->setCellValue('R1006', $numCellR);
+                $sheet->setCellValue('R1008', $numCellR1008);
+            }
+        }
+        if ($sheetName == '天井1階' || $sheetName == '天井2階') {
+            $sheet->setCellValue('R503', $numCellR);
+        }
         // insert data into table details_data_import
         $this->detailsDataImportRepository->insertDetailsData($importId,  $maxSubId, $sheetName, $floor, $name, $thickness, $totalx);
         $maxSubId++;
