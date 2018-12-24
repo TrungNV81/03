@@ -41,4 +41,13 @@ class HistoryFileRepository extends BaseRepository
             'id' => $idFile, 'file_name' => $fileName, 'created_at' => $dateNew, 'status' => $category
         ]);
     }
+
+    /**
+     * @return mixed
+     */
+    public function historyFile()
+    {
+        return $this->historyFileModel->orderByRaw('created_at DESC')
+            ->get();
+    }
 }

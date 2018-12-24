@@ -52,6 +52,9 @@ class LineChartFileRepository extends BaseRepository
             ->update(['total' => $line_chart_file_total, $category => $line_chart_file_category]);
     }
 
+    /**
+     * @return mixed
+     */
     public function getDataLineChartfile()
     {
         return $this->lineChartFileModel->get();

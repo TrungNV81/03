@@ -30,7 +30,7 @@ class HomeService
     private $templateEmailRepository;
     private $manageMailRepository;
     private $historySendMailRepository;
-    
+
     /**
      * HomeService constructor.
      */
@@ -47,7 +47,9 @@ class HomeService
     }
 
     /**
-     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function handle()
     {
@@ -374,6 +376,13 @@ class HomeService
         $this->detailsDataImportRepository->insertDetailsData($importId,  $maxSubId, $sheetName, $floor, '総切断m', '0', ceil($totalCellJ));
     }
 
+    /**
+     * @param $pathPDF
+     * @param $dataPDF
+     * @param $file_extension
+     * @param $filename
+     * @param $templatePDF
+     */
     public function exportPDF($pathPDF, $dataPDF, $file_extension, $filename, $templatePDF)
     {
         $pdf = PDF::loadView($templatePDF, compact('dataPDF', 'filename'));
@@ -382,7 +391,16 @@ class HomeService
         $pdf->save($saveFile);
     }
 
-    public function exportFile2($importId, $pathExcel, $filename) // file 指示書
+    /**
+     * file 指示書
+     * @param $importId
+     * @param $pathExcel
+     * @param $filename
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function exportFile2($importId, $pathExcel, $filename)
     {
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template02.xlsx");
 
@@ -633,6 +651,13 @@ class HomeService
 
     }
 
+    /**
+     * @param $data1
+     * @param $data2
+     * @param $data3
+     * @param $spreadsheet
+     * @param $sheetName
+     */
     private function addDataToFile5($data1, $data2, $data3, $spreadsheet, $sheetName)
     {
         $spreadsheet->setActiveSheetIndexByName($sheetName);
@@ -687,7 +712,15 @@ class HomeService
         $this->closeEmptyExcel($num, 21, $spreadsheet);
     }
 
-    private function addDataToFile2($data, $spreadsheet, $sheetName, $numRow, $numRec) // file 指示書
+    /**
+     * file 指示書
+     * @param $data
+     * @param $spreadsheet
+     * @param $sheetName
+     * @param $numRow
+     * @param $numRec
+     */
+    private function addDataToFile2($data, $spreadsheet, $sheetName, $numRow, $numRec)
     {
         $flag;
         $num = 0;
@@ -767,6 +800,11 @@ class HomeService
         }
     }
 
+    /**
+     * @param $startCell
+     * @param $endCell
+     * @param $spreadsheet
+     */
     private function closeEmptyExcel($startCell, $endCell, $spreadsheet)
     {
         for ($i = $startCell; $i <= $endCell; $i++) {
@@ -774,6 +812,12 @@ class HomeService
         }
     }
 
+    /**
+     * @param $path
+     * @param $filename
+     * @param $fileCsv
+     * @param $dir
+     */
     public function zip($path, $filename, $fileCsv, $dir)
     {
         $path = public_path() . '/' . $filename;
@@ -812,6 +856,12 @@ class HomeService
         }
     }
 
+    /**
+     * @param $data1
+     * @param $data2
+     * @param $spreadsheet
+     * @param $sheetName
+     */
     private function addDataToFile3and4($data1, $data2, $spreadsheet, $sheetName)
     {
         $spreadsheet->setActiveSheetIndexByName($sheetName);
@@ -849,6 +899,10 @@ class HomeService
         $this->closeEmptyExcel($num++, 21, $spreadsheet);
     }
 
+    /**
+     * @param $number
+     * @return float
+     */
     private function roundNumber($number)
     {
         $val2 = round($number, 2);
@@ -858,6 +912,9 @@ class HomeService
         return $val2;
     }
 
+    /**
+     * @param $dirPath
+     */
     public function deleteDirectory($dirPath)
     {
         $Path = $dirPath;
@@ -884,6 +941,12 @@ class HomeService
         }
     }
 
+    /**
+     * @param $path
+     * @param $filename
+     * @param $importId
+     * @param $dateNew
+     */
     public function sendMail($path, $filename, $importId, $dateNew)
     {
         $templateEmail = $this->templateEmailRepository->getTemplateEmail();
@@ -917,6 +980,9 @@ class HomeService
         }
     }
 
+    /**
+     * @param $importId
+     */
     public function deleteFileZip($importId)
     {
         $file_folder = public_path() . '/'; // folder to load files

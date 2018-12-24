@@ -3,6 +3,10 @@ namespace App\Http\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class BaseRepository
+ * @package App\Http\Repositories
+ */
 class BaseRepository {
 
     protected $model;

@@ -15,7 +15,11 @@ class DashboardService
 {
     private $lineChartFileRepository;
     private $historySendMailRepository;
+    private $historyImportFileRepository;
 
+    /**
+     * DashboardService constructor.
+     */
     public function __construct()
     {
         $this->lineChartFileRepository = new LineChartFileRepository();
@@ -23,11 +27,11 @@ class DashboardService
         $this->historyImportFileRepository = new HistoryImportFileRepository();
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function dashboard()
     {
-        $tableHistoryFile = 'history_file';
-        $tableHistorySendMail = 'history_sendmail';
-
         $result = $this->lineChartFileRepository->getDataLineChartfile();
 
         $chart_data_file = '';

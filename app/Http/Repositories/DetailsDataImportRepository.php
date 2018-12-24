@@ -47,6 +47,11 @@ class DetailsDataImportRepository extends BaseRepository
         ]);
     }
 
+    /**
+     * @param $importId
+     * @param $thickness
+     * @return mixed
+     */
     public function getDataInformation($importId,  $thickness)
     {
         return $this->detailDataImportModel->where([
@@ -56,6 +61,12 @@ class DetailsDataImportRepository extends BaseRepository
             ->get();
     }
 
+    /**
+     * @param $importId
+     * @param $sheet
+     * @param $thickness
+     * @return mixed
+     */
     public function getDataFactory($importId, $sheet, $thickness)
     {
         return $this->detailDataImportModel->select('name', 'thickness', 'total as F1', DB::raw('sum(total) as total'))
@@ -67,5 +78,4 @@ class DetailsDataImportRepository extends BaseRepository
             ->groupBy('name')
             ->get();
     }
-
 }

@@ -27,4 +27,17 @@ class TemplateEmailRepository extends BaseRepository
     {
         return $this->templateEmailModel->get();
     }
+
+    /**
+     * @param $subject
+     * @param $receiver
+     * @param $body
+     * @param $sender
+     * @return mixed
+     */
+    public function updateTempalteMail($subject, $receiver, $body, $sender)
+    {
+        return $this->templateEmailModel->where('id', '=','1')
+            ->update(['subject' => $subject, 'receiver' => $receiver, 'body' => $body, 'sender' => $sender]);
+    }
 }

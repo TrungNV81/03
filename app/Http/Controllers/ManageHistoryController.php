@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Services\ManageHistoryService;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use DB;
@@ -11,6 +13,7 @@ class ManageHistoryController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->manageHistoryService = new ManageHistoryService();
     }
 
     public function getIndex()
@@ -20,19 +23,11 @@ class ManageHistoryController extends Controller
 
     public function historyFile()
     {
-        $historyFile = DB::table('history_file')
-            ->orderByRaw('created_at DESC')
-            ->get();
-
-        return view("historyFile", ['historyFile' => $historyFile]);
+        return $this->manageHistoryService->historyFile();
     }
 
     public function historySendMail()
     {
-        $historySendMail = DB::table('history_sendmail')
-            ->orderByRaw('created_at DESC')
-            ->get();
-
-        return view("historySendMail", ['historySendMail' => $historySendMail]);
+        return $this->manageHistoryService->historySendMail();
     }
 }

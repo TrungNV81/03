@@ -22,6 +22,7 @@ class HistorySendMailRepository extends BaseRepository
     }
 
     /**
+     * @param $id
      * @return mixed
      */
     public function getMaxIdMail($id)
@@ -29,7 +30,14 @@ class HistorySendMailRepository extends BaseRepository
         return $this->historySendMailModel->max($id);
     }
 
-
+    /**
+     * @param $id
+     * @param $filezip
+     * @param $receiver
+     * @param $created_at
+     * @param $status
+     * @return mixed
+     */
     public function insertHistorySendMail($id, $filezip, $receiver, $created_at, $status)
     {
         return $this->historySendMailModel->insert([
@@ -38,21 +46,38 @@ class HistorySendMailRepository extends BaseRepository
         ]);
     }
 
+    /**
+     * @return mixed
+     */
     public function getSendMailToday()
     {
         return $this->historySendMailModel->whereDate('created_at', Carbon::today())
             ->get();
     }
 
+    /**
+     * @return mixed
+     */
     public function getHistorySendMail()
     {
         return $this->historySendMailModel->get();
     }
 
+    /**
+     * @return mixed
+     */
     public function totalSuccessSendMail()
     {
         return $this->historySendMailModel->where('status', '=' ,'success')
             ->get();
     }
-    
+
+    /**
+     * @return mixed
+     */
+    public function historySendMail()
+    {
+        return $this->historySendMailModel->orderByRaw('created_at DESC')
+            ->get();
+    }
 }

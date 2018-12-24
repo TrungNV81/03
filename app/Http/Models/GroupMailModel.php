@@ -4,9 +4,9 @@ namespace App\Http\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class CsvDataImportModel
+ * Class GroupMailModel
  * @package App\Http\Models
  */
-class CsvDataImportModel extends Model {
-    protected $table = 'csv_data_import';
+class GroupMailModel extends Model {
+    protected $table = 'group_mail';
 }
