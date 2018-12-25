@@ -117,19 +117,30 @@ class ManageMailService
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function addGroup()
+    public function addGroup(Request $request)
     {
-        $maxIdGroup = $this->manageMailRepository->maxIdGroupMail('id');
-        if ($maxIdGroup == "") {
-            $maxIdGroup = 0;
+        $rules = [
+            'group-email' => 'required'
+        ];
+        $messages = [
+            'group-email.required' => 'Group mail is required.',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $maxIdGroup = $this->manageMailRepository->maxIdGroupMail('id');
+            if ($maxIdGroup == "") {
+                $maxIdGroup = 0;
+            }
+            $maxIdGroup += 1;
+            $idGroup = $maxIdGroup;
+            $this->manageMailRepository->addGroupMail($idGroup, $_POST['group-email'], '0');
+            echo '<script type="text/javascript">';
+            echo 'alert("Add group success!")';
+            echo '</script>';
+            return redirect()->intended('manageMail?id_group='.$idGroup);
         }
-        $maxIdGroup += 1;
-        $idGroup = $maxIdGroup;
-        $this->manageMailRepository->addGroupMail($idGroup, $_POST['group-email'], '0');
-        echo '<script type="text/javascript">';
-        echo 'alert("Add group success!")';
-        echo '</script>';
-        return redirect()->intended('manageMail?id_group='.$idGroup);
     }
 
     /**

@@ -22,6 +22,9 @@
                                     <label style="padding: 5px">Add group mail</label>
                                     <input style="display: inline-block; width: auto" class="form-control" type="text" name="group-email" value="">
                                     <button type="" class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Add</button>
+                                    @if($errors->has('group-email'))
+                                        <p style="color:red">{{ $errors->first('group-email') }}</p>
+                                    @endif
                                 </form>
                                 <hr>
                                 <table width="100%" class="table table-striped table-bordered table-hover">
@@ -39,18 +42,18 @@
                                         <form action="{{ url('edit-group-mail') }}" method="POST">
                                         {{ csrf_field() }}
                                         <th>
-                                            <input style="display: inline-block; width: auto" class="form-control" type="text" 
+                                            <input style="display: inline-block; width: 100%" class="form-control" type="text" 
                                                     value="{{ $dataGroup->name }}" name="name_group">
                                         </th>
                                         <td>
                                             <input hidden name="id_group" value="{{ $dataGroup->id }}">
-                                            <button class="btn btn-success"> <i class="glyphicon glyphicon-refresh"></i> Update</button>
+                                            <button class="btn btn-success center-block"> <i class="glyphicon glyphicon-refresh"></i> Update</button>
                                         </td>
                                         </form>
                                         <td>
                                             <form action="{{ url('manageMail') }}" method="GET">
                                                 <input type="hidden" value="{{ $dataGroup->id }}" name="id_group">
-                                                <button type="" class="btn btn-warning"><i class="fa fa-eye fa-fw"></i> View mail</button>
+                                                <button type="" class="btn btn-warning center-block"><i class="fa fa-eye fa-fw"></i> View mail</button>
                                             </form>
                                         </td>
                                         <td>
@@ -76,9 +79,6 @@
                                         @if($errors->has('new-email'))
                                             <p style="color:red">{{ $errors->first('new-email') }}</p>
                                         @endif
-                                        @if($id_group)
-                                            <p style="color:red">{{ $errors->first('new-email') }}</p>
-                                        @endif
                                     </form>
                                     @if(count($dataMail) > 0)
                                         <br>
@@ -95,7 +95,7 @@
                                         @foreach ($dataMail as $data)
                                             <tr class="odd gradeX">
                                                 <td>
-                                                    <input class="form-control" type="email" name="mail{{ $data->id }}" value="{{ $data->email }}" id="email{{$i}}">
+                                                    <input style="width: 100%" class="form-control" type="email" name="mail{{ $data->id }}" value="{{ $data->email }}" id="email{{$i}}">
                                                 </td>
                                                 @if($data->status == '1')
                                                 <td>
@@ -119,9 +119,9 @@
                                         </tbody>
                                     </table>
                                     <hr>
-                                    @endif
                                     <input hidden value="{{ count($dataMail) }}" id="arrDataMail" />
                                     <button style="float: right" type="submit" class="btn btn-success" onclick="updateMail()">Update</button>
+                                    @endif
                                 </div>
                                 @endif
                             </div>

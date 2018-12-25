@@ -864,7 +864,7 @@ class HomeService
                 // remove folder tmp
                 $this->deleteDirectory($path);
                 // delete file in folder files
-                // unlink($dir . $fileCsv);
+                 unlink($dir . $fileCsv);
             } else {
                 throw new Exception("could not close zip file: " . $zip->getStatusString());
             }

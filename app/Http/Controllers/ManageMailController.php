@@ -36,9 +36,9 @@ class ManageMailController extends Controller
         return $this->manageMailService->delMail();
     }
 
-    public function addGroup()
+    public function addGroup(Request $request)
     {
-        return $this->manageMailService->addGroup();
+        return $this->manageMailService->addGroup($request);
     }
 
     public function editGroup()
