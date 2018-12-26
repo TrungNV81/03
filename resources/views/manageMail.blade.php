@@ -51,10 +51,10 @@
                                         </td>
                                         </form>
                                         <td>
-                                            <form action="{{ url('manageMail') }}" method="GET">
-                                                <input type="hidden" value="{{ $dataGroup->id }}" name="id_group">
-                                                <button type="" class="btn btn-warning center-block"><i class="fa fa-eye fa-fw"></i> View mail</button>
-                                            </form>
+                                            {{-- <form action="{{ url('manageMail') }}" method="GET"> --}}
+                                            {{-- <input type="hidden" value="{{ $dataGroup->id }}" name="id_group"> --}}
+                                                <button type="" class="btn btn-warning center-block" onclick="viewMail({{ $dataGroup->id }})"><i class="fa fa-eye fa-fw"></i> View mail</button>
+                                            {{-- </form> --}}
                                         </td>
                                         <td>
                                             <form action="{{ url('del-group-mail') }}" method="POST">
@@ -68,9 +68,9 @@
                                 </tbody>
                                 </table>
                                 <hr>
-                                @if($id_group)
+                                {{-- @if($id_group) --}}
                                 <div>
-                                    <form action="{{url('add-mail')}}" method="POST">
+                                    {{-- <form action="{{url('add-mail')}}" method="POST">
                                         {{ csrf_field() }}
                                         <label style="padding: 5px">Add new mail</label>
                                         <input style="display: inline-block; width: auto" class="form-control" type="email" name="new-email" value="">
@@ -79,11 +79,12 @@
                                         @if($errors->has('new-email'))
                                             <p style="color:red">{{ $errors->first('new-email') }}</p>
                                         @endif
-                                    </form>
-                                    @if(count($dataMail) > 0)
-                                        <br>
-                                        <h3>Group mail: {{ $dataMail[0]->group_name }}</h3>
-                                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">
+                                    </form> --}}
+                                    <div id="movie-data"></div>
+                                    {{-- @if(count($dataMail) > 0) --}}
+                                    <br>
+                                    {{-- <h3>Group mail: {{ $dataMail[0]->group_name }}</h3> --}}
+                                    {{-- <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">
                                         <thead>
                                         <tr>
                                             <th>Email</th>
@@ -115,15 +116,15 @@
                                                     </form>
                                                 </td>
                                             </tr>
-                                            <?php $i++ ?> @endforeach
+                                             @endforeach
                                         </tbody>
                                     </table>
                                     <hr>
                                     <input hidden value="{{ count($dataMail) }}" id="arrDataMail" />
-                                    <button style="float: right" type="submit" class="btn btn-success" onclick="updateMail()">Update</button>
-                                    @endif
+                                    <button style="float: right" type="submit" class="btn btn-success" onclick="updateMail()">Update</button> --}}
+                                    {{-- @endif --}}
                                 </div>
-                                @endif
+                                {{-- @endif --}}
                             </div>
                             <!-- /.col-lg-6 (nested) -->
                         </div>

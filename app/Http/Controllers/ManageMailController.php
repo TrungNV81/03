@@ -21,6 +21,11 @@ class ManageMailController extends Controller
         return $this->manageMailService->manageMail();
     }
 
+    public function getMailGroup(Request $request)
+    {
+        return $this->manageMailService->getMailGroup($request);
+    }
+
     public function addMail(Request $request)
     {
         return $this->manageMailService->addMail($request);

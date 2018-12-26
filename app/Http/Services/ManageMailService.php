@@ -40,6 +40,21 @@ class ManageMailService
         return view("manageMail", ['dataMail' => $dataMail, 'dataGroupMail' => $dataGroupMail, 'id_group' => $id_group]);
     }
 
+
+    public function getMailGroup($request)
+    {
+
+        if(isset($_POST['id_group'])) {
+            $id_group = $_POST['id_group'];
+            $dataMail = $this->manageMailRepository->dataMail($id_group);
+
+        } else {
+            $dataMail = [];
+            $id_group = '';
+        }
+        return [$dataMail, $id_group];
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse

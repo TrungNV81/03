@@ -37,6 +37,8 @@ Route::post('updateTemplate','ManageMailController@updateTemplate');
 
 Route::get('manageMail', 'ManageMailController@manageMail')->name('manageMail');
 
+Route::post('getMailGroup', 'ManageMailController@getMailGroup')->name('getMailGroup');
+
 Route::post('add-mail', 'ManageMailController@addMail')->name('add-mail');
 
 Route::post('edit-mail', 'ManageMailController@editMail')->name('edit-mail');
