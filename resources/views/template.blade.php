@@ -108,7 +108,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="{{ url('/dashboard') }}">
-                <span class="logo-text">STExcelExport</span>
+                <span class="logo-text">STSekisanCenter</span>
             </a>
         </div>
         <!-- /.navbar-header -->
