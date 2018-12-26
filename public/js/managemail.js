@@ -63,7 +63,7 @@ function viewMail(id_group)
             id_group : id_group
         },
         success : function (data){
-            html+='<label style="padding: 5px;position: absolute;top: -38px;">Group: '+data[0][0].group_name+'</label>'
+            html+='<label style="padding: 5px;position: absolute;top: -38px;">Group: '+data[2][0].name+'</label>'
             html+='<label style="padding: 5px">Add new mail</label>'
             html+='<input style="display: inline-block; width: auto" class="form-control" required type="email" id="new-email" value="">'
             html+='<button onclick="addMail('+data[1]+')" class="btn btn-success" style="margin-left:5px"><i class="fa fa-plus-circle fa-fw"></i> Add</button>'
@@ -103,7 +103,7 @@ function viewMail(id_group)
                 html+='</table>'
                 html+='<hr>'
                 html+='<input hidden value="'+data[1]+'" id="id_group" name="id_group" />'
-                html+='<input hidden value="'+data.length+'" id="arrDataMail" />'
+                html+='<input hidden value="'+data[0].length+'" id="arrDataMail" />'
                 html+='<button style="float: right" type="submit" class="btn btn-success" onclick="updateMail()">Save changes</button>'
 				html+='<br>'
             }

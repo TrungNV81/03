@@ -66,6 +66,13 @@ class ManageMailRepository extends BaseRepository
             ->get();
     }
 
+    public function nameGroup($id_group)
+    {
+        return $this->groupMailModel->select('name')
+            ->where('id', '=', $id_group)
+            ->get();
+    }
+
     /**
      * @param $id_group
      * @param $new_email

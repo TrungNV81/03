@@ -46,13 +46,14 @@ class ManageMailService
 
         if(isset($_POST['id_group'])) {
             $id_group = $_POST['id_group'];
+            $nameGroup = $this->manageMailRepository->nameGroup($id_group);
             $dataMail = $this->manageMailRepository->dataMail($id_group);
 
         } else {
             $dataMail = [];
             $id_group = '';
         }
-        return [$dataMail, $id_group];
+        return [$dataMail, $id_group, $nameGroup];
     }
 
     /**
@@ -134,7 +135,7 @@ class ManageMailService
             echo '<script type="text/javascript">';
             echo 'alert("Add group success!")';
             echo '</script>';
-            return redirect()->intended('manageMail?id_group='.$idGroup);
+            return redirect()->intended('manageMail');
         }
     }
 
@@ -147,7 +148,7 @@ class ManageMailService
         echo '<script type="text/javascript">';
         echo 'alert("Update group success!")';
         echo '</script>';
-        return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
+        return redirect()->intended('manageMail');
     }
 
     /**
