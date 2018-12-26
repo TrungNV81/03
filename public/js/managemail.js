@@ -63,9 +63,12 @@ function viewMail(id_group)
             id_group : id_group
         },
         success : function (data){
+            html+='<label style="padding: 5px">Group: '+data[0][0].group_name+'</label>'
+            html+='<br>'
             html+='<label style="padding: 5px">Add new mail</label>'
             html+='<input style="display: inline-block; width: auto" class="form-control" required type="email" id="new-email" value="">'
             html+='<button onclick="addMail('+data[1]+')" class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Add</button>'
+            html+='<br>'
             if (data[0].length) {
                 html+='<br>'
                 html+='<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">'
