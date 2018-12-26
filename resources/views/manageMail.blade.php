@@ -30,7 +30,7 @@
                                 <table width="100%" class="table table-striped table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th>City</th>
+                                    <th>Group Mail</th>
                                     <th>Edit Group</th>
                                     <th>View Group</th>
                                     <th>Delete Group</th>
