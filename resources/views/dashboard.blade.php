@@ -123,10 +123,6 @@
                 <div class="panel-body">
                     <div id="morris-line-chart"></div>
                 </div>
-                <hr>
-                <div class="panel-body">
-                    <div id="morris-line-chartx"></div>
-                </div>
                 <!-- /.panel-body -->
             </div>
             <!-- /.panel -->
@@ -190,15 +186,6 @@
     $(function() {
         Morris.Line({
             element: 'morris-line-chart',
-            data:[<?php echo $chart_data_file; ?>],
-            xkey:'day',
-            ykeys:['total', 'success', 'fail'],
-            labels: ['Toal','Success','Fail'],
-            lineColors: ['#1433F9','#7FFF00','#FE0808'],
-            parseTime: false
-        });
-        Morris.Line({
-            element: 'morris-line-chartx',
             data:[<?php echo $chart_data_file; ?>],
             xkey:'day',
             ykeys:['total', 'success', 'fail'],
