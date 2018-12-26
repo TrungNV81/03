@@ -62,36 +62,19 @@ class ManageMailService
     public function addMail(Request $request)
     {
         $id_group = $_POST['id_group'];
-        $new_email = $_POST['new-email'];
-        $rules = [
-            'new-email' => 'required'
-        ];
-        $messages = [
-            'new-email.required' => 'Email is required.',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $new_email = $_POST['new_email'];
         $checkExists = $this->manageMailRepository->checkExists($id_group, $new_email);
         if ($checkExists == 1) {
-            echo '<script type="text/javascript">';
-            echo 'alert("Email address exists!")';
-            echo '</script>';
-            return redirect()->intended('manageMail?id_group='.$id_group);
+            return -1;
         } else {
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            } else {
-                $maxIdMail = $this->manageMailRepository->maxIdMail('id');
-                if ($maxIdMail == "") {
-                    $maxIdMail = 0;
-                }
-                $maxIdMail += 1;
-                $maxIdMail = $maxIdMail;
-                $this->manageMailRepository->addMail($maxIdMail, $id_group, $new_email, '0');
-                echo '<script type="text/javascript">';
-                echo 'alert("Add mail success!")';
-                echo '</script>';
-                return redirect()->intended('manageMail?id_group='.$id_group);
+            $maxIdMail = $this->manageMailRepository->maxIdMail('id');
+            if ($maxIdMail == "") {
+                $maxIdMail = 0;
             }
+            $maxIdMail += 1;
+            $maxIdMail = $maxIdMail;
+            $this->manageMailRepository->addMail($maxIdMail, $id_group, $new_email, '0');
+            return $id_group;
         }
     }
 
@@ -122,11 +105,8 @@ class ManageMailService
      */
     public function delMail()
     {
-        $this->manageMailRepository->delMail($_POST['id-mail']);
-        echo '<script type="text/javascript">';
-        echo 'alert("Delete mail success!")';
-        echo '</script>';
-        return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
+        $this->manageMailRepository->delMail($_POST['idMail']);
+        return $_POST['idGroup'];
     }
 
     /**
@@ -164,6 +144,9 @@ class ManageMailService
     public function editGroup()
     {
         $this->manageMailRepository->editGroup($_POST['id_group'], $_POST['name_group']);
+        echo '<script type="text/javascript">';
+        echo 'alert("Update group success!")';
+        echo '</script>';
         return redirect()->intended('manageMail?id_group='.$_POST['id_group']);
     }
 

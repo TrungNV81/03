@@ -68,61 +68,8 @@
                                 </tbody>
                                 </table>
                                 <hr>
-                                {{-- @if($id_group) --}}
                                 <div>
-                                    {{-- <form action="{{url('add-mail')}}" method="POST">
-                                        {{ csrf_field() }}
-                                        <label style="padding: 5px">Add new mail</label>
-                                        <input style="display: inline-block; width: auto" class="form-control" type="email" name="new-email" value="">
-                                        <input hidden value="{{ $id_group }}" id="id_group" name="id_group" />
-                                        <button type="" class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Add</button>
-                                        @if($errors->has('new-email'))
-                                            <p style="color:red">{{ $errors->first('new-email') }}</p>
-                                        @endif
-                                    </form> --}}
-                                    <div id="movie-data"></div>
-                                    {{-- @if(count($dataMail) > 0) --}}
-                                    <br>
-                                    {{-- <h3>Group mail: {{ $dataMail[0]->group_name }}</h3> --}}
-                                    {{-- <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example-3">
-                                        <thead>
-                                        <tr>
-                                            <th>Email</th>
-                                            <th>Status</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ($dataMail as $data)
-                                            <tr class="odd gradeX">
-                                                <td>
-                                                    <input style="width: 100%" class="form-control" type="email" name="mail{{ $data->id }}" value="{{ $data->email }}" id="email{{$i}}">
-                                                </td>
-                                                @if($data->status == '1')
-                                                <td>
-                                                    <input class="form-control auto" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}" checked>
-                                                </td>
-                                                @else
-                                                <td>
-                                                    <input class="form-control auto" type="checkbox" name="status{{ $data->id }}" class="form-check-input" id="status{{$i}}">
-                                                </td>
-                                                @endif
-                                                <td>
-                                                    <form action="{{ url('del-mail') }}" method="POST">
-                                                    {{ csrf_field() }}
-                                                        <input hidden name="id-mail" value="{{ $data->id }}">
-                                                        <input hidden value="{{ $id_group }}" name="id_group" />
-                                                        <button class="btn btn-danger center-block"><i class="fa fa-trash-o fa-fw"></i> Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                             @endforeach
-                                        </tbody>
-                                    </table>
-                                    <hr>
-                                    <input hidden value="{{ count($dataMail) }}" id="arrDataMail" />
-                                    <button style="float: right" type="submit" class="btn btn-success" onclick="updateMail()">Update</button> --}}
-                                    {{-- @endif --}}
+                                    <div id="data-mail"></div><br>
                                 </div>
                                 {{-- @endif --}}
                             </div>

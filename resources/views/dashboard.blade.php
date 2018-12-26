@@ -103,7 +103,7 @@
         <div class="col-lg-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Line chart
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Line chart import file
                     <!-- <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -122,6 +122,10 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div id="morris-line-chart"></div>
+                </div>
+                <hr>
+                <div class="panel-body">
+                    <div id="morris-line-chartx"></div>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -186,6 +190,15 @@
     $(function() {
         Morris.Line({
             element: 'morris-line-chart',
+            data:[<?php echo $chart_data_file; ?>],
+            xkey:'day',
+            ykeys:['total', 'success', 'fail'],
+            labels: ['Toal','Success','Fail'],
+            lineColors: ['#1433F9','#7FFF00','#FE0808'],
+            parseTime: false
+        });
+        Morris.Line({
+            element: 'morris-line-chartx',
             data:[<?php echo $chart_data_file; ?>],
             xkey:'day',
             ykeys:['total', 'success', 'fail'],
