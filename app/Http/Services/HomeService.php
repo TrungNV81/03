@@ -55,7 +55,7 @@ class HomeService
     {
         $dir = public_path() . '/files/';
         $files = glob($dir . '*');
-        foreach ($files as $file) {
+        foreach ($files as &$file) {
             // get day of week
             $dateNew = date('Y-m-d H:i:s');
             // $dateNew = date('2018-12-24');
@@ -80,32 +80,44 @@ class HomeService
                 $importMaxId += 1;
                 $importId = $importMaxId;
                 $subId = 1;
-
+                // call function add data file import success
+                $this->lineChartImportFile($dayOfWeek, 'success');
+                $strrpos = strrpos($file, '/');
+                $substr = substr($file, $strrpos + 1);
+                $filename = explode('.', $substr);
                 $fileReader = fopen($file, 'r');
-                while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
-                    $colA = mb_convert_encoding($data[0], 'UTF-8', 'Shift-JIS');
-                    $colB = mb_convert_encoding($data[1], 'UTF-8', 'Shift-JIS');
-                    $colC = mb_convert_encoding($data[2], 'UTF-8', 'Shift-JIS');
-                    $colD = mb_convert_encoding($data[3], 'UTF-8', 'Shift-JIS');
-                    $colE = mb_convert_encoding($data[4], 'UTF-8', 'Shift-JIS');
-                    $colF = mb_convert_encoding($data[5], 'UTF-8', 'Shift-JIS');
-                    $colG = mb_convert_encoding($data[6], 'UTF-8', 'Shift-JIS');
-                    $colH = mb_convert_encoding($data[7], 'UTF-8', 'Shift-JIS');
-                    $colI = mb_convert_encoding($data[8], 'UTF-8', 'Shift-JIS');
-                    $colJ = mb_convert_encoding($data[9], 'UTF-8', 'Shift-JIS');
-                    $colK = mb_convert_encoding($data[10], 'UTF-8', 'Shift-JIS');
-                    $colL = mb_convert_encoding($data[11], 'UTF-8', 'Shift-JIS');
-                    $colM = mb_convert_encoding($data[12], 'UTF-8', 'Shift-JIS');
-                    $colN = mb_convert_encoding($data[13], 'UTF-8', 'Shift-JIS');
-                    $colO = mb_convert_encoding($data[14], 'UTF-8', 'Shift-JIS');
-                    $colP = mb_convert_encoding($data[15], 'UTF-8', 'Shift-JIS');
-                    $colQ = mb_convert_encoding($data[16], 'UTF-8', 'Shift-JIS');
-
-                    $this->csvDataImportRepository->insertCsvDataImport($importId, $subId, $colA, $colB, $colC, $colD,
-                        $colE, $colF, $colG, $colH, $colI, $colJ, $colK, $colL, $colM, $colN, $colO, $colP, $colQ);
-                    $subId++;
+                try {
+                    while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
+                        $colA = mb_convert_encoding($data[0], 'UTF-8', 'Shift-JIS');
+                        $colB = mb_convert_encoding($data[1], 'UTF-8', 'Shift-JIS');
+                        $colC = mb_convert_encoding($data[2], 'UTF-8', 'Shift-JIS');
+                        $colD = mb_convert_encoding($data[3], 'UTF-8', 'Shift-JIS');
+                        $colE = mb_convert_encoding($data[4], 'UTF-8', 'Shift-JIS');
+                        $colF = mb_convert_encoding($data[5], 'UTF-8', 'Shift-JIS');
+                        $colG = mb_convert_encoding($data[6], 'UTF-8', 'Shift-JIS');
+                        $colH = mb_convert_encoding($data[7], 'UTF-8', 'Shift-JIS');
+                        $colI = mb_convert_encoding($data[8], 'UTF-8', 'Shift-JIS');
+                        $colJ = mb_convert_encoding($data[9], 'UTF-8', 'Shift-JIS');
+                        $colK = mb_convert_encoding($data[10], 'UTF-8', 'Shift-JIS');
+                        $colL = mb_convert_encoding($data[11], 'UTF-8', 'Shift-JIS');
+                        $colM = mb_convert_encoding($data[12], 'UTF-8', 'Shift-JIS');
+                        $colN = mb_convert_encoding($data[13], 'UTF-8', 'Shift-JIS');
+                        $colO = mb_convert_encoding($data[14], 'UTF-8', 'Shift-JIS');
+                        $colP = mb_convert_encoding($data[15], 'UTF-8', 'Shift-JIS');
+                        $colQ = mb_convert_encoding($data[16], 'UTF-8', 'Shift-JIS');
+                        $this->csvDataImportRepository->insertCsvDataImport($importId, $subId, $colA, $colB, $colC, $colD,
+                            $colE, $colF, $colG, $colH, $colI, $colJ, $colK, $colL, $colM, $colN, $colO, $colP, $colQ);
+                        $subId++;
+                    }
+                    fclose($fileReader);
                 }
-                fclose($fileReader);
+                catch (\Exception $e) {
+                    $this->historyFileRepository->insertHistoryFile($idFile,  basename($file), $dateNew, 'fail');
+                    fclose($fileReader);
+                    unlink($dir . $substr);
+                    continue;
+                }
+                
                 // insert data into table csv_file_import
                 $this->csvFileImportRepository->insertFile($importId, basename($file));
                 // insert data into table history_file
@@ -864,7 +876,7 @@ class HomeService
                 // remove folder tmp
                 $this->deleteDirectory($path);
                 // delete file in folder files
-                 unlink($dir . $fileCsv);
+                unlink($dir . $fileCsv);
             } else {
                 throw new Exception("could not close zip file: " . $zip->getStatusString());
             }
