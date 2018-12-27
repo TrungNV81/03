@@ -18,7 +18,7 @@ class UploadFileController extends Controller
 
     public function uploadFile()
     {
-        return view('upload_form');
+        return $this->uploadFileService->uploadFile();
     }
 
     public function uploadSubmit(Request $request)

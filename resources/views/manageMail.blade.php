@@ -51,17 +51,14 @@
                                         </td>
                                         </form>
                                         <td>
-                                            {{-- <form action="{{ url('manageMail') }}" method="GET"> --}}
-                                            {{-- <input type="hidden" value="{{ $dataGroup->id }}" name="id_group"> --}}
-                                                <button type="" class="btn btn-warning center-block" onclick="viewMail({{ $dataGroup->id }})" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-eye fa-fw"></i> View mail</button>
-                                            {{-- </form> --}}
+                                            <button type="" class="btn btn-warning center-block" onclick="viewMail({{ $dataGroup->id }})" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-eye fa-fw"></i> View mail</button>
                                         </td>
                                         <td>
-                                            <form action="{{ url('del-group-mail') }}" method="POST">
+                                        <form action="{{ url('del-group-mail') }}" method="POST" id="form_upload{{ $dataGroup->id }}">
                                             {{ csrf_field() }}
                                                 <input hidden name="id-group" value="{{ $dataGroup->id }}">
-                                                <button class="btn btn-danger center-block"> <i class="fa fa-trash-o fa-fw"></i> Delete</button>
                                             </form>
+                                            <button type="button" onclick="ConfirmDelete({{ $dataGroup->id }})" class="btn btn-danger center-block"> <i class="fa fa-trash-o fa-fw"></i> Delete</button>
                                         </td>
                                     </tr>
                                     @endforeach

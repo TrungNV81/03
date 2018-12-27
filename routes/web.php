@@ -53,6 +53,6 @@ Route::post('del-group-mail', 'ManageMailController@delGroup')->name('del-group-
 
 Route::get('uploadFile','UploadFileController@uploadFile')->name('uploadFile');
 
-Route::post('uploadSubmit', 'UploadFileController@uploadSubmit')->name('uploadSubmit');
+Route::post('uploadFile', 'UploadFileController@uploadSubmit')->name('uploadSubmit');
 
 

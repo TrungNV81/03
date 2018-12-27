@@ -9,6 +9,11 @@ use Validator;
 
 class UploadFileService
 {
+    public function uploadFile()
+    {
+        return view('upload_form');
+    }
+
     /**
      * @param $request
      * @return \Illuminate\Http\RedirectResponse
@@ -25,7 +30,7 @@ class UploadFileService
                     echo '<script language="javascript">';
                     echo 'alert("The system only accepts CSV files")';
                     echo '</script>';
-                    return redirect()->intended('uploadFile');
+                    return $this->uploadFile();
                 }
                 $dir = public_path() . '/files/';
                 $file->move($dir, $file->getClientOriginalName());
@@ -33,7 +38,7 @@ class UploadFileService
             echo '<script language="javascript">';
             echo 'alert("Upload file success!")';
             echo '</script>';
-            return redirect()->intended('uploadFile');
+            return $this->uploadFile();
         }
     }
 }

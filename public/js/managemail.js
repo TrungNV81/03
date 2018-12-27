@@ -169,3 +169,10 @@ function addMail(id_group)
         }
     }) 
 }
+
+function ConfirmDelete(id_group) {
+    var result = confirm("Are you sure you want to delete?");
+    if (result) {
+        $("#form_upload"+id_group).submit();
+    }
+}

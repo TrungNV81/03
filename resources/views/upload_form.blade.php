@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <!-- Standar Form -->
-                            <form action="{{ url('uploadSubmit') }}" enctype="multipart/form-data" method="POST">
+                            <form action="{{ url('uploadFile') }}" enctype="multipart/form-data" method="POST">
                                 {{ csrf_field() }}
                                 <h5>Select files from your computer</h5>
                                 <input type="file" id="fileInput" name="csv-file[]" required="true" multiple>
