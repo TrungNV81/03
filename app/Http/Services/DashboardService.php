@@ -44,6 +44,12 @@ class DashboardService
 
         $timeLastImportFile = $this->historyImportFileRepository->getTimeLastImportFile();
 
+        if (empty($timeLastImportFile[0]->created_at)) {
+            $timeLastImportFile = '';
+        } else {
+            $timeLastImportFile = $timeLastImportFile[0]->created_at;
+        }
+
         $fileImportToday = count($this->historyImportFileRepository->getFileImportToday());
 
         $sendMailToday = count($this->historySendMailRepository->getSendMailToday());
@@ -61,7 +67,7 @@ class DashboardService
         return view("dashboard", ['historyFile' => $historyFile, 'historySendMail' => $historySendMail,
             'totalFile' => $totalFile, 'totalSendMail' => $totalSendMail, 'totalSuccessFile' => $totalSuccessFile,
             'totalSuccessSendMail' => $totalSuccessSendMail, 'fileImportToday' => $fileImportToday, 'sendMailToday' => $sendMailToday,
-            'timeLastImportFile' => $timeLastImportFile[0]->created_at, 'chart_data_file' => $chart_data_file
+            'timeLastImportFile' => $timeLastImportFile, 'chart_data_file' => $chart_data_file
         ]);
     }
 }
