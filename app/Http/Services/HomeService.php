@@ -225,6 +225,9 @@ class HomeService
         $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
         $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename, 'filepdf1');
         $this->exportPDF($pathPDF, '', '_ラベル', $filename, 'filepdf2');
+
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(false);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(true);
         $spreadsheet->setActiveSheetIndex(0);
 
         // Save file to folder
@@ -260,7 +263,7 @@ class HomeService
         $maxSubId += 1;
 
         $cellPos = array(
-            "B", "C", "D", "E", "G", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R",
+            "B", "C", "D", "E", "G", "H", "I", "J", "K",
         );
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
@@ -324,9 +327,9 @@ class HomeService
             }
 
             if ($name != $data->K) {
-                if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
-                    $sheet->setCellValue('S' . ((string) ($indexCell - 2)), $total);
-                }
+                // if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
+                //     $sheet->setCellValue('S' . ((string) ($indexCell - 2)), $total);
+                // }
 
                 // insert data into table details_data_import
                 $this->detailsDataImportRepository->insertDetailsData($importId,  $maxSubId, $sheetName, $floor, $name, $thickness, $totalx);
@@ -354,12 +357,12 @@ class HomeService
             array_push($cellValue, $I);
             array_push($cellValue, $J);
             array_push($cellValue, $data->J);
-            array_push($cellValue, $M_cell);
-            array_push($cellValue, $N_cell);
-            array_push($cellValue, $O);
-            array_push($cellValue, $P);
-            array_push($cellValue, $Q);
-            array_push($cellValue, $R);
+            // array_push($cellValue, $M_cell);
+            // array_push($cellValue, $N_cell);
+            // array_push($cellValue, $O);
+            // array_push($cellValue, $P);
+            // array_push($cellValue, $Q);
+            // array_push($cellValue, $R);
             foreach ($cellPos as $key => $value) {
                 $num = (string) $index;
                 $cellpos = $cellPos[$key] . $num;
@@ -380,23 +383,23 @@ class HomeService
         }
 
         $this->closeEmptyExcel($index, $endCell, $spreadsheet);
-        if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
-            $sheet->setCellValue('S' . ((string) ($indexCell - 1)), $total);
-        }
-        if ($sheetName == '先行1階2階' || $sheetName == '壁1階2階') {
-            if ($floor == "1階") {
-                session(['numCellR503' => $numCellR]);
-                $sheet->setCellValue('R503', $numCellR);
-            }
-            if ($floor == "2階") {
-                $numCellR1008 = session('numCellR503') + $numCellR;
-                $sheet->setCellValue('R1006', $numCellR);
-                $sheet->setCellValue('R1008', $numCellR1008);
-            }
-        }
-        if ($sheetName == '天井1階' || $sheetName == '天井2階') {
-            $sheet->setCellValue('R503', $numCellR);
-        }
+        // if ($sheetName == '天井1階' || $sheetName == '壁1階2階') {
+        //     $sheet->setCellValue('S' . ((string) ($indexCell - 1)), $total);
+        // }
+        // if ($sheetName == '先行1階2階' || $sheetName == '壁1階2階') {
+        //     if ($floor == "1階") {
+        //         session(['numCellR503' => $numCellR]);
+        //         $sheet->setCellValue('R503', $numCellR);
+        //     }
+        //     if ($floor == "2階") {
+        //         $numCellR1008 = session('numCellR503') + $numCellR;
+        //         $sheet->setCellValue('R1006', $numCellR);
+        //         $sheet->setCellValue('R1008', $numCellR1008);
+        //     }
+        // }
+        // if ($sheetName == '天井1階' || $sheetName == '天井2階') {
+        //     $sheet->setCellValue('R503', $numCellR);
+        // }
         // insert data into table details_data_import
         $this->detailsDataImportRepository->insertDetailsData($importId,  $maxSubId, $sheetName, $floor, $name, $thickness, $totalx);
         $maxSubId++;
