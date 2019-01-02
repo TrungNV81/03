@@ -226,9 +226,10 @@ class HomeService
         $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename, 'filepdf1');
         $this->exportPDF($pathPDF, '', '_ラベル', $filename, 'filepdf2');
 
-        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(false);
-        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(true);
         $spreadsheet->setActiveSheetIndex(0);
+        // Set orientation portrait print excel
+        $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
 
         // Save file to folder
         // $filename = $dataImport1_1[0]->Q;
