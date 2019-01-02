@@ -20,25 +20,27 @@ class UploadFileService
      */
     public function uploadSubmit($request)
     {
-        $files = $request->file('csv-file');
-        if($request->hasFile('csv-file'))
+        sleep(1);
+        $file = $request->file('file');
+        $extension = strtolower($file->getClientOriginalExtension());
+        if($extension == "csv")
         {
-            foreach($files as $file) {
-                $extension = strtolower($file->getClientOriginalExtension());
-                if($extension != "csv")
-                {
-                    echo '<script language="javascript">';
-                    echo 'alert("The system only accepts CSV files")';
-                    echo '</script>';
-                    return $this->uploadFile();
-                }
-                $dir = public_path() . '/files/';
-                $file->move($dir, $file->getClientOriginalName());
-            }
-            echo '<script language="javascript">';
-            echo 'alert("Upload file success!")';
-            echo '</script>';
-            return $this->uploadFile();
+            $dir = public_path() . '/files/';
+            $file->move($dir, $file->getClientOriginalName());
+        } else {
+            return response()->json([
+                'errors' => 'File wrong format',
+            ], 422);
         }
+    }
+
+    public function deleteFile($request)
+    {
+        $filename = $request->get('filename');
+        $dir = public_path() . '/files/'.$filename;
+        if (file_exists($dir)) {
+            unlink($dir);
+        }
+        return $filename;
     }
 }

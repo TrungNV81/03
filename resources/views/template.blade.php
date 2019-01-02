@@ -92,6 +92,9 @@
     <!------ Include the above in your HEAD tag ---------->
     <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
     <script src="{{URL::asset('/js/setting.js')}}"></script>
+    <!-- dropzone -->
+    <link href="{{ asset('/js/dropzone.css') }}" rel="stylesheet">
+    <script src="{{URL::asset('/js/dropzone.js')}}"></script>
     <meta name="csrf_token" content="{{ csrf_token() }}" />
 </head>
 <body>

@@ -55,4 +55,4 @@ Route::get('uploadFile','UploadFileController@uploadFile')->name('uploadFile');
 
 Route::post('uploadFile', 'UploadFileController@uploadSubmit')->name('uploadSubmit');
 
-
+Route::post('deleteFile', 'UploadFileController@deleteFile')->name('deleteFile');

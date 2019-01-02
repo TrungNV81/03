@@ -25,4 +25,9 @@ class UploadFileController extends Controller
     {
         return $this->uploadFileService->uploadSubmit($request);
     }
+
+    public function deleteFile(Request $request)
+    {
+        return $this->uploadFileService->deleteFile($request);
+    }
 }
