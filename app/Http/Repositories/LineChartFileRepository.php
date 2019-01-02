@@ -33,10 +33,10 @@ class LineChartFileRepository extends BaseRepository
      * @param $value
      * @return mixed
      */
-    public function resetLineChartFile($value)
+    public function resetLineChartFile($value, $weekOfYear)
     {
         return $this->lineChartFileModel->where('day', '=', $value)
-            ->update(['total' => 0, 'success' => 0, 'fail' => 0]);
+            ->update(['total' => 0, 'success' => 0, 'fail' => 0, 'week_of_year' => $weekOfYear]);
     }
 
     /**

@@ -58,8 +58,9 @@ class HomeService
         foreach ($files as &$file) {
             // get day of week
             $dateNew = date('Y-m-d H:i:s');
-            // $dateNew = date('2018-12-24');
+            // $dateNew = date('2019-01-14');
             $dayOfWeek = date("l", strtotime($dateNew));
+            $weekOfYear = date("W", strtotime($dateNew));
 
             $strrpos = strrpos($file, '/');
             $filename = substr($file, $strrpos + 1);
@@ -80,11 +81,7 @@ class HomeService
                 $importMaxId += 1;
                 $importId = $importMaxId;
                 $subId = 1;
-                // call function add data file import success
-                $this->lineChartImportFile($dayOfWeek, 'success');
-                $strrpos = strrpos($file, '/');
-                $substr = substr($file, $strrpos + 1);
-                $filename = explode('.', $substr);
+
                 $fileReader = fopen($file, 'r');
                 try {
                     while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
@@ -124,7 +121,7 @@ class HomeService
                 $this->historyFileRepository->insertHistoryFile($idFile,  basename($file), $dateNew, 'success');
 
                 // call function add data file import success
-                $this->lineChartImportFile($dayOfWeek, 'success');
+                $this->lineChartImportFile($dayOfWeek, $weekOfYear, 'success');
                 $strrpos = strrpos($file, '/');
                 $substr = substr($file, $strrpos + 1);
                 $filename = explode('.', $substr);
@@ -144,7 +141,7 @@ class HomeService
                 // insert data into table history_file
                 $this->historyFileRepository->insertHistoryFile($idFile,  basename($file), $dateNew, 'fail');
                 // call function add data file import fail
-                $this->lineChartImportFile($dayOfWeek, 'fail');
+                $this->lineChartImportFile($dayOfWeek, $weekOfYear, 'fail');
             }
         }
     }
@@ -153,24 +150,20 @@ class HomeService
      * @param $dayOfWeek
      * @param $category
      */
-    public function lineChartImportFile($dayOfWeek, $category)
+    public function lineChartImportFile($dayOfWeek, $weekOfYear, $category)
     {
         // select total file import in day
         $line_chart_file = $this->lineChartFileRepository->getDay($dayOfWeek);
-        if ($dayOfWeek == 'Monday' && ($line_chart_file[0]->total > 0)) {
-            // select total file import in Tuesday
-            $total_file = $this->lineChartFileRepository->getDay('Tuesday');
-            if ($total_file[0]->total > 0) {
-                $day = array(
-                    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
-                );
-                foreach ($day as $key => $value) {
-                    // reset line_chart_file
-                    $this->lineChartFileRepository->resetLineChartFile($value);
-                }
-                // select record empty
-                $line_chart_file = $this->lineChartFileRepository->getDay($dayOfWeek);
+        if ($weekOfYear > $line_chart_file[0]->week_of_year) {
+            $day = array(
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+            );
+            foreach ($day as $key => $value) {
+                // reset line_chart_file
+                $this->lineChartFileRepository->resetLineChartFile($value, $weekOfYear);
             }
+            // select record empty
+            $line_chart_file = $this->lineChartFileRepository->getDay($dayOfWeek);
         }
         $line_chart_file_total = $line_chart_file[0]->total + 1;
         $line_chart_file_category = $line_chart_file[0]->$category + 1;
