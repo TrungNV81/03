@@ -221,8 +221,8 @@ class HomeService
 
         $spreadsheet->setActiveSheetIndex(0);
         // Set orientation portrait print excel
-        $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
-        $spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+        // $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+        // $spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
 
         // Save file to folder
         // $filename = $dataImport1_1[0]->Q;
@@ -853,6 +853,7 @@ class HomeService
             $zip = new ZipArchive(); // Load zip library
             $zip_name = $filename . '.zip'; // Zip name
             $zip_folder = $filename . '/';
+            $error = '';
             if ($zip->open($zip_name, ZIPARCHIVE::CREATE) !== true) {
                 $error .= "* Sorry ZIP creation failed at this time";
             }
@@ -863,7 +864,9 @@ class HomeService
                 foreach ($files as $file) {
                     $position = strrpos($file, '/');
                     $nameFile = substr($file, $position + 1);
-                    $zip->addFile($zip_folder . $nameDir . '/' . $nameFile);
+                    // $utf8_with_bom = chr(239) . chr(187) . chr(191) . $nameFile;
+                    $utf8_with_bom = iconv(mb_detect_encoding($nameFile, mb_detect_order(), true), "UTF-8", $nameFile);
+                    $zip->addFile($zip_folder . $nameDir . '/' . $utf8_with_bom);
                     continue;
                 }
             }
