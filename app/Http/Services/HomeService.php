@@ -864,9 +864,11 @@ class HomeService
                 foreach ($files as $file) {
                     $position = strrpos($file, '/');
                     $nameFile = substr($file, $position + 1);
-                    // $utf8_with_bom = chr(239) . chr(187) . chr(191) . $nameFile;
-                    $utf8_with_bom = iconv(mb_detect_encoding($nameFile, mb_detect_order(), true), "UTF-8", $nameFile);
-                    $zip->addFile($zip_folder . $nameDir . '/' . $utf8_with_bom);
+                    // check file name UTF-8 bom
+                    if(substr($nameFile, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+                        $nameFile = substr($nameFile, 3);
+                    }
+                    $zip->addFile($zip_folder . $nameDir . '/' . $nameFile);
                     continue;
                 }
             }
