@@ -68,22 +68,22 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <form>
-                                {{--<table class="table table-striped table-sm" style="width: 50%">--}}
-                                    {{--<tbody>--}}
-                                    {{--<tr style="line-height: 35px;">--}}
-                                        {{--<td style="font-weight: bold;vertical-align: middle"> Time </td>--}}
-                                        {{--<td> <input class="form-control" type="text" id="time" value="{{ $timeRunBatch->time }}" maxlength="4"></td>--}}
-                                        {{--<td style="vertical-align: middle">minutes</td>--}}
-                                    {{--</tr>--}}
-                                    {{--<tr>--}}
-                                        {{--<td></td>--}}
-                                        {{--<td>--}}
-                                            {{--<p style="color:red;text-align:left;" hidden id="showError">Invalid (Time run batch: >=10 minutes, must be a number)</p>--}}
-                                        {{--</td>--}}
-                                        {{--<td></td>--}}
-                                    {{--</tr>--}}
-                                    {{--</tbody>--}}
-                                {{--</table>--}}
+                                <table class="table table-striped table-sm" style="width: 50%">
+                                    <tbody>
+                                    <tr style="line-height: 35px;">
+                                        <td style="font-weight: bold;vertical-align: middle"> Time run batch </td>
+                                        <td> <input class="form-control" type="text" id="time" value="{{ $timeRunBatch->time }}" maxlength="4"></td>
+                                        <td style="vertical-align: middle">minutes</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <p style="color:red;text-align:left;" hidden id="showError">Invalid (Time run batch: >=5 minutes, must be a number)</p>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                                 <table class="table table-sm">
                                     <tbody>
                                     <tr>

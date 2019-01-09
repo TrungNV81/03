@@ -169,9 +169,8 @@ class ManageMailService
      */
     public function templateMail()
     {
-        // $timeRunBatch = DB::table('time_run_batch')
-        //     ->get();
-        $timeRunBatch[0] = [];
+        $timeRunBatch = DB::table('time_run_batch')
+            ->get();
         $templateEmail = $this->templateEmailRepository->getTemplateEmail();
 
         return view("setting", ['timeRunBatch' => $timeRunBatch[0], 'templateEmail' => $templateEmail[0]]);
@@ -182,21 +181,14 @@ class ManageMailService
      */
     public function updateTemplate()
     {
-        //$time = $_POST['time'];
+        $time = $_POST['time'];
         $subject = $_POST['subject'];
         $receiver = $_POST['receiver'];
         $body = $_POST['body'];
         $sender = $_POST['sender'];
-
-        // $timeRun = DB::table('time_run_batch')
-        //     ->get();
-
-        // $fileCrontab = file_get_contents(public_path().'/crontab');
-        // $newFileCrontab = str_replace('*/'.$timeRun[0]->time, '*/'.$time, $fileCrontab);
-        // file_put_contents(public_path().'/crontab', $newFileCrontab);
-
-        // DB::table('time_run_batch')
-        //    ->update(['time' => $time]);
+        // Update time run batch
+        DB::table('time_run_batch')
+            ->update(['time' => $time]);
 
         $this->templateEmailRepository->updateTempalteMail($subject, $receiver, $body, $sender);
         $smg = "Update success";
