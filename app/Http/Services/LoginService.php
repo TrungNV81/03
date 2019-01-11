@@ -30,6 +30,7 @@ class LoginService
             $password = $request->input('password');
 
             if (Auth::attempt(['name' => $email, 'password' => $password])) {
+                session(['LOGGED' => 1]);
                 return redirect()->intended('/');
             } else {
                 $errors = new MessageBag(['errorlogin' => 'Email or Password incorrect']);

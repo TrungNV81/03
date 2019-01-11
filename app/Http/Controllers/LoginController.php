@@ -17,6 +17,10 @@ class LoginController extends Controller
 
     public function getLogin()
     {
+        $logged = session('LOGGED');
+        if (isset($logged)) {
+            return redirect()->intended('');
+        }
         return view('login');
     }
 

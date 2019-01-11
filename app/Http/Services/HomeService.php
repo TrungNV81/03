@@ -61,9 +61,6 @@ class HomeService
             // $dateNew = date('2019-01-14');
             $dayOfWeek = date("l", strtotime($dateNew));
             $weekOfYear = date("W", strtotime($dateNew));
-
-            $strrpos = strrpos($file, '/');
-            $filename = substr($file, $strrpos + 1);
             $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
             $idFile = $this->historyFileRepository->maxIdFile('id');
@@ -82,6 +79,9 @@ class HomeService
                 $importId = $importMaxId;
                 $subId = 1;
 
+                $strrpos = strrpos($file, '/');
+                $substr = substr($file, $strrpos + 1);
+                $filename = explode('.', $substr);
                 $fileReader = fopen($file, 'r');
                 try {
                     while (($data = fgetcsv($fileReader, 1000, ",")) !== false) {
@@ -122,9 +122,6 @@ class HomeService
 
                 // call function add data file import success
                 $this->lineChartImportFile($dayOfWeek, $weekOfYear, 'success');
-                $strrpos = strrpos($file, '/');
-                $substr = substr($file, $strrpos + 1);
-                $filename = explode('.', $substr);
                 // Create folder temp
                 $path = public_path() . '/' . $filename[0];
                 mkdir($path, 0777, true);
@@ -646,7 +643,6 @@ class HomeService
         // Save file to folder
         $writer = new Xlsx($spreadsheet);
         $saveFile = $pathExcel . '/' . $filename . '_指示書.xlsx';
-        // $saveFile = $path . '/' . $importId . '2.xlsx';
         $writer->save($saveFile);
 
         $spreadsheet1 = \PhpOffice\PhpSpreadsheet\IOFactory::load(public_path() . "/template/Excel/template03.xlsx");
@@ -746,8 +742,6 @@ class HomeService
      */
     private function addDataToFile2($data, $spreadsheet, $sheetName, $numRow, $numRec)
     {
-        $flag;
-        $num = 0;
         $spreadsheet->setActiveSheetIndexByName($sheetName);
         $sheet = $spreadsheet->getActiveSheet();
         if ($numRow == 1) {
@@ -864,10 +858,8 @@ class HomeService
                 foreach ($files as $file) {
                     $position = strrpos($file, '/');
                     $nameFile = substr($file, $position + 1);
-                    $nameFile = mb_convert_encoding($nameFile, "UTF-8", "auto");
-                    // $utf8_with_bom = chr(239) . chr(187) . chr(191) . $nameFile;
-                    // $utf8_with_bom = iconv(mb_detect_encoding($nameFile, mb_detect_order(), true), "UTF-8", $nameFile);
-                    $zip->addFile($zip_folder . $nameDir . '/' . $nameFile);
+                    $nameFileShiftJIS = mb_convert_encoding($nameFile, "Shift-JIS", "auto");
+                    $zip->addFile($zip_folder . $nameDir . '/' . $nameFile, $nameDir . '/' . $nameFileShiftJIS);
                     continue;
                 }
             }

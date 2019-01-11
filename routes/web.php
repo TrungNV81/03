@@ -17,6 +17,7 @@ Route::post('login','LoginController@postLogin');
 
 Route::get('logout', function(){
     Auth::logout();
+    Session::flush();
     return Redirect::to('login');
 });
 Route::get('batch', 'HomeController@batch');
