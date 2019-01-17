@@ -10,6 +10,7 @@ use App\Http\Repositories\DetailsDataImportRepository;
 use App\Http\Repositories\TemplateEmailRepository;
 use App\Http\Repositories\ManageMailRepository;
 use App\Http\Repositories\HistorySendMailRepository;
+use App\Http\Repositories\DataInformationRepository;
 use App\Mail\SendEmail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -30,6 +31,7 @@ class HomeService
     private $templateEmailRepository;
     private $manageMailRepository;
     private $historySendMailRepository;
+    private $dataInformationRepository;
 
     /**
      * HomeService constructor.
@@ -44,6 +46,7 @@ class HomeService
         $this->templateEmailRepository = new TemplateEmailRepository();
         $this->manageMailRepository = new ManageMailRepository();
         $this->historySendMailRepository = new HistorySendMailRepository();
+        $this->dataInformationRepository = new DataInformationRepository();
     }
 
     /**
@@ -214,7 +217,14 @@ class HomeService
 
         $this->addDataToFile1($dataImport4_2, '壁1階2階', 506, $spreadsheet, 2395);
         $this->exportPDF($pathPDF, $dataImport4_2, '_２階壁', $filename, 'filepdf1');
-        $this->exportPDF($pathPDF, '', '_ラベル', $filename, 'filepdf2');
+
+        // export file PDF ラベル
+        // get property_name
+        $explodeFileName = (explode("・",$filename));
+        $property_name = $explodeFileName[0] . '・' . $explodeFileName[1];
+        // get dataInformation
+        $dataPdfLabel = $this->dataInformationRepository->getDataPdfLabel($property_name);
+        $this->exportPDF($pathPDF, $dataPdfLabel, '_ラベル', $filename, 'filepdf2');
 
         $spreadsheet->setActiveSheetIndex(0);
         // Set orientation portrait print excel
@@ -430,9 +440,55 @@ class HomeService
             "B12", "C12", "B13", "C13", "B14", "C14",
         );
 
+        // set value information
+        $cellPosInformatioin = array(
+            "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2",
+            "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2"
+        );
+
+        $colTableInfomation = array(
+            "1" => "property_name",
+            "2" => "billing_address",
+            "3" => "billing_name",
+            "4" => "proud_first",
+            "5" => "proud_first_name",
+            "6" => "secondary_store_1",
+            "7" => "secondary_store_name_1",
+            "8" => "secondary_store_2",
+            "9" => "secondary_store_name_2",
+            "10" => "factory",
+            "11" => "delivery_time_1",
+            "12" => "delivery_time_2",
+            "13" => "delivery_time_3",
+            "14" => "on_site_residence",
+            "15" => "car_model",
+            "16" => "person_in_charge",
+            "17" => "street_address",
+            "18" => "tel",
+            "19" => "fax",
+            "20" => "branch_office",
+            "21" => "responsible",
+            "22" => "request_no1",
+            "23" => "request_no2",
+        );
+
         $dataImport1 = $this->detailsDataImportRepository->getDataInformation($importId, '0');
+        // get property_name
+        $explodeFileName = (explode("・",$filename));
+        $property_name = $explodeFileName[0] . '・' . $explodeFileName[1];
+        // get dataInformation
+        $dataInformation = $this->dataInformationRepository->getDataInformation($property_name);
         $spreadsheet->setActiveSheetIndexByName('情報');
         $sheet = $spreadsheet->getActiveSheet();
+        foreach ($cellPosInformatioin as $key => $value) {
+            if ($value == 'A2') {
+                $sheet->setCellValue($value, '1111');
+            } else {
+                $nameColumn = $colTableInfomation[$key];
+                $valueColumn = $dataInformation[0]->$nameColumn;
+                $sheet->setCellValue($value, $valueColumn);
+            }
+        }
         foreach ($cellPos as $key => $value) {
             $cellpos = $cellPos[$key];
             $sheet->setCellValue($cellpos, $dataImport1[$key]->total);

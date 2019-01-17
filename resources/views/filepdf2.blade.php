@@ -130,30 +130,36 @@
 </head>
 
 <body>
-    @for($i=0;$i
-    <6;$i++) <div style="page-break-inside:avoid;">
+    {{-- @for($i = 0 ;$i < 6; $i ++) --}}
+    <div style="page-break-inside:avoid;">
         <div class="title-heading">
-            紅中㈱ - ㈱飯⽥産業
+            {{ $dataPDF[0]->billing_name }}
         </div>
         <div class="location">
-            ⾨沢橋3丁⽬2048番・B号棟
+            {{ $dataPDF[0]->property_name }}
         </div>
         <div class="house">様邸</div>
         <div class="content">
-            <div class="td2_1 "><label>B号棟</label></div>
-            <div class="td2_2"><label>33-438-①</label></div>
+            <div class="td2_1 ">
+                <label>B号棟</label>
+            </div>
+            <div class="td2_2">
+                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-①</label>
+            </div>
         </div>
-        <div class="floor"><span>1F</span></div>
+        <div class="floor">
+            <span>1F</span>
+        </div>
         <div class="name-house">
-            <span class="product">11/21 積</span>
+            <span class="product">{{ $dataPDF[0]->delivery_time_1 }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">
             <label class="warning">※原板は含まれていません</label>
             <label class="here"><span>⼭</span>　あります</label>
         </div>
-        </div>
-        @endfor
+    </div>
+    {{-- @endfor --}}
 </body>
 
 </html>

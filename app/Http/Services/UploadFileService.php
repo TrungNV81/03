@@ -65,14 +65,14 @@ class UploadFileService
 
     public function uploadFileConfigSubmit($request)
     {
-        
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         if($request->hasFile('file')) {
             $extension = File::extension($request->file->getClientOriginalName());
             if ($extension == "xlsm") {
                 $path = $request->file->getRealPath();
                 $spreadsheet = $reader->load($path);
-                $sheetname = 'H30.11';
+                // get sheet name end
+                $sheetname = array_values(array_slice($spreadsheet->getSheetNames(), -1))[0];
                 $spreadsheet->setActiveSheetIndexByName($sheetname);
                 $sheetData = $spreadsheet->getActiveSheet()->toArray();
                 $dataTargetFlg = false;
@@ -84,33 +84,34 @@ class UploadFileService
                 $maxId += 1;
                 $subId = 1;
                 $building = $sheetData[2][11];
+                // delete db before insert file mew
                 foreach ($sheetData as $key => $value) {
                     $col9 = $value[9];
                     $col11 = $value[11];
                     // sheetname
                     $property_name = $col9 . '・' . $col11 . $building;
-                    $billing_address = $value[12];
+                    $billing_address = $value[45];
                     $billing_name = $value[13];
                     $proud_first = $value[14];
-                    $proud_first_name = $value[15];
-                    $secondary_store_1 = $value[16];
+                    $proud_first_name = $value[46];
+                    $secondary_store_1 = $value[47];
                     $secondary_store_name_1 = $value[17];
                     $secondary_store_2 = $value[18];
                     $secondary_store_name_2 = $value[19];
                     $factory = $value[20];
                     $delivery_time_1 = $value[21];
-                    $delivery_time_2 = $value[22];
-                    $delivery_time_3 = $value[23];
+                    $delivery_time_2 = $value[43];
+                    $delivery_time_3 = $value[44];
                     $on_site_residence = $value[24];
                     $car_model = $value[25];
                     $person_in_charge = $value[26];
                     $street_address = $value[27];
                     $tel = $value[28];
                     $fax = $value[29];
-                    $branch_office = $value[30];
-                    $responsible = $value[31];
-                    $request_no1 = $value[32];
-                    $request_no2 = $value[33];
+                    $branch_office = $value[48];
+                    $responsible = $value[40];
+                    $request_no1 = $value[41];
+                    $request_no2 = $value[42];
 
                     if ($col9 == '現場名') {
                         $dataTargetFlg = true;
@@ -126,5 +127,6 @@ class UploadFileService
                 }
             }
         }
+        return redirect()->intended('uploadFileConfig');
     }
 }
