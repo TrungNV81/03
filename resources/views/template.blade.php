@@ -164,6 +164,9 @@
                     <li>
                         <a href="{{ url('/uploadFile') }}"><i class="fa fa-upload fa-fw"></i> Upload File Server</a>
                     </li>
+                    <li>
+                        <a href="{{ url('/uploadFileConfig') }}"><i class="fa fa-upload fa-fw"></i> Upload File Config</a>
+                    </li>
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->
