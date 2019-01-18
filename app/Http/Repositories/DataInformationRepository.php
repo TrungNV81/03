@@ -28,6 +28,35 @@ class DataInformationRepository extends BaseRepository
         return $this->dataInformationModel->max($id);
     }
 
+    /**
+     * @param $maxId
+     * @param $subId
+     * @param $sheetname
+     * @param $property_name
+     * @param $billing_address
+     * @param $billing_name
+     * @param $proud_first
+     * @param $proud_first_name
+     * @param $secondary_store_1
+     * @param $secondary_store_name_1
+     * @param $secondary_store_2
+     * @param $secondary_store_name_2
+     * @param $factory
+     * @param $delivery_time_1
+     * @param $delivery_time_2
+     * @param $delivery_time_3
+     * @param $on_site_residence
+     * @param $car_model
+     * @param $person_in_charge
+     * @param $street_address
+     * @param $tel
+     * @param $fax
+     * @param $branch_office
+     * @param $responsible
+     * @param $request_no1
+     * @param $request_no2
+     * @return mixed
+     */
     public function insertInfomation($maxId, $subId, $sheetname, $property_name,
         $billing_address, $billing_name, $proud_first, $proud_first_name, $secondary_store_1,
         $secondary_store_name_1, $secondary_store_2, $secondary_store_name_2, $factory, $delivery_time_1,
@@ -46,6 +75,10 @@ class DataInformationRepository extends BaseRepository
         ]);
     }
 
+    /**
+     * @param $property_name
+     * @return mixed
+     */
     public function getDataInformation($property_name)
     {
         return $this->dataInformationModel->where([
@@ -54,6 +87,10 @@ class DataInformationRepository extends BaseRepository
         ->get();
     }
 
+    /**
+     * @param $property_name
+     * @return mixed
+     */
     public function getDataPdfLabel($property_name)
     {
         return $this->dataInformationModel->select('billing_name', 'property_name', 'request_no1', 'request_no2', 'delivery_time_1')

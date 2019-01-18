@@ -37,7 +37,11 @@ class BaseRepository {
         }
         
     }
-    
+
+    /**
+     * @param array $columns
+     * @return bool
+     */
     public function insert($columns = array()) {
         $modelInsert = new $this->model;
         try {

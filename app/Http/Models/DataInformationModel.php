@@ -4,7 +4,7 @@ namespace App\Http\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class CsvDataImportModel
+ * Class DataInformationModel
  * @package App\Http\Models
  */
 class DataInformationModel extends Model {

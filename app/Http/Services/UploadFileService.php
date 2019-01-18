@@ -48,6 +48,10 @@ class UploadFileService
         }
     }
 
+    /**
+     * @param $request
+     * @return mixed
+     */
     public function deleteFile($request)
     {
         $filename = $request->get('filename');
@@ -58,11 +62,20 @@ class UploadFileService
         return $filename;
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function uploadFileConfig()
     {
         return view('upload_file_form');
     }
 
+    /**
+     * @param $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     public function uploadFileConfigSubmit($request)
     {
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();

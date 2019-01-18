@@ -21,7 +21,9 @@ class HomeController extends Controller
     }
 
     /**
-     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function handle()
     {

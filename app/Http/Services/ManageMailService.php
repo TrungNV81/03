@@ -40,7 +40,10 @@ class ManageMailService
         return view("manageMail", ['dataMail' => $dataMail, 'dataGroupMail' => $dataGroupMail, 'id_group' => $id_group]);
     }
 
-
+    /**
+     * @param $request
+     * @return array
+     */
     public function getMailGroup($request)
     {
 
