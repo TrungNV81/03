@@ -141,7 +141,7 @@
         <div class="house">様邸</div>
         <div class="content">
             <div class="td2_1 ">
-                <label>B号棟</label>
+                <label>先行壁</label>
             </div>
             <div class="td2_2">
                 <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-①</label>

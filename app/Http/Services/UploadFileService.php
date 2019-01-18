@@ -90,21 +90,22 @@ class UploadFileService
                 $sheetData = $spreadsheet->getActiveSheet()->toArray();
                 $dataTargetFlg = false;
 
-                $maxId = $this->dataInformationRepository->maxId('id');
-                if ($maxId == "") {
-                    $maxId = 0;
-                }
-                $maxId += 1;
+                // $maxId = $this->dataInformationRepository->maxId('id');
+                // if ($maxId == "") {
+                //     $maxId = 0;
+                // }
+                $maxId = 1;
                 $subId = 1;
+                $this->dataInformationRepository->deleteInfomation($maxId);
                 $building = $sheetData[2][11];
                 // delete db before insert file mew
                 foreach ($sheetData as $key => $value) {
                     $col9 = $value[9];
                     $col11 = $value[11];
                     // sheetname
-                    $property_name = $col9 . '・' . $col11 . $building;
-                    $billing_address = $value[45];
-                    $billing_name = $value[13];
+                    $property_name = $col9 . '・' . $col11 . $building; // J + L + L3
+                    $billing_address = $value[18];
+                    $billing_name = $value[48]; // AW
                     $proud_first = $value[14];
                     $proud_first_name = $value[46];
                     $secondary_store_1 = $value[47];
@@ -112,12 +113,12 @@ class UploadFileService
                     $secondary_store_2 = $value[18];
                     $secondary_store_name_2 = $value[19];
                     $factory = $value[20];
-                    $delivery_time_1 = $value[21];
+                    $delivery_time_1 = $value[18]; // S
                     $delivery_time_2 = $value[43];
                     $delivery_time_3 = $value[44];
                     $on_site_residence = $value[24];
                     $car_model = $value[25];
-                    $person_in_charge = $value[26];
+                    $person_in_charge = $value[13]; // N
                     $street_address = $value[27];
                     $tel = $value[28];
                     $fax = $value[29];
@@ -140,6 +141,6 @@ class UploadFileService
                 }
             }
         }
-        return redirect()->intended('uploadFileConfig');
+        return 'Insert data information success!';
     }
 }

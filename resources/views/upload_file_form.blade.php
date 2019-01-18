@@ -4,7 +4,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><i class="fa fa-upload fa-fw"></i> Upload file server</h1>
+            <h1 class="page-header"><i class="fa fa-upload fa-fw"></i> Upload file information</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -18,18 +18,11 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        {{-- <div class="col-lg-12">
-                            <form action="{{ url('uploadFile') }}" class="dropzone" id="upload-file-form" name="upload-file-form" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('uploadFileConfig') }}" id="upload_form" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }}
-                            </form><br><br>
-                            <button type="submit" class="btn btn-success pull-right" id="btnUpload">Upload</button>
-                        </div> --}}
-                        <form action="{{ url('uploadFileConfig') }}" method="POST" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            Choose your xls/csv File : <input type="file" name="file" class="form-control">
-                         
-                            <input type="submit" class="btn btn-primary btn-lg" style="margin-top: 3%">
+                            Choose your xlsm: <input type="file" name="file" class="form-control">
                         </form>
+                        <button type="button" id="addbtn" class="btn btn-primary btn-lg" style="margin-top: 3%">Add data</button>
                         <!-- /.col-lg-6 (nested) -->
                     </div>
                     <!-- /.table-responsive -->
@@ -41,5 +34,25 @@
         <!-- /.col-lg-12 -->
     </div>
 </div>
+
+<script type="text/javascript">
+$("#addbtn").click(function(){
+    $.ajax({
+        type: 'POST',
+        url: '{{ url("uploadFileConfig") }}',
+        data: new FormData($("#upload_form")[0]),
+        async: false,
+        processData: false,
+        contentType: false,
+        cache: false,
+        complete: function(){
+            
+        },
+        success: function (data){
+            alert("Add data infomation success!");
+        },
+    });
+});
+</script>
 
 @endsection

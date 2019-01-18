@@ -29,6 +29,15 @@ class DataInformationRepository extends BaseRepository
     }
 
     /**
+     * @param $id
+     * @return mixed
+     */
+    public function deleteInfomation($id)
+    {
+        return $this->dataInformationModel->where('id', '=', $id)->delete();
+    }
+
+    /**
      * @param $maxId
      * @param $subId
      * @param $sheetname
