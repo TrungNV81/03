@@ -116,9 +116,13 @@ class UploadFileService
                     // 
                     $numCell = $key+1;
                     $valueCellS = $spreadsheet->getActiveSheet()->getCell('S'.$numCell)->getValue();
-                    $getDateCellS = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($valueCellS);
-                    $delivery_time_1 = date('Y/m/d', $getDateCellS); // S ok - L2
 
+                    if ($valueCellS != "" && $numCell >= 4) {
+                        $getDateCellS = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($valueCellS);
+                        $delivery_time_1 = date('Y/m/d', $getDateCellS); // S ok - L2
+                    } else {
+                        $delivery_time_1 = "";
+                    }
                     // handle delivery time 2 and 3
                     $dates1 = array();
                     $dates7 = array();

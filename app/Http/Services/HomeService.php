@@ -134,9 +134,9 @@ class HomeService
 
                 $this->exportFile1($importId, $pathExcel, $filename[0]);
                 $this->exportFile2($importId, $pathExcel, $filename[0]);
-                // $this->zip($path, $filename[0], $substr, $dir);
-                // $this->sendMail($path, $filename[0], $importId, $dateNew);
-                // $this->deleteFileZip($filename[0]);
+                $this->zip($path, $filename[0], $substr, $dir);
+                $this->sendMail($path, $filename[0], $importId, $dateNew);
+                $this->deleteFileZip($filename[0]);
             } else {
                 // insert data into table history_file
                 $this->historyFileRepository->insertHistoryFile($idFile,  basename($file), $dateNew, 'fail');
