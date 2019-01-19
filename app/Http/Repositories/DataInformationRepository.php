@@ -109,4 +109,12 @@ class DataInformationRepository extends BaseRepository
         ])
         ->get();
     }
+
+    public function checkExistsFileNameCSV($property_name)
+    {
+        return $this->dataInformationModel->where([
+            ['property_name', '=', $property_name]
+            ])
+            ->exists();
+    }
 }

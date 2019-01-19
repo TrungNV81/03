@@ -74,6 +74,11 @@
                     fileRef.parentNode.removeChild(file.previewElement) : void 0;
             },
         });
+        myDropzone.on("error", function(file, message, xhr) {
+            var header = xhr.response;
+            var mess = JSON.parse(header);
+            $(file.previewElement).find('.dz-error-message').text(mess.note);
+        });
         $('#btnUpload').on('click', function(){
             myDropzone.processQueue();
         });

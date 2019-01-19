@@ -36,6 +36,21 @@ class UploadFileService
     {
         sleep(1);
         $file = $request->file('file');
+        $filename = $file->getClientOriginalName();
+        $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+        $nameArr = (explode("・",$withoutExt));
+        $checkExists = false;
+        if (count($nameArr) >= 2) {
+            $property_name = $nameArr[0]. '・' .$nameArr[1];
+            $checkExists = $this->dataInformationRepository->checkExistsFileNameCSV($property_name);
+        }
+
+        if ($checkExists == false || count($nameArr) < 2) {
+            return response()->json([
+                'note' => 'Information does not exist. Please click "Upload file information" to add data!',
+            ], 422);
+        }
+
         $extension = strtolower($file->getClientOriginalExtension());
         if($extension == "csv")
         {
