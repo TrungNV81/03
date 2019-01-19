@@ -224,7 +224,34 @@ class HomeService
         $property_name = $explodeFileName[0] . '・' . $explodeFileName[1];
         // get dataInformation
         $dataPdfLabel = $this->dataInformationRepository->getDataPdfLabel($property_name);
-        $this->exportPDF($pathPDF, $dataPdfLabel, '_ラベル', $filename, 'filepdf2');
+        $arrDataFileLabel = array();
+        if (count($dataPdfLabel) > 0) {
+            foreach ($dataPdfLabel as $key => $data) {
+                $delivery_time_1 = $data->delivery_time_1;
+                $delivery_time_2 = $data->delivery_time_2;
+                $delivery_time_3 = $data->delivery_time_3;
+                if ($delivery_time_1 != "") {
+                    $delivery_time_1 = (explode("/",$delivery_time_1));
+                    $delivery_time_1 = $delivery_time_1[1] . '/' . $delivery_time_1[2];
+                }
+                if ($delivery_time_2 != "") {
+                    $delivery_time_2 = (explode("/",$delivery_time_2));
+                    $delivery_time_2 = $delivery_time_2[1] . '/' . $delivery_time_2[2];
+                }
+                if ($delivery_time_3 != "") {
+                    $delivery_time_3 = (explode("/",$delivery_time_3));
+                    $delivery_time_3 = $delivery_time_3[1] . '/' . $delivery_time_3[2];
+                }
+                array_push($arrDataFileLabel, $data->billing_name);
+                array_push($arrDataFileLabel, $data->property_name);
+                array_push($arrDataFileLabel, $data->request_no1);
+                array_push($arrDataFileLabel, $data->request_no2);
+                array_push($arrDataFileLabel, $delivery_time_1);
+                array_push($arrDataFileLabel, $delivery_time_2);
+                array_push($arrDataFileLabel, $delivery_time_3);
+            }
+        }
+        $this->exportPDF($pathPDF, $arrDataFileLabel, '_ラベル', $filename, 'filepdf2');
 
         $spreadsheet->setActiveSheetIndex(0);
         // Set orientation portrait print excel
@@ -441,47 +468,36 @@ class HomeService
         );
 
         // set value information
-        // $cellPosInformatioin = array(
-        //     "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2",
-        //     "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2"
-        // );
         $cellPosInformatioin = array(
-            "A2", "B2", "D2", "L2", "M2", "N2"
+            "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2",
+            "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2"
         );
 
         $colTableInfomation = array(
             "1" => "property_name",
-            "2" => "billing_name",
-            "3" => "delivery_time_1",
-            "4" => "delivery_time_2",
-            "5" => "delivery_time_3",
+            "2" => "billing_address",
+            "3" => "billing_name",
+            "4" => "proud_first",
+            "5" => "proud_first_name",
+            "6" => "secondary_store_1",
+            "7" => "secondary_store_name_1",
+            "8" => "secondary_store_2",
+            "9" => "secondary_store_name_2",
+            "10" => "factory",
+            "11" => "delivery_time_1",
+            "12" => "delivery_time_2",
+            "13" => "delivery_time_3",
+            "14" => "on_site_residence",
+            "15" => "car_model",
+            "16" => "person_in_charge",
+            "17" => "street_address",
+            "18" => "tel",
+            "19" => "fax",
+            "20" => "branch_office",
+            "21" => "responsible",
+            "22" => "request_no1",
+            "23" => "request_no2",
         );
-
-        // $colTableInfomation = array(
-        //     "1" => "property_name",
-        //     "2" => "billing_address",
-        //     "3" => "billing_name",
-        //     "4" => "proud_first",
-        //     "5" => "proud_first_name",
-        //     "6" => "secondary_store_1",
-        //     "7" => "secondary_store_name_1",
-        //     "8" => "secondary_store_2",
-        //     "9" => "secondary_store_name_2",
-        //     "10" => "factory",
-        //     "11" => "delivery_time_1",
-        //     "12" => "delivery_time_2",
-        //     "13" => "delivery_time_3",
-        //     "14" => "on_site_residence",
-        //     "15" => "car_model",
-        //     "16" => "person_in_charge",
-        //     "17" => "street_address",
-        //     "18" => "tel",
-        //     "19" => "fax",
-        //     "20" => "branch_office",
-        //     "21" => "responsible",
-        //     "22" => "request_no1",
-        //     "23" => "request_no2",
-        // );
 
         $dataImport1 = $this->detailsDataImportRepository->getDataInformation($importId, '0');
         // get property_name
@@ -491,14 +507,16 @@ class HomeService
         $dataInformation = $this->dataInformationRepository->getDataInformation($property_name);
         $spreadsheet->setActiveSheetIndexByName('情報');
         $sheet = $spreadsheet->getActiveSheet();
-        foreach ($cellPosInformatioin as $key => $value) {
-            if ($value == 'A2') {
-                $dateNew = date('Y/m/d');
-                $sheet->setCellValue($value, $dateNew);
-            } else {
-                $nameColumn = $colTableInfomation[$key];
-                $valueColumn = $dataInformation[0]->$nameColumn;
-                $sheet->setCellValue($value, $valueColumn);
+        if (count($dataInformation) > 0) {
+            foreach ($cellPosInformatioin as $key => $value) {
+                if ($value == 'A2') {
+                    $dateNew = date('Y/m/d');
+                    $sheet->setCellValue($value, $dateNew);
+                } else {
+                    $nameColumn = $colTableInfomation[$key];
+                    $valueColumn = $dataInformation[0]->$nameColumn;
+                    $sheet->setCellValue($value, $valueColumn);
+                }
             }
         }
         foreach ($cellPos as $key => $value) {

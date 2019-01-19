@@ -134,10 +134,10 @@
     {{-- file 1 --}}
     <div style="page-break-inside:avoid;">
         <div class="title-heading">
-            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+            {{ isset($dataPDF[0]) ? $dataPDF[0] : '' }}- ㈱飯⽥産業
         </div>
         <div class="location">
-            {{ $dataPDF[0]->property_name }}
+            {{ isset($dataPDF[1]) ? $dataPDF[1] : '' }}
         </div>
         <div class="house">様邸</div>
         <div class="content">
@@ -145,14 +145,14 @@
                 <label>先行壁</label>
             </div>
             <div class="td2_2">
-                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-①</label>
+                <label>{{ isset($dataPDF[2]) ? $dataPDF[2] : '' }}-{{ isset($dataPDF[3]) ? $dataPDF[3] : '' }}-①</label>
             </div>
         </div>
         <div class="floor">
             <span>1F</span>
         </div>
         <div class="name-house">
-            <span class="product">{{ $dataPDF[0]->delivery_time_1 }} 積</span>
+            <span class="product">{{ isset($dataPDF[4]) ? $dataPDF[4] : '' }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">
@@ -163,10 +163,10 @@
     {{-- file 2 --}}
     <div style="page-break-inside:avoid">
         <div class="title-heading">
-            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+            {{ isset($dataPDF[0]) ? $dataPDF[0] : '' }}- ㈱飯⽥産業
         </div>
         <div class="location">
-            {{ $dataPDF[0]->property_name }}
+            {{ isset($dataPDF[1]) ? $dataPDF[1] : '' }}
         </div>
         <div class="house">様邸</div>
         <div class="content">
@@ -174,14 +174,14 @@
                 <label>先行壁</label>
             </div>
             <div class="td2_2">
-                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-①</label>
+                <label>{{ isset($dataPDF[2]) ? $dataPDF[2] : '' }}-{{ isset($dataPDF[3]) ? $dataPDF[3] : '' }}-①</label>
             </div>
         </div>
         <div class="floor">
             <span>2F</span>
         </div>
         <div class="name-house">
-            <span class="product">{{ $dataPDF[0]->delivery_time_1 }} 積</span>
+            <span class="product">{{ isset($dataPDF[4]) ? $dataPDF[4] : '' }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">
@@ -192,10 +192,10 @@
     {{-- file 3 --}}
     <div style="page-break-inside:avoid;">
         <div class="title-heading">
-            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+            {{ isset($dataPDF[0]) ? $dataPDF[0] : '' }}- ㈱飯⽥産業
         </div>
         <div class="location">
-            {{ $dataPDF[0]->property_name }}
+            {{ isset($dataPDF[1]) ? $dataPDF[1] : '' }}
         </div>
         <div class="house">様邸</div>
         <div class="content">
@@ -203,14 +203,14 @@
                 <label>天井</label>
             </div>
             <div class="td2_2">
-                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-②</label>
+                <label>{{ isset($dataPDF[2]) ? $dataPDF[2] : '' }}-{{ isset($dataPDF[3]) ? $dataPDF[3] : '' }}-②</label>
             </div>
         </div>
         <div class="floor">
             <span>1F</span>
         </div>
         <div class="name-house">
-            <span class="product">{{ $dataPDF[0]->delivery_time_2 }} 積</span>
+            <span class="product">{{ isset($dataPDF[5]) ? $dataPDF[5] : '' }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">
@@ -221,10 +221,10 @@
     {{-- file 4 --}}
     <div style="page-break-inside:avoid;">
         <div class="title-heading">
-            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+            {{ isset($dataPDF[0]) ? $dataPDF[0] : '' }}- ㈱飯⽥産業
         </div>
         <div class="location">
-            {{ $dataPDF[0]->property_name }}
+            {{ isset($dataPDF[1]) ? $dataPDF[1] : '' }}
         </div>
         <div class="house">様邸</div>
         <div class="content">
@@ -232,14 +232,14 @@
                 <label>天井</label>
             </div>
             <div class="td2_2">
-                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-②</label>
+                <label>{{ isset($dataPDF[2]) ? $dataPDF[2] : '' }}-{{ isset($dataPDF[3]) ? $dataPDF[3] : '' }}-②</label>
             </div>
         </div>
         <div class="floor">
             <span>2F</span>
         </div>
         <div class="name-house">
-            <span class="product">{{ $dataPDF[0]->delivery_time_2 }} 積</span>
+            <span class="product">{{ isset($dataPDF[5]) ? $dataPDF[5] : '' }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">
@@ -250,10 +250,10 @@
     {{-- file 5 --}}
     <div style="page-break-inside:avoid;">
         <div class="title-heading">
-            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+            {{ isset($dataPDF[0]) ? $dataPDF[0] : '' }}- ㈱飯⽥産業
         </div>
         <div class="location">
-            {{ $dataPDF[0]->property_name }}
+            {{ isset($dataPDF[1]) ? $dataPDF[1] : '' }}
         </div>
         <div class="house">様邸</div>
         <div class="content">
@@ -261,14 +261,14 @@
                 <label>壁</label>
             </div>
             <div class="td2_2">
-                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-③</label>
+                <label>{{ isset($dataPDF[2]) ? $dataPDF[2] : '' }}-{{ isset($dataPDF[3]) ? $dataPDF[3] : '' }}-③</label>
             </div>
         </div>
         <div class="floor">
             <span>1F</span>
         </div>
         <div class="name-house">
-            <span class="product">{{ $dataPDF[0]->delivery_time_3 }} 積</span>
+            <span class="product">{{ isset($dataPDF[6]) ? $dataPDF[6] : '' }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">
@@ -279,10 +279,10 @@
     {{-- file 6 --}}
     <div style="page-break-inside:avoid;">
         <div class="title-heading">
-            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+            {{ isset($dataPDF[0]) ? $dataPDF[0] : '' }}- ㈱飯⽥産業
         </div>
         <div class="location">
-            {{ $dataPDF[0]->property_name }}
+            {{ isset($dataPDF[1]) ? $dataPDF[1] : '' }}
         </div>
         <div class="house">様邸</div>
         <div class="content">
@@ -290,14 +290,14 @@
                 <label>壁</label>
             </div>
             <div class="td2_2">
-                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-③</label>
+                <label>{{ isset($dataPDF[2]) ? $dataPDF[2] : '' }}-{{ isset($dataPDF[3]) ? $dataPDF[3] : '' }}-③</label>
             </div>
         </div>
         <div class="floor">
             <span>2F</span>
         </div>
         <div class="name-house">
-            <span class="product">{{ $dataPDF[0]->delivery_time_3 }} 積</span>
+            <span class="product">{{ isset($dataPDF[6]) ? $dataPDF[6] : '' }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">

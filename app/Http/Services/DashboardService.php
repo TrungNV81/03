@@ -32,8 +32,23 @@ class DashboardService
      */
     public function dashboard()
     {
+        // get day of week
+        $dateNew = date('Y-m-d H:i:s');
+        $dateNew = date('2019-01-21');
+        $dayOfWeek = date("l", strtotime($dateNew));
+        $weekOfYear = date("W", strtotime($dateNew));
+        // select total file import in day
+        $line_chart_file = $this->lineChartFileRepository->getDay($dayOfWeek);
+        if ($weekOfYear > $line_chart_file[0]->week_of_year) {
+            $day = array(
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+            );
+            foreach ($day as $key => $value) {
+                // reset line_chart_file
+                $this->lineChartFileRepository->resetLineChartFile($value, $weekOfYear);
+            }
+        }
         $result = $this->lineChartFileRepository->getDataLineChartfile();
-
         $chart_data_file = '';
         foreach($result as $key => $value)
         {

@@ -104,26 +104,33 @@ class UploadFileService
                     $col11 = $value[11];
                     // sheetname
                     $property_name = $col9 . '・' . $col11 . $building; // J + L + L3 ok - B2
-                    $billing_address = $value[27];
+                    // $billing_address = $value[27];
+                    $billing_address = "211850"; // C2
                     $billing_name = $value[48]; // AW ok - D2
-                    $proud_first = $value[14];
-                    $proud_first_name = $value[46];
-                    $secondary_store_1 = $value[47];
-                    $secondary_store_name_1 = $value[17];
-                    $secondary_store_2 = $value[28];
-                    $secondary_store_name_2 = $value[19];
-                    $factory = $value[20];
-                    // 
+                    // $proud_first = $value[14];
+                    $proud_first = "211850"; // E2
+                    // $proud_first_name = $value[46];
+                    $proud_first_name = "紅中㈱　多摩"; // F2
+                    // $secondary_store_1 = $value[47];
+                    $secondary_store_1 = "705360"; // G2
+                    // $secondary_store_name_1 = $value[17];
+                    $secondary_store_name_1 = "㈱飯田産業"; // H2
+                    // $secondary_store_2 = $value[28];
+                    $secondary_store_2 = ""; // I2
+                    // $secondary_store_name_2 = $value[19];
+                    $secondary_store_name_2 = ""; // J2
+                    // $factory = $value[20];
+                    $factory = "千葉"; // K2
+                    // get value cell S
                     $numCell = $key+1;
                     $valueCellS = $spreadsheet->getActiveSheet()->getCell('S'.$numCell)->getValue();
-
                     if ($valueCellS != "" && $numCell >= 4) {
                         $getDateCellS = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($valueCellS);
                         $delivery_time_1 = date('Y/m/d', $getDateCellS); // S ok - L2
                     } else {
                         $delivery_time_1 = "";
                     }
-                    // handle delivery time 2 and 3
+                    // handle get delivery time 2 and 3
                     $dates1 = array();
                     $dates7 = array();
                     if ($delivery_time_1 != "") {
@@ -135,7 +142,7 @@ class UploadFileService
                         {
                             $date1->add(new \DateInterval('P1D'));
                             if ($date1->format('N') < 6)
-                                $dates1[]=$date1->format('Y-m-d');
+                                $dates1[]=$date1->format('Y/m/d');
                         }
                         // handle delivery_time_2
                         $delivery_time_2 = $dates1[0]; // M2
@@ -145,7 +152,7 @@ class UploadFileService
                         {
                             $date7->add(new \DateInterval('P1D'));
                             if ($date7->format('N') < 6)
-                                $dates7[]=$date7->format('Y-m-d');
+                                $dates7[]=$date7->format('Y/m/d');
                         }
                         // handle delivery_time_3
                         $delivery_time_3 = $dates7[6]; // N2
@@ -153,21 +160,31 @@ class UploadFileService
                         $delivery_time_2 = "";
                         $delivery_time_3 = "";
                     }
-                    $on_site_residence = $value[24];
-                    $car_model = $value[25];
-                    $person_in_charge = $value[13];
-                    $street_address = $value[27];
-                    $tel = $value[28];
-                    $fax = $value[29];
-                    $branch_office = $value[48];
-                    $responsible = $value[40];
-                    $request_no1 = $value[41];
-                    $request_no2 = $value[42];
-
+                    // 海老名市門沢橋３丁目２−２１	４ｔ	宮島裕和	東京都台東区寿3-14-11	03-6635-1650	03-5828-2860
+                    // $on_site_residence = $value[24];
+                    $on_site_residence = "海老名市門沢橋３丁目２−２１"; // O2
+                    // $car_model = $value[25];
+                    $car_model = "４ｔ"; // P2
+                    // $person_in_charge = $value[13];
+                    $person_in_charge = "宮島裕和"; // Q2
+                    // $street_address = $value[27];
+                    $street_address = "東京都台東区寿3-14-11"; // R2
+                    // $tel = $value[28];
+                    $tel = "03-6635-1650"; // S2
+                    // $fax = $value[29];
+                    $fax = "03-5828-2860";
+                    // $branch_office = $value[48];
+                    $branch_office ="東京支社"; // U2
+                    // $responsible = $value[40];
+                    $responsible = "野村"; // V2
+                    // $request_no1 = $value[41];
+                    $request_no1 = "33"; // W2
+                    // $request_no2 = $value[42];
+                    $request_no2 = "438"; // X2
                     if ($col9 == '現場名') {
                         $dataTargetFlg = true;
                     }
-                    if ($dataTargetFlg) {
+                    if ($dataTargetFlg == "true" && $numCell >= 4) {
                         $this->dataInformationRepository->insertInfomation($maxId, $subId, $sheetname, $property_name, 
                             $billing_address, $billing_name, $proud_first, $proud_first_name, $secondary_store_1,
                             $secondary_store_name_1, $secondary_store_2, $secondary_store_name_2, $factory, $delivery_time_1,
