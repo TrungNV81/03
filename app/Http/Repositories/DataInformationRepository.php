@@ -102,7 +102,8 @@ class DataInformationRepository extends BaseRepository
      */
     public function getDataPdfLabel($property_name)
     {
-        return $this->dataInformationModel->select('billing_name', 'property_name', 'request_no1', 'request_no2', 'delivery_time_1')
+        return $this->dataInformationModel->select('billing_name', 'property_name', 'request_no1', 'request_no2',
+            'delivery_time_1', 'delivery_time_2', 'delivery_time_3')
         ->where([
             ['property_name', '=', $property_name],
         ])

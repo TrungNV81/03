@@ -103,22 +103,55 @@ class UploadFileService
                     $col9 = $value[9];
                     $col11 = $value[11];
                     // sheetname
-                    $property_name = $col9 . '・' . $col11 . $building; // J + L + L3
-                    $billing_address = $value[18];
-                    $billing_name = $value[48]; // AW
+                    $property_name = $col9 . '・' . $col11 . $building; // J + L + L3 ok - B2
+                    $billing_address = $value[27];
+                    $billing_name = $value[48]; // AW ok - D2
                     $proud_first = $value[14];
                     $proud_first_name = $value[46];
                     $secondary_store_1 = $value[47];
                     $secondary_store_name_1 = $value[17];
-                    $secondary_store_2 = $value[18];
+                    $secondary_store_2 = $value[28];
                     $secondary_store_name_2 = $value[19];
                     $factory = $value[20];
-                    $delivery_time_1 = $value[18]; // S
-                    $delivery_time_2 = $value[43];
-                    $delivery_time_3 = $value[44];
+                    // 
+                    $numCell = $key+1;
+                    $valueCellS = $spreadsheet->getActiveSheet()->getCell('S'.$numCell)->getValue();
+                    $getDateCellS = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($valueCellS);
+                    $delivery_time_1 = date('Y/m/d', $getDateCellS); // S ok - L2
+
+                    // handle delivery time 2 and 3
+                    $dates1 = array();
+                    $dates7 = array();
+                    if ($delivery_time_1 != "") {
+                        $dateReplace = str_replace('/', '-', $delivery_time_1);
+                        $dateFormat = date('Y-m-d H:i:s', strtotime($dateReplace));
+                        $date = new \DateTime($dateFormat);
+                        $date1 = $date;
+                        while (count($dates1) < 1)
+                        {
+                            $date1->add(new \DateInterval('P1D'));
+                            if ($date1->format('N') < 6)
+                                $dates1[]=$date1->format('Y-m-d');
+                        }
+                        // handle delivery_time_2
+                        $delivery_time_2 = $dates1[0]; // M2
+                        $date = new \DateTime($dateFormat);
+                        $date7 = $date;
+                        while (count($dates7) < 7)
+                        {
+                            $date7->add(new \DateInterval('P1D'));
+                            if ($date7->format('N') < 6)
+                                $dates7[]=$date7->format('Y-m-d');
+                        }
+                        // handle delivery_time_3
+                        $delivery_time_3 = $dates7[6]; // N2
+                    } else {
+                        $delivery_time_2 = "";
+                        $delivery_time_3 = "";
+                    }
                     $on_site_residence = $value[24];
                     $car_model = $value[25];
-                    $person_in_charge = $value[13]; // N
+                    $person_in_charge = $value[13];
                     $street_address = $value[27];
                     $tel = $value[28];
                     $fax = $value[29];

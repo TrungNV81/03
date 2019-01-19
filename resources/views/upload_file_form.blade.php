@@ -34,7 +34,7 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        <form action="{{ url('uploadFileConfig') }}" id="upload_form" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('uploadFileInfomation') }}" id="upload_form" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             Choose your xlsm: <input type="file" name="file" class="form-control">
                         </form>
@@ -65,7 +65,7 @@
             beforeSend: function() {
                 showLoader();
             },
-            url: '{{ url("uploadFileConfig") }}',
+            url: '{{ url("uploadFileInfomation") }}',
             data: new FormData($("#upload_form")[0]),
             async: true,
             processData: false,

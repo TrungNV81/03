@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>xxx</title>
+    <title>PDF</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:103,600" rel="stylesheet" type="text/css">
@@ -131,9 +131,10 @@
 
 <body>
     {{-- @for($i = 0 ;$i < 6; $i ++) --}}
+    {{-- file 1 --}}
     <div style="page-break-inside:avoid;">
         <div class="title-heading">
-            {{ $dataPDF[0]->billing_name }}
+            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
         </div>
         <div class="location">
             {{ $dataPDF[0]->property_name }}
@@ -152,6 +153,151 @@
         </div>
         <div class="name-house">
             <span class="product">{{ $dataPDF[0]->delivery_time_1 }} 積</span>
+            <span class=" name-house-up">この邸名は</span>
+        </div>
+        <div class="">
+            <label class="warning">※原板は含まれていません</label>
+            <label class="here"><span>⼭</span>　あります</label>
+        </div>
+    </div>
+    {{-- file 2 --}}
+    <div style="page-break-inside:avoid">
+        <div class="title-heading">
+            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+        </div>
+        <div class="location">
+            {{ $dataPDF[0]->property_name }}
+        </div>
+        <div class="house">様邸</div>
+        <div class="content">
+            <div class="td2_1 ">
+                <label>先行壁</label>
+            </div>
+            <div class="td2_2">
+                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-①</label>
+            </div>
+        </div>
+        <div class="floor">
+            <span>2F</span>
+        </div>
+        <div class="name-house">
+            <span class="product">{{ $dataPDF[0]->delivery_time_1 }} 積</span>
+            <span class=" name-house-up">この邸名は</span>
+        </div>
+        <div class="">
+            <label class="warning">※原板は含まれていません</label>
+            <label class="here"><span>⼭</span>　あります</label>
+        </div>
+    </div>
+    {{-- file 3 --}}
+    <div style="page-break-inside:avoid;">
+        <div class="title-heading">
+            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+        </div>
+        <div class="location">
+            {{ $dataPDF[0]->property_name }}
+        </div>
+        <div class="house">様邸</div>
+        <div class="content">
+            <div class="td2_1 ">
+                <label>天井</label>
+            </div>
+            <div class="td2_2">
+                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-②</label>
+            </div>
+        </div>
+        <div class="floor">
+            <span>1F</span>
+        </div>
+        <div class="name-house">
+            <span class="product">{{ $dataPDF[0]->delivery_time_2 }} 積</span>
+            <span class=" name-house-up">この邸名は</span>
+        </div>
+        <div class="">
+            <label class="warning">※原板は含まれていません</label>
+            <label class="here"><span>⼭</span>　あります</label>
+        </div>
+    </div>
+    {{-- file 4 --}}
+    <div style="page-break-inside:avoid;">
+        <div class="title-heading">
+            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+        </div>
+        <div class="location">
+            {{ $dataPDF[0]->property_name }}
+        </div>
+        <div class="house">様邸</div>
+        <div class="content">
+            <div class="td2_1 ">
+                <label>天井</label>
+            </div>
+            <div class="td2_2">
+                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-②</label>
+            </div>
+        </div>
+        <div class="floor">
+            <span>2F</span>
+        </div>
+        <div class="name-house">
+            <span class="product">{{ $dataPDF[0]->delivery_time_2 }} 積</span>
+            <span class=" name-house-up">この邸名は</span>
+        </div>
+        <div class="">
+            <label class="warning">※原板は含まれていません</label>
+            <label class="here"><span>⼭</span>　あります</label>
+        </div>
+    </div>
+    {{-- file 5 --}}
+    <div style="page-break-inside:avoid;">
+        <div class="title-heading">
+            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+        </div>
+        <div class="location">
+            {{ $dataPDF[0]->property_name }}
+        </div>
+        <div class="house">様邸</div>
+        <div class="content">
+            <div class="td2_1 ">
+                <label>壁</label>
+            </div>
+            <div class="td2_2">
+                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-③</label>
+            </div>
+        </div>
+        <div class="floor">
+            <span>1F</span>
+        </div>
+        <div class="name-house">
+            <span class="product">{{ $dataPDF[0]->delivery_time_3 }} 積</span>
+            <span class=" name-house-up">この邸名は</span>
+        </div>
+        <div class="">
+            <label class="warning">※原板は含まれていません</label>
+            <label class="here"><span>⼭</span>　あります</label>
+        </div>
+    </div>
+    {{-- file 6 --}}
+    <div style="page-break-inside:avoid;">
+        <div class="title-heading">
+            {{ $dataPDF[0]->billing_name }}- ㈱飯⽥産業
+        </div>
+        <div class="location">
+            {{ $dataPDF[0]->property_name }}
+        </div>
+        <div class="house">様邸</div>
+        <div class="content">
+            <div class="td2_1 ">
+                <label>壁</label>
+            </div>
+            <div class="td2_2">
+                <label>{{ $dataPDF[0]->request_no1 }}-{{ $dataPDF[0]->request_no2 }}-③</label>
+            </div>
+        </div>
+        <div class="floor">
+            <span>2F</span>
+        </div>
+        <div class="name-house">
+            <span class="product">{{ $dataPDF[0]->delivery_time_3 }} 積</span>
             <span class=" name-house-up">この邸名は</span>
         </div>
         <div class="">

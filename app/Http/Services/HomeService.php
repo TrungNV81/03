@@ -134,9 +134,9 @@ class HomeService
 
                 $this->exportFile1($importId, $pathExcel, $filename[0]);
                 $this->exportFile2($importId, $pathExcel, $filename[0]);
-                $this->zip($path, $filename[0], $substr, $dir);
-                $this->sendMail($path, $filename[0], $importId, $dateNew);
-                $this->deleteFileZip($filename[0]);
+                // $this->zip($path, $filename[0], $substr, $dir);
+                // $this->sendMail($path, $filename[0], $importId, $dateNew);
+                // $this->deleteFileZip($filename[0]);
             } else {
                 // insert data into table history_file
                 $this->historyFileRepository->insertHistoryFile($idFile,  basename($file), $dateNew, 'fail');
@@ -441,36 +441,47 @@ class HomeService
         );
 
         // set value information
+        // $cellPosInformatioin = array(
+        //     "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2",
+        //     "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2"
+        // );
         $cellPosInformatioin = array(
-            "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2",
-            "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2"
+            "A2", "B2", "D2", "L2", "M2", "N2"
         );
 
         $colTableInfomation = array(
             "1" => "property_name",
-            "2" => "billing_address",
-            "3" => "billing_name",
-            "4" => "proud_first",
-            "5" => "proud_first_name",
-            "6" => "secondary_store_1",
-            "7" => "secondary_store_name_1",
-            "8" => "secondary_store_2",
-            "9" => "secondary_store_name_2",
-            "10" => "factory",
-            "11" => "delivery_time_1",
-            "12" => "delivery_time_2",
-            "13" => "delivery_time_3",
-            "14" => "on_site_residence",
-            "15" => "car_model",
-            "16" => "person_in_charge",
-            "17" => "street_address",
-            "18" => "tel",
-            "19" => "fax",
-            "20" => "branch_office",
-            "21" => "responsible",
-            "22" => "request_no1",
-            "23" => "request_no2",
+            "2" => "billing_name",
+            "3" => "delivery_time_1",
+            "4" => "delivery_time_2",
+            "5" => "delivery_time_3",
         );
+
+        // $colTableInfomation = array(
+        //     "1" => "property_name",
+        //     "2" => "billing_address",
+        //     "3" => "billing_name",
+        //     "4" => "proud_first",
+        //     "5" => "proud_first_name",
+        //     "6" => "secondary_store_1",
+        //     "7" => "secondary_store_name_1",
+        //     "8" => "secondary_store_2",
+        //     "9" => "secondary_store_name_2",
+        //     "10" => "factory",
+        //     "11" => "delivery_time_1",
+        //     "12" => "delivery_time_2",
+        //     "13" => "delivery_time_3",
+        //     "14" => "on_site_residence",
+        //     "15" => "car_model",
+        //     "16" => "person_in_charge",
+        //     "17" => "street_address",
+        //     "18" => "tel",
+        //     "19" => "fax",
+        //     "20" => "branch_office",
+        //     "21" => "responsible",
+        //     "22" => "request_no1",
+        //     "23" => "request_no2",
+        // );
 
         $dataImport1 = $this->detailsDataImportRepository->getDataInformation($importId, '0');
         // get property_name
@@ -482,7 +493,8 @@ class HomeService
         $sheet = $spreadsheet->getActiveSheet();
         foreach ($cellPosInformatioin as $key => $value) {
             if ($value == 'A2') {
-                $sheet->setCellValue($value, '1111');
+                $dateNew = date('Y/m/d');
+                $sheet->setCellValue($value, $dateNew);
             } else {
                 $nameColumn = $colTableInfomation[$key];
                 $valueColumn = $dataInformation[0]->$nameColumn;
