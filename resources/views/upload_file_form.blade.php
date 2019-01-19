@@ -7,7 +7,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 100;
+            z-index: 100000;
             width: 100vw;
             height: 100vh;
             background-color: rgba(192, 192, 192, 0.5);
@@ -33,13 +33,20 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="row">
-                        <form action="{{ url('uploadFileInfomation') }}" id="upload_form" method="POST" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            Choose your xlsm: <input type="file" name="file" class="form-control">
-                        </form>
-                        <button type="button" id="addbtn" class="btn btn-primary btn-lg" style="margin-top: 3%">Add data</button>
-                        <!-- /.col-lg-6 (nested) -->
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <form action="{{ url('uploadFileInfomation') }}" id="upload_form" method="POST" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                Choose your file xlsm:
+                                <input type="file" name="file" id="fileInput" required="true">
+                                <h5>Or drag and drop files below</h5>
+                                <div id="dropContainer" class="upload-drop-zone">
+                                    Just drag and drop files here
+                                </div>
+                            </form>
+                            <button type="button" id="addbtn" class="btn btn-success pull-right">Add data</button>
+                            <!-- /.col-lg-6 (nested) -->
+                        </div>
                     </div>
                     <!-- /.table-responsive -->
                 </div>
@@ -52,6 +59,32 @@
 </div>
 
 <script type="text/javascript">
+    $(function () {
+        dropContainer.ondragover = dropContainer.ondragenter = function (evt) {
+            evt.preventDefault();
+        };
+        dropContainer.ondrop = function (evt) {
+            // pretty simple -- but not for IE :(
+            fileInput.files = evt.dataTransfer.files;
+            evt.preventDefault();
+        };
+    });
+    var pullfiles = function () {
+        // love the query selector
+        var fileInput = document.querySelector("#fileInput");
+        var files = fileInput.files;
+        // cache files.length
+        var fl = files.length;
+        if (fl > 1) {
+            setTimeout(function () {
+                alert("Allow only a file to be uploaded, please select again. ");
+            }, 0);
+            location.replace("{{url ('upload-file')}}");
+        }
+    };
+    // set the input element onchange to call pullfiles
+    document.querySelector("#fileInput").onchange = pullfiles;
+    
     function showLoader() {
         $("#overload_upload").attr("id","loading");
     }
