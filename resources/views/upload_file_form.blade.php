@@ -1,5 +1,21 @@
+<div id="overload_upload"> </div>
 @extends('template')
 @section('content')
+    <style>
+        #loading {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(192, 192, 192, 0.5);
+            background-image: url("https://i.stack.imgur.com/MnyxU.gif");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
 
 <div id="page-wrapper">
     <div class="row">
@@ -36,23 +52,33 @@
 </div>
 
 <script type="text/javascript">
-$("#addbtn").click(function(){
-    $.ajax({
-        type: 'POST',
-        url: '{{ url("uploadFileConfig") }}',
-        data: new FormData($("#upload_form")[0]),
-        async: false,
-        processData: false,
-        contentType: false,
-        cache: false,
-        complete: function(){
-            
-        },
-        success: function (data){
-            alert("Add data infomation success!");
-        },
+    function showLoader() {
+        $("#overload_upload").attr("id","loading");
+    }
+    function hideLoader() {
+        $("#loading").attr("id","overload_upload");
+    }
+    $("#addbtn").click(function(){
+        showLoader();
+        $.ajax({
+            type: 'POST',
+            beforeSend: function() {
+                showLoader();
+            },
+            url: '{{ url("uploadFileConfig") }}',
+            data: new FormData($("#upload_form")[0]),
+            async: true,
+            processData: false,
+            contentType: false,
+            cache: false,
+            complete: function(){
+                hideLoader();
+            },
+            success: function (data){
+                alert("Add data infomation success!");
+            },
+        });
     });
-});
 </script>
 
 @endsection

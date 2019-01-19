@@ -58,6 +58,6 @@ Route::post('uploadFile', 'UploadFileController@uploadSubmit')->name('uploadSubm
 
 Route::post('deleteFile', 'UploadFileController@deleteFile')->name('deleteFile');
 
-Route::get('uploadFileConfig','UploadFileController@uploadFileConfig')->name('uploadFileConfig');
+Route::get('uploadFileInfomation','UploadFileController@uploadFileConfig')->name('uploadFileConfig');
 
-Route::post('uploadFileConfig', 'UploadFileController@uploadFileConfigSubmit')->name('uploadFileConfigSubmit');
+Route::post('uploadFileInfomation', 'UploadFileController@uploadFileConfigSubmit')->name('uploadFileConfigSubmit');
