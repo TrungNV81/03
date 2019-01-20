@@ -7,6 +7,8 @@ use App\Http\Requests;
 use DB;
 use Validator;
 use File;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailInformation;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use App\Http\Repositories\DataInformationRepository;
 
@@ -46,20 +48,23 @@ class UploadFileService
         }
 
         if ($checkExists == false || count($nameArr) < 2) {
+            $filename = $file->getClientOriginalName();
+            Mail::to('thanh@sonthanh.vn')->send(new SendMailInformation($filename));
+            Mail::to('kawasaki@housetechno.vn')->send(new SendMailInformation($filename));
             return response()->json([
                 'note' => 'Information does not exist. Please click "Upload file information" to add data!',
             ], 422);
-        }
-
-        $extension = strtolower($file->getClientOriginalExtension());
-        if($extension == "csv")
-        {
-            $dir = public_path() . '/files/';
-            $file->move($dir, $file->getClientOriginalName());
         } else {
-            return response()->json([
-                'errors' => 'File wrong format',
-            ], 422);
+            $extension = strtolower($file->getClientOriginalExtension());
+            if($extension == "csv")
+            {
+                $dir = public_path() . '/files/';
+                $file->move($dir, $file->getClientOriginalName());
+            } else {
+                return response()->json([
+                    'errors' => 'File wrong format',
+                ], 422);
+            }
         }
     }
 
